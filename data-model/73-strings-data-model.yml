@@ -1,0 +1,149 @@
+generated: '2026-08-05'
+method: derived
+source: openapi/*.yml (141 component schemas across the six published APIs)
+description: >-
+  Entity-relationship graph for the 73 Strings platform, derived from the id-reference fields and
+  $ref links in the published OpenAPI component schemas. Every entity and field named here appears
+  verbatim in a spec; nothing is inferred beyond the join implied by a shared identifier.
+
+id_convention:
+  format: UUID (v4-shaped in every documented example)
+  prefixes: none
+  note: >-
+    Identifiers are bare UUIDs with no type prefix, so an id is not self-describing — an agent must
+    track which field a value came from. Two mandatory scoping ids (orgId, userId) appear on
+    virtually every request body.
+
+scoping:
+  - {field: orgId, appears_in_schemas: 31, required: true, description: Unique identifier of the organization; determines data access scope}
+  - {field: userId, appears_in_schemas: 26, required: true, description: Unique identifier of the calling user}
+
+entities:
+- name: Organization
+  id_field: orgId
+  aliases: [organizationId, tenantOrgId]
+  description: The tenant. Every request is scoped to exactly one organization.
+  apis: [asset-info, captable, documents, financial-data, qualitative-data, transaction-api]
+- name: User
+  id_field: userId
+  aliases: [createdByUserId, lastUpdatedByUserId, createdBySelectedUserId, lastUpdatedBySelectedUserId]
+  description: The acting user the subscription key is associated with; also carried as audit fields on transactions.
+- name: Entity
+  id_field: entityId
+  plural_field: entityIds
+  description: >-
+    The portfolio company / investment entity. The core object of the platform. Also referenced as
+    companyId in the asset-info, documents, qualitative-data and financial-data APIs.
+  schemas: [Entities, EntityListResDTO, CompanyData]
+- name: Company
+  id_field: companyId
+  plural_field: companyIds
+  description: >-
+    Used interchangeably with entityId across APIs — the same portfolio company object addressed by
+    a different field name depending on the endpoint. A real modelling inconsistency, not a
+    separate entity.
+- name: BusinessUnit
+  id_field: businessUnitId
+  plural_field: businessUnitIds
+  description: A segment of an entity, used to break financial data down below company level.
+  schemas: [BusinessUnitsRespDTO, CompBusinessUnitsRespDTO, OrgBusinessUnitsRespDTO]
+- name: Security
+  id_field: securityId
+  plural_field: securityIds
+  aliases: [externalSecurityId, linkedSecurityId]
+  description: An instrument held in an entity — equity or credit — carrying its own financial data and cap-table position.
+  schemas: [securities, EntitySecurityListResDTO, SecurityData, SecurityDataDetail]
+- name: Version
+  id_field: versionId
+  description: >-
+    A named valuation/reporting version within the organization. Filters most reads; listed by
+    getVersionList.
+  schemas: [VersionsData, VersionListResDTO, VersionData]
+- name: ReportingDate
+  id_field: reportingDateId
+  description: A period end against which cap-table and financial data are reported.
+  schemas: [ReportingDate, ReportingDateAggregate]
+- name: Attribute
+  id_field: attributeId
+  plural_field: attributeIds
+  description: >-
+    A metric or qualitative field definition (name, categorical tag, attributeType NUMERICAL,
+    displayProperty ABSOLUTE_NUMBER). The platform's extensibility model.
+  schemas: [AttributeIdsDataDTO, EntityAttributeResDTO, EntityAttributeData, CustomAttributeDetails]
+- name: Captable
+  id_field: captableId
+  description: The capitalization table for an entity at a reporting date, grouped into equity and cash entities.
+  schemas: [CaptableDataResDTO, CaptableResponse, CaptableHomePage, GroupedSecurityData]
+- name: EquityEntity
+  id_field: equityId
+  description: An equity line on the cap table.
+- name: CashEntity
+  id_field: cashId
+  description: A cash line on the cap table.
+- name: Document
+  id_field: documentId
+  description: A file attached to an entity; listed then downloaded by document + company id.
+  schemas: [DocumentDto, EntityDocumentListResDTO]
+- name: Transaction
+  id_field: transactionId
+  aliases: [displayId, externalTransactionSourceReferenceId]
+  description: >-
+    A ledger record ingested from a customer pipeline. displayId is the platform-generated stable
+    reference; externalTransactionSourceReferenceId is the customer's own key.
+  schemas: [TransactionDTO, TransactionData, UnifiedTransactionData, UnifiedTransactionV2Data]
+- name: TransactionType
+  id_field: transactionTypeId
+  aliases: [transactionCategoryId]
+  description: Reference data describing the shape a transaction payload must take.
+  schemas: [TransactionTypeData, TransactionTypeContent]
+- name: TransactionVersion
+  id_field: versionId
+  description: Reference data pinning which transaction structure version a payload conforms to.
+  schemas: [TransactionVersionData]
+- name: Fund
+  id_field: fundId
+  description: A fund vehicle; target of putfundTransactions (GTN_FUND_TRANSACTION).
+  schemas: [FundDTO, FundDetailsDTO]
+- name: InvestmentEntity
+  id_field: investmentEntityId
+  aliases: [externalInvestmentEntityId]
+  description: The entity being invested in, on a transaction.
+- name: OwnerEntity
+  id_field: ownerEntityId
+  aliases: [externalOwnerEntityId, issuerEntityId]
+  description: The entity holding the position, on a transaction. Modelled as an owner→investment mapping.
+  schemas: [OwnerEntityMapping, UnifiedOwnerEntityMapping, UnifiedOwnerEntityMappingV2]
+
+relationships:
+- {from: Organization, to: Entity, kind: has_many, via: orgId}
+- {from: Organization, to: Version, kind: has_many, via: orgId}
+- {from: Organization, to: Attribute, kind: has_many, via: orgId}
+- {from: Organization, to: User, kind: has_many, via: orgId}
+- {from: Entity, to: BusinessUnit, kind: has_many, via: companyId}
+- {from: Entity, to: Security, kind: has_many, via: entityId}
+- {from: Entity, to: Document, kind: has_many, via: companyId}
+- {from: Entity, to: Captable, kind: has_one, via: companyId}
+- {from: Entity, to: Attribute, kind: has_many, via: entityId, note: attribute values per entity}
+- {from: Captable, to: EquityEntity, kind: has_many, via: captableId}
+- {from: Captable, to: CashEntity, kind: has_many, via: captableId}
+- {from: Captable, to: ReportingDate, kind: belongs_to, via: reportingDateId}
+- {from: Security, to: Security, kind: has_one, via: linkedSecurityId}
+- {from: Transaction, to: InvestmentEntity, kind: belongs_to, via: investmentEntityId}
+- {from: Transaction, to: OwnerEntity, kind: belongs_to, via: ownerEntityId}
+- {from: Transaction, to: TransactionType, kind: belongs_to, via: transactionTypeId}
+- {from: Transaction, to: TransactionVersion, kind: belongs_to, via: versionId}
+- {from: Transaction, to: Fund, kind: belongs_to, via: fundId}
+- {from: EntityFinancialResDTO, to: Entity, kind: belongs_to, via: companyId}
+- {from: EntityFinancialResDTO, to: Attribute, kind: belongs_to, via: attributeId}
+- {from: EntityBuFinancialDataResDTO, to: BusinessUnit, kind: belongs_to, via: segmentId}
+- {from: EntitySecurityFinancialDataResDTO, to: Security, kind: belongs_to, via: securityId}
+- {from: EntityBuFinancialDataReqDTO, to: Version, kind: belongs_to, via: versionId}
+
+notes:
+- >-
+  The same portfolio company is addressed as entityId in asset-info/financial-data and as companyId
+  in documents/qualitative-data/captable. Agents integrating across APIs must treat them as one key.
+- >-
+  External-reference fields (externalSecurityId, externalOwnerEntityId, externalInvestmentEntityId,
+  externalTransactionSourceReferenceId) let a customer address platform objects by their own
+  upstream keys on transaction ingest — the intended integration seam for data pipelines.

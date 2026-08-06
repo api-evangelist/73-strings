@@ -1,0 +1,1085 @@
+openapi: 3.0.1
+info:
+  title: Qualitative Data
+  description: The **Qualitative Data APIs**, a RESTful service on the 73 Strings platform, provide structured access to narrative-driven company insights, enabling retrieval of qualitative analysis data such as strategic commentary, business model descriptions, and expert assessments. These APIs are designed to support workflows across investment teams by offering consistent and versioned access to qualitative inputs captured at various reporting stages across multiple funds and organizations.
+  contact:
+    name: ''
+    email: support@73strings.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: '1.0'
+servers:
+- url: https://api-accord-eut-73strings.azure-api.net/qualitative-data
+tags:
+- name: Qualitative Data
+  description: The **Qualitative Data APIs**, a RESTful service on the 73 Strings platform, provide structured access to narrative-driven company insights, enabling retrieval of qualitative analysis data such as strategic commentary, business model descriptions, and expert assessments. These APIs are designed to support workflows across investment teams by offering consistent and versioned access to qualitative inputs captured at various reporting stages across multiple funds and organizations.
+paths:
+  /api/v1/ems/customAttributeData:
+    post:
+      operationId: getCustomAttributeDetails
+      summary: Get Custom Attribute Data
+      tags:
+      - Qualitative Data
+      description: 'This API is designed to retrieve custom attribute data for multiple entities requested by the company. When the request payload includes a list of entities, the API identifies each one and returns the custom attributes associated with it.
+
+
+        Custom attributes are additionally created custom fields to capture specific details unique to an entity. Since these attributes can vary across different entities, the API ensures that the response provides the correct attribute values mapped to each entity individually.
+
+
+        In essence, this API acts as a reliable way to fetch all entity-specific custom attribute details in one call, helping business systems maintain consistency, accuracy, and efficiency when handling entity-level data.'
+      parameters:
+      - name: subscription-key
+        in: header
+        required: true
+        description: A unique key that grants secure access to an API, enabling authentication, usage tracking, and controlled permissions.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Request_CustomAttributes'
+            examples:
+              default:
+                value:
+                  userId: 456fa8cd-xxxx-xxxx-xxxx-850b67f2efd4
+                  orgId: cfcbb891-xxxx-xxxx-xxxx-57142094123c
+                  entityIds:
+                  - 0caf8dc0-xxxx-xxxx-xxxx-b43a2621fcba
+                  - 64f1db13-xxxx-xxxx-xxxx-a963cec04899
+                  attributeIds:
+                  - 3286287b-xxxx-xxxx-xxxx-ab4409f445f5
+                  - b57a75f7-xxxx-xxxx-xxxx-407d49868e5a
+        description: The request payload is the package of information sent to an API so it knows what action to take or what data to provide.
+      responses:
+        '200':
+          description: The request was successful and the requested data has been returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/API_Response_CustomAttributes'
+              examples:
+                Success Example:
+                  description: Sample response for 200 OK Success.
+                  value:
+                    response:
+                      orgId: cfcbb891-xxxx-xxxx-xxxx-57142094123c
+                      data:
+                      - entityId: 0caf8dc0-xxxx-xxxx-xxxx-b43a2621fcba
+                        dataApiAttributesInfos:
+                        - attributeId: b57a75f7-xxxx-xxxx-xxxx-407d49868e5a
+                          attributeName: Business Sponsor
+                          tag: Income Statement
+                          attributeType: TEXT
+                          description: null
+                          global: 'false'
+                          value: GHO-SI-ESG
+                    success: true
+                    message: Success
+                    errorCode: null
+        '207':
+          description: The request was partially successful and valid request data has been returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/API_Response_CustomAttributes'
+              examples:
+                Success Example:
+                  description: Sample response for 207 Multi Status Success.
+                  value:
+                    response:
+                      orgId: cfcbb891-xxxx-xxxx-xxxx-57142094123c
+                      data:
+                      - entityId: 0caf8dc0-xxxx-xxxx-xxxx-b43a2621fcba
+                        dataApiAttributesInfos:
+                        - attributeId: b57a75f7-xxxx-xxxx-xxxx-407d49868e5a
+                          attributeName: Business Sponsor
+                          tag: Income Statement
+                          attributeType: TEXT
+                          description: null
+                          global: 'false'
+                          value: GHO-SI-ESG
+                      errors:
+                      - success: false
+                        message: 'Invalid entity ids: [64f1db13-xxxx-xxxx-xxxx-a963cec04899]'
+                        responseCode: BAD_REQUEST
+                    success: true
+                    message: Success
+                    errorCode: null
+        '400':
+          description: The request is malformed or missing required parameters.
+          content:
+            application/json:
+              examples:
+                Bad Request Example:
+                  description: Sample response for 400 Bad Request.
+                  value:
+                    response: []
+                    success: false
+                    message: Invalid input, please try again
+                    errorCode: EXCE00028
+        '401':
+          description: The subscription key is missing or invalid.
+          content:
+            application/json:
+              examples:
+                Invalid Subscription Key Example:
+                  description: Sample response for 401 Unauthorized.
+                  value:
+                    response: []
+                    success: false
+                    message: Access denied due to invalid subscription key. Please provide a valid key with active subscription.
+                    errorCode: EXCE00028
+        '500':
+          description: An unexpected error occurred on the server (Internal Server Error).
+          content:
+            application/json:
+              examples:
+                Internal Server Error Example:
+                  description: Sample response for 500 Internal Server Error
+                  value:
+                    response: []
+                    success: false
+                    message: Internal server error. Please try again later or contact support.
+                    errorCode: EXCE00028
+  /api/v1/ems/getEntityGeneralDetails:
+    post:
+      operationId: getGeneralDetails
+      summary: Get Entity General Details
+      tags:
+      - Qualitative Data
+      description: 'The 73Value Equity offers robust tools for managing private equity funds, allowing users to create multiple funds and add companies across these funds for the valuation of both funds and companies. The **getGeneralDetails API** retrieves detailed information about various companies'', which are part of funds the user can access.
+
+
+        This API fetches essential information such as the company''s name, industry, headquarters location, and other general details. It ensures that users have quick and easy access to fundamental company information within the funds they manage or have access to.
+
+
+        This API is particularly useful for fund managers, analysts, and investors who need to gather basic company information efficiently. By leveraging the capabilities of the 73Value Equity product, users can streamline their access to important company details, enhancing their ability to manage and analyze their investments.'
+      parameters:
+      - name: subscription-key
+        in: header
+        required: true
+        description: A unique key that allows you to access and use an API
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyIdsRequest'
+            examples:
+              default:
+                value:
+                  company_ids:
+                  - b92ce0c7-63f6-4177-b59a-6c9fb54970e7
+                  - 3a13cbae-1513-49af-956d-150e0b4efe16
+                  - 37eb09f6-52ca-434d-b2fd-42df54b1024d
+                  user_id: 4d32666b-5fa9-489f-93b1-1f5036bd2a41
+        description: Request body containing user ID and company IDs
+      responses:
+        '200':
+          description: Successfully retrieved general details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyDataResponse'
+              examples:
+                Success Example:
+                  description: Success Example
+                  value:
+                    response:
+                      data:
+                      - id: 06305e61-fb17-4e05-xxx2-431414d986e0
+                        orgId: 2746c10b-70cb-xxx5aa-b320-23d2768614e7
+                        companyId: b92ce0c7-63f6-xxx77-b59a-6c9fb54970e7
+                        businessUnitId: null
+                        accountId: null
+                        description: 'Hi i am mohit garg please test with me this and check horizantal '
+                        industry: Interactive Media & Services, Interactive Media & Services, Media & Entertainment, Communication Services
+                        geography: ''
+                        geographicalExposure: null
+                        headCount: 0
+                        strategyNotes: null
+                        fiscalYearEnd: MAY
+                        currency: USD
+                        investmentRational: null
+                        funds: null
+                        gdMultiValueData: null
+                        gdCompanyMultiValueData: null
+                        spvs: null
+                        investmentDate: '2025-05-21T12:00:00Z'
+                        units: Millions
+                        uniqueKey: MohitGarg123456789
+                        webSite: ''
+                        clientSector: null
+                        companyType: NA
+                        investmentType: NA
+                        shortDescription: ''
+                        legalEntityName: ''
+                        restrictedList: 'No'
+                        informationRights: 'Yes'
+                        fundsList: []
+                        spvsList: []
+                        multiValueVerticalData: []
+                        multiValueAgentData: []
+                        multiValueSponsorData: []
+                        multiValueESGRatingData: []
+                        domainsList: []
+                        productsList: []
+                        addressList: []
+                        acquisionsList: []
+                        competitorsList: []
+                        clientSectorList: []
+                        securityList: []
+                        segmentList: []
+                      - id: be078aa8-75e7-407c-xxxa-3a6585b26361
+                        orgId: 2746c10b-70cb-xxx5aa-b320-23d2768614e7
+                        companyId: 3a13cbae-1513-xxxaf-956d-150e0b4efe16
+                        businessUnitId: null
+                        accountId: null
+                        description: ''
+                        industry: ''
+                        geography: ''
+                        geographicalExposure: null
+                        headCount: 0
+                        strategyNotes: null
+                        fiscalYearEnd: null
+                        currency: ''
+                        investmentRational: null
+                        funds: null
+                        gdMultiValueData: null
+                        gdCompanyMultiValueData: null
+                        spvs: null
+                        investmentDate: null
+                        units: null
+                        uniqueKey: null
+                        webSite: ''
+                        clientSector: null
+                        companyType: null
+                        investmentType: null
+                        shortDescription: null
+                        legalEntityName: null
+                        restrictedList: null
+                        informationRights: null
+                        fundsList: []
+                        spvsList: []
+                        multiValueVerticalData: []
+                        multiValueAgentData: []
+                        multiValueSponsorData: []
+                        multiValueESGRatingData: []
+                        domainsList: []
+                        productsList: []
+                        addressList: []
+                        acquisionsList: []
+                        competitorsList: []
+                        clientSectorList: []
+                        securityList: []
+                        segmentList: []
+                      - id: 6c0a3ada-e71f-42c1-xxxd-e99baa0d3f18
+                        orgId: 2746c10b-70cb-xxx5aa-b320-23d2768614e7
+                        companyId: 37eb09f6-52ca-xxx4d-b2fd-42df54b1024d
+                        businessUnitId: null
+                        accountId: null
+                        description: ''
+                        industry: ''
+                        geography: ''
+                        geographicalExposure: null
+                        headCount: 0
+                        strategyNotes: null
+                        fiscalYearEnd: null
+                        currency: ''
+                        investmentRational: null
+                        funds: null
+                        gdMultiValueData: null
+                        gdCompanyMultiValueData: null
+                        spvs: null
+                        investmentDate: null
+                        units: null
+                        uniqueKey: null
+                        webSite: ''
+                        clientSector: null
+                        companyType: null
+                        investmentType: null
+                        shortDescription: null
+                        legalEntityName: null
+                        restrictedList: null
+                        informationRights: null
+                        fundsList: []
+                        spvsList: []
+                        multiValueVerticalData: []
+                        multiValueAgentData: []
+                        multiValueSponsorData: []
+                        multiValueESGRatingData: []
+                        domainsList: []
+                        productsList: []
+                        addressList: []
+                        acquisionsList: []
+                        competitorsList: []
+                        clientSectorList: []
+                        securityList: []
+                        segmentList: []
+                No Data Example:
+                  description: No Data Example
+                  value:
+                    response: []
+                    success: false
+                    message: Data not found.
+                    errorCode: EXCE00021
+        '202':
+          description: Request accepted for processing, but not yet completed.
+          content:
+            application/json:
+              examples:
+                Accepted Example:
+                  description: Accepted Example
+                  value:
+                    response: []
+                    success: true
+                    message: Request accepted and is being processed.
+                    errorCode: null
+        '400':
+          description: Invalid input, missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                Bad Request Example:
+                  description: Bad Request Example
+                  value:
+                    response: []
+                    success: false
+                    message: Invalid request parameters.
+                    errorCode: EXCE00028
+                Required Fields Can't Be Null Or Empty Example:
+                  description: Required Fields Can't Be Null Or Empty Example
+                  value:
+                    response: []
+                    success: false
+                    message: Fields cannot be null or empty..
+                    errorCode: EXCE00020
+        '401':
+          description: Invalid or missing Subscription key.
+          content:
+            application/json:
+              examples:
+                Invalid Subscription key Example:
+                  description: Invalid Subscription key Example
+                  value:
+                    statusCode: 401
+                    message: Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                Resource not found Example:
+                  description: Resource not found Example
+                  value:
+                    statusCode: 404
+                    message: Resource not found
+        '405':
+          description: 'Request with incorrect HTTPS method. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                Method not allowed Example:
+                  description: Method not allowed Example
+                  value:
+                    statusCode: 405
+                    message: Method Not Allowed. Please use the correct HTTP method.
+        '429':
+          description: Too many requests sent in a short period. The client is being rate limited.
+          content:
+            application/json:
+              examples:
+                Too Many Request Example.:
+                  description: Too Many Request Example.
+                  value:
+                    statusCode: 429
+                    message: Too Many Requests. Please slow down and try again later.
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              examples:
+                Invalid Subscription key Example:
+                  description: Invalid Subscription key Example
+                  value:
+                    statusCode: 500
+                    message: Internal server error. Please try again later or contact support.
+  /api/v1/ems/getEntityQualitativeAnalysisData:
+    post:
+      operationId: getQualitativeAnalysisData
+      summary: Get Entity Qualitative Analysis Data
+      tags:
+      - Qualitative Data
+      description: "The 73 Monitor allows users to add qualitative comments or insights about the company. The **get73MQualitativeAnalysis API** retrieves qualitative insights or commentary related to a specific company within a particular fund, the user can access to. The Qualitative Analysis section allows fund managers or analysts, to input their observations, insights, or detailed commentary about a company's performance, strategy, or other relevant factors. These inputs are typically structured as pairs of titles and comments, providing a clear and organized way to document and review qualitative data.\n\n By leveraging the capabilities of the 73Value Equity product, users can streamline their access to important company details, enhancing their ability to manage and analyze their investments."
+      parameters:
+      - name: subscription-key
+        in: header
+        required: true
+        description: A unique key that allows you to access and use an API
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntityQualitativeAnalysisDataReqDTO'
+            examples:
+              default:
+                value:
+                  userId: 4d32666b-5fa9-xxx89f-93b1-1f5036bd2a41
+                  companyId:
+                  - 189d620b-8551-xxx64-b595-b5eb50411d2a
+                  tags:
+                  - Employee Benefit5
+                  orgId: 2746c10b-70cb-xxx45aa-b320-23d2768614e7
+                  startDate: ''
+                  endDate: ''
+                  asOfDate: ''
+        description: Request body containing transaction details for qualitative analysis
+      responses:
+        '200':
+          description: Successfully retrieved qualitative analysis data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QualitativeAnalysisDataResDTO'
+              examples:
+                Success Example:
+                  description: Success Example
+                  value:
+                    response:
+                      data:
+                      - createdBy: System
+                        createdDate: '2025-04-14T12:05:40Z'
+                        lastModifiedBy: System
+                        lastModifiedDate: '2025-04-14T12:07:36Z'
+                        tenantOrgId: 2746c10b-70cb-xxx45aa-b320-23d2768614e7
+                        createdByUserId: c9676cc5-54ab-xxx79-984b-29b01b86ca0b
+                        createdByUserName: Rahul Vanga
+                        lastUpdatedByUserId: c9676cc5-54ab-xxx79-984b-29b01b86ca0b
+                        lastUpdatedByUserName: Rahul Vanga
+                        createdBySelectedUserId: 4d32666b-5fa9-xxx9f-93b1-1f5036bd2a41
+                        createdBySelectedUserName: Admin
+                        lastUpdatedBySelectedUserId: 4d32666b-5fa9-xxx9f-93b1-1f5036bd2a41
+                        lastUpdatedBySelectedUserName: Admin
+                        auditSourceModule: null
+                        id: ruowNJYBP7vcBDXZ3yPQ
+                        orgId: 2746c10b-70cb-xxx45aa-b320-23d2768614e7
+                        companyId: 189d620b-8551-xxx64-b595-b5eb50411d2a
+                        tag: Employee Benefit5
+                        title: navi
+                        articleDate: '2021-03-31T12:00:00Z'
+                        description: navi
+                        imageUrl: []
+                        sourceUrl: null
+                        displayUrl: []
+                        uploadedImage: false
+                        articleDateString: '2021-03-31'
+                    success: true
+                    message: Success
+                    errorCode: null
+                No Data Example:
+                  description: No Data Example
+                  value:
+                    response: []
+                    success: false
+                    message: Data not found.
+                    errorCode: EXCE00021
+        '202':
+          description: Request accepted for processing, but not yet completed.
+          content:
+            application/json:
+              examples:
+                Accepted Example:
+                  description: Accepted Example
+                  value:
+                    response: []
+                    success: true
+                    message: Request accepted and is being processed.
+                    errorCode: null
+        '400':
+          description: Invalid input, missing parameters.
+          content:
+            application/json:
+              examples:
+                Bad Request Example:
+                  description: Bad Request Example
+                  value:
+                    response: []
+                    success: false
+                    message: Invalid request parameters.
+                    errorCode: EXCE00028
+                Required Fields Can't Be Null Or Empty Example:
+                  description: Required Fields Can't Be Null Or Empty Example
+                  value:
+                    response: []
+                    success: false
+                    message: Fields cannot be null or empty..
+                    errorCode: EXCE00020
+        '401':
+          description: Invalid or missing Subscription key.
+          content:
+            application/json:
+              examples:
+                Invalid Subscription key Example:
+                  description: Invalid Subscription key Example
+                  value:
+                    statusCode: 401
+                    message: Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.
+        '405':
+          description: 'Request with incorrect HTTPS method. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                Method not allowed Example:
+                  description: Method not allowed Example
+                  value:
+                    statusCode: 405
+                    message: Method Not Allowed. Please use the correct HTTP method.
+        '429':
+          description: Too many requests sent in a short period. The client is being rate limited.
+          content:
+            application/json:
+              examples:
+                Too Many Request Example.:
+                  description: Too Many Request Example.
+                  value:
+                    statusCode: 429
+                    message: Too Many Requests. Please slow down and try again later.
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    statusCode: 500
+                    message: Internal server error. Please try again later or contact support.
+components:
+  securitySchemes:
+    apiKeyHeader:
+      type: apiKey
+      name: subscription-key
+      in: header
+    apiKeyQuery:
+      type: apiKey
+      name: subscription-key
+      in: query
+  schemas:
+    EntityQualitativeAnalysisDataReqDTO:
+      required:
+      - companyId
+      - orgId
+      - userId
+      type: object
+      properties:
+        userId:
+          type: string
+          description: User identifier
+          format: uuid
+          example: 4d32666b-5fa9-489f-93b1-1f5036bd2a41
+        companyId:
+          type: array
+          items:
+            type: string
+            description: List of company identifiers
+            format: uuid
+          description: List of company identifiers
+          example:
+          - 189d620b-8551-4644-b595-b5eb50411d2a
+        tags:
+          type: array
+          items:
+            type: string
+            description: List of tags to filter
+            example: '["Employee Benefit5"]'
+          description: List of tags to filter
+          example:
+          - Employee Benefit5
+        orgId:
+          type: string
+          description: Organization identifier
+          format: uuid
+          example: 2746c10b-70cb-45aa-b320-23d2768614e7
+        startDate:
+          type: string
+          description: Start date in ISO format (yyyy-MM-dd)
+          nullable: true
+          example: '2023-01-01'
+        endDate:
+          type: string
+          description: End date in ISO format (yyyy-MM-dd)
+          nullable: true
+          example: '2023-12-31'
+        asOfDate:
+          type: string
+          description: As of date in ISO format (yyyy-MM-dd)
+          nullable: true
+          example: '2023-06-30'
+      description: Request DTO for filtering data by user, company, tags, organization and dates
+    ApiResponse:
+      type: object
+      properties:
+        response:
+          type: array
+          items:
+            type: object
+            description: List containing the response data.
+            example:
+            - id: '123'
+              name: Sample Data
+          description: List containing the response data.
+          example:
+          - id: '123'
+            name: Sample Data
+        success:
+          type: boolean
+          description: Request’s success status.
+          example: true
+        message:
+          type: string
+          description: Output message depending on success status.
+          example: Success
+        errorCode:
+          type: string
+          description: 'Error response on hitting API request.
+
+
+            null: No errors were encountered.
+
+
+            string: A descriptive error message or code if an issue occurred.'
+          example: EXCE00018
+      description: Generic API response wrapper containing the response data, success status, message, and error code.
+      xml:
+        name: ApiResponse
+    DataItem:
+      type: object
+      properties:
+        createdBy:
+          type: string
+          description: Who created the item
+        createdDate:
+          type: string
+          description: Date item was created
+        lastModifiedBy:
+          type: string
+          description: Who last modified the item
+        lastModifiedDate:
+          type: string
+          description: Date item was last modified
+        tenantOrgId:
+          type: string
+          description: Tenant organization ID
+        createdByUserId:
+          type: string
+          description: ID of the user who created
+        createdByUserName:
+          type: string
+          description: Name of the user who created
+        lastUpdatedByUserId:
+          type: string
+          description: ID of the user who last updated
+        lastUpdatedByUserName:
+          type: string
+          description: Name of the user who last updated
+        createdBySelectedUserId:
+          type: string
+          description: ID of the selected user who created
+        createdBySelectedUserName:
+          type: string
+          description: Name of the selected user who created
+        lastUpdatedBySelectedUserId:
+          type: string
+          description: ID of the selected user who last updated
+        lastUpdatedBySelectedUserName:
+          type: string
+          description: Name of the selected user who last updated
+        auditSourceModule:
+          type: string
+          description: Audit source module
+        id:
+          type: string
+          description: Unique identifier
+        orgId:
+          type: string
+          description: Organization ID
+        companyId:
+          type: string
+          description: Company ID
+        tag:
+          type: string
+          description: Tag name
+        title:
+          type: string
+          description: Title of the article
+        articleDate:
+          type: string
+          description: Date of the article
+        description:
+          type: string
+          description: Description text
+        imageUrl:
+          type: array
+          items:
+            type: string
+            description: List of image URLs
+          description: List of image URLs
+        sourceUrl:
+          type: string
+          description: Source URL
+        displayUrl:
+          type: array
+          items:
+            type: string
+            description: Display URLs
+          description: Display URLs
+        uploadedImage:
+          type: boolean
+          description: Flag if image was uploaded
+        articleDateString:
+          type: string
+          description: Article date as string
+      description: List of data items
+    QualitativeAnalysisDataResDTO:
+      type: object
+      properties:
+        response:
+          $ref: '#/components/schemas/Response'
+        success:
+          type: boolean
+          description: Indicates success or failure
+        message:
+          type: string
+          description: Response message
+        errorCode:
+          type: string
+          description: Error code if any
+    Response:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataItem'
+          description: List of data items
+      description: Response payload
+    CompanyIdsRequest:
+      required:
+      - companyIds
+      - userId
+      type: object
+      properties:
+        companyIds:
+          type: array
+          items:
+            type: string
+            description: 'array/list of company_id
+
+
+              company_id → unique identifier of a company'
+            example: '["n2n3jndi12-hxj2-h3un2j-mnxj823njw","nek3oec5njk3nk-nc34ni-nj49u48f- hcjcc904nf3","e4nikv4im4654n3k-nj959nrf4-nf4j44-nfjnrji93"]'
+          description: 'array/list of company_id
+
+
+            company_id → unique identifier of a company'
+          example:
+          - n2n3jndi12-hxj2-h3un2j-mnxj823njw
+          - nek3oec5njk3nk-nc34ni-nj49u48f- hcjcc904nf3
+          - e4nikv4im4654n3k-nj959nrf4-nf4j44-nfjnrji93
+        userId:
+          type: string
+          description: Unique Identifier of a user.
+          example: 420a8114-n32mxxxbe-948hn75-8d90-2c372e4230b3
+    CompanyData:
+      type: object
+      properties:
+        description:
+          type: string
+          description: A detailed information on the company, mentioning its activities, products, operations and such.
+          example: Puma SE, based in Herzogenaurach, Germany, is a well-known sportswear and athletic footwear brand. Founded in 1948, Puma is recognized for its iconic cat logo and innovative sports and lifestyle products.
+        funds:
+          type: string
+          description: Lists the names of the funds in which the company is a participant.
+          example: AA Excel Test Fund
+        spv:
+          type: string
+          description: Lists the Special Purpose Vehicles (SPVs) associated with the company.
+          example: SPV Test
+        investmentDate:
+          type: string
+          description: Provides the dates on which initial investments were made in the company across various funds.
+          example: 30-06-2024
+        clientSector:
+          type: string
+          description: Specifies the sectors to which the company belongs, reflecting its primary areas of operation.
+          example: Clothing
+        industry:
+          type: string
+          description: Indicates the industries in which the company conducts its business activities.
+          example: Apparel Retail, Specialty Retail, Retailing, Consumer Discretionary
+        geography:
+          type: string
+          description: Primary geographical region where the company operates or has its HQ.
+          example: DEU-Germany
+        currency:
+          type: string
+          description: The currency in which the company’s valuation is calculated and reported.
+          example: EUR
+        fiscalYearEnd:
+          type: string
+          description: The month in which the company’s financial year concludes.
+          example: DECEMBER
+        website:
+          type: string
+          description: The official website URL of the company.
+          example: https://us.puma.com/
+        units:
+          type: string
+          description: The currency units used to display the company’s valuation figures.
+          example: Millions
+        headcount:
+          type: integer
+          description: The total number of employees working in the company’s organization.
+          format: int32
+          example: 172107
+        companyType:
+          type: string
+          description: Indicates the kind of company holding.
+          example: PUBLIC
+        investmentStatus:
+          type: string
+          description: Investment status of the company inside various funds.
+          example: CURRENT
+        shortDescription:
+          type: string
+          description: A brief overview or summary of the company, highlighting its key activities and purpose.
+          example: 'Puma: Puma, based in Herzogenaurach, Germany, is a prominent sportswear and athletic footwear brand recognized for its iconic cat logo and a commitment to sports and lifestyle products.'
+        legalEntityName:
+          type: string
+          description: The official legal name of the company as registered.
+          example: Puma SE
+        restrictedList:
+          type: string
+          description: Indicates whether the company has restrictions to investments.
+          example: 'No'
+        informationRights:
+          type: string
+          description: Access granted to stakeholders on information.
+          example: 'Yes'
+        geographicalExposure:
+          type: string
+          description: Regions where the company has significant business exposure.
+          example: N/A
+        companyId:
+          type: string
+          description: Unique identifier of a company
+          example: 0afea14d-ca1b-4baf-b3eb-8de498f9b8e9
+        companyName:
+          type: string
+          description: Name of the company.
+          example: Puma
+        companyCode:
+          type: string
+          description: Unique Ticker symbol of a company
+          example: PUMA2023
+      description: Company Data
+    CompanyDataResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyData'
+          description: Array/List containing details of each company.
+    Request_CustomAttributes:
+      required:
+      - userId
+      - orgId
+      - entityIds
+      type: object
+      properties:
+        userId:
+          type: string
+          description: "Unique identifier for the user. \nShared by 73 Strings team."
+          example: 456fa8cd-xxxx-xxxx-xxxx-850b67f2efd4
+        orgId:
+          type: string
+          description: "Organization identifier on 73 Strings Platform. \nShared by 73Strings team."
+          example: cfcbb891-xxxx-xxxx-xxxx-57142094123c
+        entityIds:
+          type: array
+          items:
+            type: string
+          description: List of unique identifier of the entities, can be retrieved from Entity List operation under Asset Info APIs.
+          example:
+          - 0caf8dc0-xxxx-xxxx-xxxx-b43a2621fcba
+          - 0cabd8dc0-xxxx-xxxx-xxxx-bu41fcba
+        attributeIds:
+          type: array
+          items:
+            type: string
+          description: 'List of unique identifier of the attributes, can be retrieved from Attribute List operation under Asset Info APIs.
+
+
+            **NOTE**: If the “attributeIds” is an empty array, then data for all custom attributes created will be displayed in the response.'
+          example:
+          - 3286287b-xxxx-xxxx-xxxx-ab4409f445f5
+      description: Key–value parameters sent to an API that specify what data should be retrieved from, or pushed to, the destination system.
+    API_Response_CustomAttributes:
+      required:
+      - success
+      - message
+      type: object
+      properties:
+        response:
+          required:
+          - orgId
+          - data
+          type: object
+          properties:
+            orgId:
+              type: string
+              description: Unique identifier of the organization.
+              example: cfcbb891-xxxx-xxxx-xxxx-57142094123c
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/EntityAttributeData'
+              description: Entity Id and details of the custom attributes associated with the corresponding entity.
+            Invalid_Requests:
+              type: array
+              items:
+                $ref: '#/components/schemas/InvalidRequests'
+              description: 'Provides the list of invalid requests, incase of partially successful requests. '
+        success:
+          type: boolean
+          description: Request’s success status.
+          example: true
+        message:
+          type: string
+          description: Output message depending on success status.
+          example: Success
+        errorCode:
+          type: string
+          description: 'Response on hitting API request.
+
+
+            null: No errors were encountered.
+
+            Error Code: A descriptive error message or code if an issue occurred.'
+          nullable: true
+          example: null
+      description: Response parameters when custom attributes and its details is requested.
+    EntityAttributeData:
+      required:
+      - entityId
+      - Entity_CustomAttributes
+      type: object
+      properties:
+        entityId:
+          type: string
+          description: Unique identifier of the entity
+          example: 0caf8dc0-xxxx-xxxx-xxxx-b43a2621fcba
+        Entity_CustomAttributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomAttributeDetails'
+          description: List of all custom attributes and its details, associated to an entity.
+      description: Entity Id and details of the custom attributes associated with the corresponding entity.
+    CustomAttributeDetails:
+      required:
+      - attributeId
+      - attributeName
+      - tag
+      - attributeType
+      - global
+      - value
+      type: object
+      properties:
+        attributeId:
+          type: string
+          description: Unique identifier of the attribute.
+          example: b57a75f7-xxxx-xxxx-xxxx-407d49868e5a
+        attributeName:
+          type: string
+          description: Attribute names as seen on 73S Monitor, corresponding to the attribute Id.
+          example: Business Sponsor
+        tag:
+          type: string
+          description: The tag that an attribute is associated with, which determines where the attribute is used.
+          example: General Details
+        attributeType:
+          type: string
+          description: 'Category of the attribute.
+
+
+            **TEXT** or ** NUMERICAL**.'
+          example: TEXT
+        description:
+          type: string
+          description: Brief overview added about the attribute.
+          nullable: true
+          example: Strategic
+        global:
+          type: string
+          description: Indicates whether the attribute is a Global attribute.
+          example: 'false'
+        value:
+          type: string
+          description: The specific value an attribute holds for a given entity.
+          example: GHO-SI-ESG
+      description: List of all custom attributes and its details, associated to an entity.
+    InvalidRequests:
+      required:
+      - success
+      - message
+      - responseCode
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Request’s success status.
+          example: false
+        message:
+          type: string
+          description: Output message depending on success status.
+          example: 'Invalid entity ids: [64f1db13-xxxx-xxxx-xxxx-a963cec04899]'
+        responseCode:
+          type: string
+          description: 'Response on hitting API request.
+
+
+            null: No errors were encountered.
+
+            Error Code: A descriptive error message or code if an issue occurred.'
+          example: BAD_REQUEST
+      description: Provides the list of invalid requests, incase of partially successful requests.
+    ApiV1EmsGetEntityQualitativeAnalysisDataPostRequest:
+      type: string
+      x-apim-inline: true
+    ApiV1EmsGetEntityGeneralDetailsPostRequest:
+      type: string
+      x-apim-inline: true
+    ApiV1EmsCustomAttributeDataPostRequest:
+      type: string
+      x-apim-inline: true
+security:
+- {}
+- apiKeyHeader: []
+- apiKeyQuery: []

@@ -1,23 +1,218 @@
 aid: 73-strings
 name: 73 Strings
-description: '73 Strings is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  73 Strings is an AI-powered financial technology company serving alternative asset managers in
+  private equity, private credit, venture capital, infrastructure and multi-strategy funds. Its
+  platform digitises the valuation and portfolio-monitoring lifecycle for illiquid assets through
+  three products — 73 Value (audit-ready equity and credit valuations), 73 Monitor (portfolio
+  monitoring and analytics) and 73 Extract (AI extraction of unstructured private-market documents
+  into structured data). 73 Strings exposes a REST API surface through Microsoft Azure API
+  Management developer portals, covering asset information, cap tables, documents, financial data,
+  qualitative data and transaction-ledger ingestion, all authenticated with a subscription key and
+  scoped by organization and user identifiers. The company is headquartered in Paris with offices in
+  London, New York, San Francisco, Singapore, Riyadh, Abu Dhabi, Bengaluru and Hyderabad, and is
+  backed by Blackstone, Goldman Sachs, Hamilton Lane, Golub Capital and Broadhaven.
+image: https://backend.73strings.com/wp-content/uploads/73-Intelligence_image-1.png
 url: https://raw.githubusercontent.com/api-evangelist/73-strings/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-05'
 modified: '2026-08-05'
+x-enrichment:
+  date: '2026-08-05'
+  status: enriched
+  artifacts_added: 30
+  pass: local-v1
+  note: >-
+    Six real OpenAPI 3.0.1 documents (23 operations, 141 component schemas) were harvested from the
+    73 Strings Azure API Management developer-portal Data API at
+    api-accord-eut-73strings.developer.azure-api.net/developer/apis?api-version=2022-04-01-preview.
+    The portal's own anonymous OpenAPI export returns paths:{}, so operations, parameters,
+    request/response representations, published examples and component schemas were assembled from
+    the same portal's /operations and /schemas endpoints. Two sibling APIM instances
+    (api-usa-73strings, api-73strings) publish no catalogue anonymously.
 tags:
-- Company
-apis: []
+- private-markets
+- valuation
+- portfolio-monitoring
+- private-equity
+- private-credit
+- venture-capital
+- alternative-assets
+- financial-data
+- data-extraction
+- fintech
+- asset-management
+- azure-api-management
+apis:
+- name: 73 Strings Asset Info API
+  description: >-
+    RESTful service returning company and entity insights from the 73 Strings platform — entity
+    lists, entity securities, business units, attribute identifiers and version lists — for
+    portfolio management, investment analysis and data retrieval across an organization.
+  humanURL: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=asset-info
+  baseURL: https://api-accord-eut-73strings.azure-api.net/assetinfo
+  tags:
+  - private-markets
+  - asset-management
+  - portfolio-monitoring
+  - financial-data
+  properties:
+  - type: OpenAPI
+    url: openapi/73-strings-asset-info-openapi.yml
+  - type: Documentation
+    url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=asset-info
+  - type: APIReference
+    url: https://api-accord-eut-73strings.developer.azure-api.net/apis
+- name: 73 Strings Captable API
+  description: >-
+    RESTful service returning capitalization-table data for a portfolio company held in the
+    73 Strings platform, including security-level ownership detail scoped to an organization.
+  humanURL: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=captable
+  baseURL: https://api-accord-eut-73strings.azure-api.net/captable
+  tags:
+  - private-markets
+  - valuation
+  - private-equity
+  - financial-data
+  properties:
+  - type: OpenAPI
+    url: openapi/73-strings-captable-openapi.yml
+  - type: Documentation
+    url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=captable
+- name: 73 Strings Documents API
+  description: >-
+    RESTful service listing the documents attached to a portfolio company in the 73 Strings
+    platform and returning download details for an individual document by document and company id.
+  humanURL: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=documents
+  baseURL: https://api-accord-eut-73strings.azure-api.net/documents
+  tags:
+  - private-markets
+  - data-extraction
+  - document-management
+  properties:
+  - type: OpenAPI
+    url: openapi/73-strings-documents-openapi.yml
+  - type: Documentation
+    url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=documents
+- name: 73 Strings Financial Data API
+  description: >-
+    RESTful service reading and writing entity, business-unit and security-level financial data in
+    the 73 Strings platform, including a v2 streaming variant for entity financial data and an
+    endpoint returning all financial texts for an entity.
+  humanURL: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=financial-data
+  baseURL: https://api-accord-eut-73strings.azure-api.net/financial-data
+  tags:
+  - financial-data
+  - private-markets
+  - portfolio-monitoring
+  - valuation
+  properties:
+  - type: OpenAPI
+    url: openapi/73-strings-financial-data-openapi.yml
+  - type: Documentation
+    url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=financial-data
+- name: 73 Strings Qualitative Data API
+  description: >-
+    RESTful service returning qualitative and general company detail from the 73 Strings platform —
+    general entity details, custom attribute data and qualitative analysis data.
+  humanURL: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=qualitative-data
+  baseURL: https://api-accord-eut-73strings.azure-api.net/qualitative-data
+  tags:
+  - private-markets
+  - portfolio-monitoring
+  - alternative-assets
+  properties:
+  - type: OpenAPI
+    url: openapi/73-strings-qualitative-data-openapi.yml
+  - type: Documentation
+    url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=qualitative-data
+- name: 73 Strings Transaction API
+  description: >-
+    RESTful service letting external enterprise customers ingest and retrieve transaction-ledger
+    records in the 73 Strings platform. Supports bulk create/update of transaction ledger records
+    with partial-success handling, platform-generated display ids, retrieval of processed
+    transaction data, and reference endpoints for transaction types and transaction versions.
+  humanURL: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=transaction-api
+  baseURL: https://api-accord-eut-73strings.azure-api.net/transactions
+  tags:
+  - private-markets
+  - financial-data
+  - transactions
+  - alternative-assets
+  properties:
+  - type: OpenAPI
+    url: openapi/73-strings-transaction-api-openapi.yml
+  - type: Documentation
+    url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=transaction-api
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DomainSecurity
+  url: security/73-strings-domain-security.yml
+- type: AgenticAccess
+  url: agentic-access/73-strings-agentic-access.yml
+- type: Authentication
+  url: authentication/73-strings-authentication.yml
 - type: Website
-  url: https://www.hiive.com/securities/73-strings-stock
+  url: https://www.73strings.com/
+- type: DeveloperPortal
+  url: https://api-accord-eut-73strings.developer.azure-api.net/
+- type: Documentation
+  url: https://api-accord-eut-73strings.developer.azure-api.net/apis
+- type: APIReference
+  url: https://api-accord-eut-73strings.developer.azure-api.net/apis
+- type: SignUp
+  url: https://api-accord-eut-73strings.developer.azure-api.net/signup
+- type: Login
+  url: https://api-accord-eut-73strings.developer.azure-api.net/signin
+- type: Support
+  url: mailto:support@73strings.com
+- type: Blog
+  url: https://www.73strings.com/insights/blog/
+- type: GitHubOrganization
+  url: https://github.com/73Strings
+- type: TermsOfService
+  url: https://www.73strings.com/terms-and-use/
+- type: PrivacyPolicy
+  url: https://www.73strings.com/privacy-policy/
+- type: Compliance
+  url: https://www.73strings.com/resources/about/
+- type: Conventions
+  url: conventions/73-strings-conventions.yml
+- type: ErrorCatalog
+  url: errors/73-strings-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/73-strings-lifecycle.yml
+- type: Conformance
+  url: conformance/73-strings-conformance.yml
+- type: DataModel
+  url: data-model/73-strings-data-model.yml
+- type: RateLimits
+  url: rate-limits/73-strings-rate-limits.yml
+- type: Plans
+  url: plans/73-strings-plans.yml
+- type: MCPServer
+  url: mcp/73-strings-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/73-strings-tool-crosswalk.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/73-strings-llms.txt
+- type: Overlay
+  url: overlays/73-strings-asset-info-overlay.yaml
+- type: Overlay
+  url: overlays/73-strings-captable-overlay.yaml
+- type: Overlay
+  url: overlays/73-strings-documents-overlay.yaml
+- type: Overlay
+  url: overlays/73-strings-financial-data-overlay.yaml
+- type: Overlay
+  url: overlays/73-strings-qualitative-data-overlay.yaml
+- type: Overlay
+  url: overlays/73-strings-transaction-api-overlay.yaml

@@ -1,0 +1,91 @@
+generated: '2026-08-05'
+method: derived
+source: >-
+  openapi/*.yml; https://www.73strings.com/resources/about/;
+  https://api-accord-eut-73strings.developer.azure-api.net/developer/apis
+description: >-
+  Cross-cutting and industry standards conformance for the 73 Strings API surface, derived from the
+  six published OpenAPI documents and searched against the company's public compliance statements.
+standards:
+- id: openapi-3.0
+  conforms: true
+  evidence: >-
+    All six product APIs are published as OpenAPI 3.0.1 by the Azure API Management developer
+    portal export endpoint (format=openapi / format=openapi+json).
+- id: rest
+  conforms: partial
+  evidence: >-
+    HTTPS/JSON over a resource-named gateway path, but every one of the 23 operations is POST
+    including read-shaped ones, and identifiers travel in the request body rather than the URI —
+    an RPC-over-HTTP style rather than resource-oriented REST.
+- id: oauth2
+  conforms: false
+  evidence: >-
+    securitySchemes declare only apiKey (subscription-key, header and query). No oauth2 flow is
+    declared and /.well-known/oauth-authorization-server returns 404 on every host.
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration returns 404 on all five 73 Strings hosts.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    Errors use a proprietary {response, success, message, errorCode} envelope on application/json;
+    no application/problem+json media type appears in any spec.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt returns 404 on all five hosts (well-known/73-strings-well-known.yml).
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: No Sunset or Deprecation response header is declared, and no operation is marked deprecated.
+- id: rfc6749-idempotency
+  conforms: false
+  evidence: No idempotency-key header or client-supplied deduplication token in any operation.
+- id: pagination
+  conforms: false
+  evidence: No page/limit/offset/cursor parameter or paging envelope appears anywhere in the surface.
+- id: http-207-multi-status
+  conforms: true
+  evidence: >-
+    Bulk transaction ingestion (unifiedTransaction, unifiedTransaction-v2, GTN_FUND_TRANSACTION)
+    returns 207 for partial success, with 422 identifying per-object validation failures.
+- id: sse-text-event-stream
+  conforms: true
+  evidence: >-
+    streamEntityFinancialData (POST /api/v2/ems/entityFinancialData) declares a text/event-stream
+    200 response with Cache-Control/Connection/Content-Type response-header schemas.
+- id: asyncapi
+  conforms: false
+  evidence: >-
+    No AsyncAPI document, event catalog, webhook registry, or streaming spec is published. The only
+    push-shaped surface is the SSE response above, which is modelled inside OpenAPI.
+- id: a2a-agent-card
+  conforms: false
+  evidence: >-
+    /.well-known/agent-card.json and /.well-known/agent.json return 404 on all five hosts.
+- id: mcp
+  conforms: false
+  evidence: No hosted or published MCP server was found for 73 Strings.
+
+compliance_program:
+  published: true
+  certifications:
+  - SOC 1
+  - SOC 2
+  claim: >-
+    "We also guarantee the highest standards of security and reliability with SOC 1 and SOC 2
+    compliance."
+  source: https://www.73strings.com/resources/about/
+  trust_center: null
+  report_access: not published
+  caveat: >-
+    The claim is a marketing statement on the About page. 73 Strings publishes no trust center, no
+    report-request flow, no audit period, and no auditor name, and probe-security-programs.py found
+    no trust/compliance page (trust.73strings.com, security.73strings.com, /trust, /security,
+    /compliance all miss). Recorded as a published claim, not as verified certification.
+
+regulatory_context:
+  sector: private markets / alternative asset management
+  note: >-
+    73 Strings is a software vendor to regulated fund managers, not a regulated financial
+    institution itself. Its API surface carries no PSD2/FDX/Open Banking conformance and asserts
+    none. Data residency is implied by the separate EU ("accord-eut") and US APIM instances.

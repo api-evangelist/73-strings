@@ -1,0 +1,78 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: 73 Strings
+providerId: 73-strings
+created: '2026-08-05'
+modified: '2026-08-05'
+generated: '2026-08-05'
+method: searched
+reconciled: false
+tags:
+- private-markets
+- financial-data
+- rate-limiting
+description: >-
+  73 Strings fronts its APIs with Microsoft Azure API Management and publishes quantitative limits
+  on the APIM product rather than in the API contract. The self-serve "Starter" product publishes an
+  explicit quota; the approval-gated products publish none. Every product API signals throttling
+  with HTTP 429, but no Retry-After or X-RateLimit-* response header is declared in any OpenAPI.
+sources:
+- https://api-accord-eut-73strings.developer.azure-api.net/developer/products?api-version=2022-04-01-preview
+- https://api-accord-eut-73strings.developer.azure-api.net/products
+responseCodes:
+  throttled: 429
+  throttledDescription: Too many requests sent in a short period. The client is being rate limited.
+headers:
+  retry_after: false
+  rate_limit_headers: []
+  note: No throttling response headers are declared in any of the six OpenAPI documents.
+limits:
+- name: Starter
+  product: starter
+  scope: subscription
+  metric: requests-per-minute
+  limit_count: 5
+  timeFrame: minute
+  notes: 'Published verbatim: "Subscribers will be able to run 5 calls/minute up to a maximum of 100 calls/week."'
+- name: Starter weekly quota
+  product: starter
+  scope: subscription
+  metric: requests-per-week
+  limit_count: 100
+  timeFrame: week
+  notes: Hard weekly ceiling on the self-serve tier. One subscription per developer.
+- name: Unlimited
+  product: unlimited
+  scope: subscription
+  metric: requests
+  limit_count: -1
+  timeFrame: unlimited
+  notes: 'Published verbatim: "Subscribers have completely unlimited access to the API. Administrator approval is required."'
+- name: 73 Monitor
+  product: 73-monitor
+  scope: subscription
+  metric: requests
+  limit: not published
+  notes: Approval-required product bundling the Monitor platform APIs; no quota published anonymously.
+- name: Transaction Management
+  product: transaction-management
+  scope: subscription
+  metric: requests
+  limit: not published
+  notes: Approval-required product for the Transaction Management System APIs; no quota published anonymously.
+policies:
+- name: Subscription-key scoping
+  description: >-
+    Limits are enforced per APIM product subscription, and the subscription key is associated with
+    a User ID. Requests are additionally scoped by orgId/userId in the request body.
+- name: Backoff
+  description: >-
+    No Retry-After is returned. Clients should apply exponential backoff with jitter on 429.
+notes: >-
+  16 of the 23 published operations document a 429 response. The 504 documented on bulk transaction
+  ingest leaves processing state indeterminate and there is no idempotency key, so a retry after a
+  throttle or timeout on that operation should be preceded by a read.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

@@ -1,0 +1,75 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: 73 Strings
+providerId: 73-strings
+created: '2026-08-05'
+modified: '2026-08-05'
+generated: '2026-08-05'
+method: searched
+reconciled: false
+tags:
+- private-markets
+- financial-data
+- plans
+description: >-
+  73 Strings publishes no public price list. Commercial terms are handled through a sales motion
+  ("Book a demo"), and API access is granted as Azure API Management product subscriptions. The
+  four products below are the access tiers the developer portal exposes anonymously; three of the
+  four require administrator approval, and none carries a published price.
+notes: >-
+  Prices are not published. The "Starter" product is the only self-serve tier (no approval), and it
+  is a quota tier rather than a priced plan. No Pricing pointer is wired in apis.yml because no
+  pricing page exists on 73strings.com.
+sources:
+- https://api-accord-eut-73strings.developer.azure-api.net/developer/products?api-version=2022-04-01-preview
+- https://www.73strings.com/book-a-demo/
+plans:
+- id: starter
+  name: Starter
+  type: free-tier
+  approvalRequired: false
+  subscriptionsLimit: 1
+  price: not published
+  description: 'Verbatim: "Subscribers will be able to run 5 calls/minute up to a maximum of 100 calls/week."'
+  entries:
+  - {label: Requests per minute, name: requests_per_minute, type: limit, metric: requests, limit: 5, timeFrame: minute}
+  - {label: Requests per week, name: requests_per_week, type: limit, metric: requests, limit: 100, timeFrame: week}
+- id: unlimited
+  name: Unlimited
+  type: enterprise
+  approvalRequired: true
+  subscriptionsLimit: 1
+  price: not published
+  description: 'Verbatim: "Subscribers have completely unlimited access to the API. Administrator approval is required."'
+  entries:
+  - {label: Requests, name: requests, type: limit, metric: requests, limit: -1, timeFrame: unlimited}
+- id: 73-monitor
+  name: 73 Monitor
+  type: product-bundle
+  approvalRequired: true
+  subscriptionsLimit: null
+  price: not published
+  description: >-
+    Verbatim: "The 73 Monitor API is a bundle of REST APIs designed to interact with the Monitor
+    platform of 73 Strings. It provides endpoints to fetch (GET HTTPS Method) and populate (PUT
+    HTTPS Method) data within the platform. API subscription keys are required for accessing the 73
+    Monitor API. These API provides comprehensive access to the platform's portfolio monitoring and
+    data analytics capabilities., designed for seamless integration."
+- id: transaction-management
+  name: Transaction Management
+  type: product-bundle
+  approvalRequired: true
+  subscriptionsLimit: null
+  price: not published
+  description: 'Verbatim: "REST APIs for Transaction Management System in 73 Strings"'
+onboarding:
+  model: sales-assisted
+  self_serve_signup: https://api-accord-eut-73strings.developer.azure-api.net/signup
+  note: >-
+    Developer-portal signup is open, but three of the four products require administrator approval
+    before a subscription key is issued, and the underlying data is customer tenant data — so a key
+    is only useful to an existing 73 Strings customer.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

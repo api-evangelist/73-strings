@@ -1,0 +1,121 @@
+generated: '2026-08-05'
+method: derived
+source: >-
+  openapi/*.yml (assembled from the 73 Strings Azure API Management developer-portal Data API),
+  https://api-accord-eut-73strings.developer.azure-api.net/developer/products
+description: >-
+  Cross-cutting request/response semantics for the 73 Strings REST API surface, derived from the six
+  published product APIs and the Azure API Management product/subscription model that fronts them.
+
+authentication:
+  style: api-key
+  scheme: subscription-key
+  transport:
+  - {in: header, name: subscription-key, preferred: true}
+  - {in: query, name: subscription-key}
+  gateway: Microsoft Azure API Management
+  notes: >-
+    Every operation across all six APIs declares the same two apiKey security schemes. The
+    subscription key is bound to an APIM product subscription and, per the Transaction API
+    description, is associated with a User ID. The `subscription-key` header is documented as
+    required on each operation in addition to the document-level security requirement.
+  ref: authentication/73-strings-authentication.yml
+
+tenancy:
+  model: multi-tenant
+  request_scoping:
+  - {field: orgId, required: true, description: Unique identifier of the organization; determines data access scope}
+  - {field: userId, required: true, description: Unique identifier of the calling user}
+  notes: >-
+    Organization ID and User ID are mandatory in request payloads and determine data access. APIs
+    are multi-tenant by design and return data scoped to the provided organization (stated verbatim
+    in the Transaction API description). This is a body-level scoping convention, not a header.
+
+request:
+  transport: HTTPS only (protocols declared as ["https"] on every API)
+  method_convention: >-
+    All 23 product operations are POST, including read-shaped operations (getEntityList,
+    getTransactionTypes, getCaptableData). Identifiers and filters travel in the JSON request body
+    rather than in the path or query string. There are no path parameters anywhere in the surface.
+  content_type: application/json
+  path_versioning: true
+
+pagination:
+  supported: false
+  notes: >-
+    No page/limit/offset/cursor parameters appear in any request schema, and no paging envelope
+    appears in any response schema. Bulk reads are bounded by the request filters (entity ids,
+    version ids, date ranges) instead. One operation is explicitly streaming
+    (streamEntityFinancialData, POST /api/v2/ems/entityFinancialData).
+
+idempotency:
+  supported: false
+  header: null
+  notes: >-
+    No Idempotency-Key header, request-id echo, or client-supplied deduplication token appears in
+    any operation across the six specs, and no idempotency guarantee is documented. The Transaction
+    API is an upsert-style bulk ingest ("bulk creation and update of transaction ledger records")
+    with partial-success handling via HTTP 207, which is a merge semantic rather than an
+    idempotency-key contract. Deliberately NOT wired as type Idempotency in apis.yml.
+
+error_envelope:
+  shape: proprietary
+  media_type: application/json
+  fields:
+  - {name: response, description: The payload on success; empty array or object on failure}
+  - {name: success, type: boolean, description: Whether the call succeeded}
+  - {name: message, type: string, description: Human-readable outcome message}
+  - {name: errorCode, type: string, description: 73 Strings error code, e.g. EXCE00028; null on success}
+  rfc9457: false
+  notes: >-
+    The envelope is returned on both success and failure, and a business-level failure can be
+    carried on an HTTP 200 (errorCode EXCE00021 "Data not found." is documented as a 200 example).
+    Agents must read `success`/`errorCode` and not rely on the HTTP status alone.
+  ref: errors/73-strings-problem-types.yml
+
+async_processing:
+  supported: true
+  signal: HTTP 202
+  notes: >-
+    18 of 23 operations document a 202 "Request accepted for processing, but not yet completed."
+    response. No callback URL, polling endpoint, or job-id retrieval convention is documented in
+    the specs, so the completion contract is not machine-discoverable.
+
+partial_success:
+  supported: true
+  signal: HTTP 207
+  operations: [unifiedTransaction-v2, unifiedTransaction, GTN_FUND_TRANSACTION]
+  notes: >-
+    Bulk transaction ingestion returns 207 Multi-Status when some submitted objects succeed and
+    others fail; 422 identifies validation failures per transaction object (VALIDATION_ERROR).
+
+rate_limiting:
+  signalled: true
+  status: 429
+  documented_headers: none
+  notes: >-
+    16 of 23 operations document a 429 "Too many requests sent in a short period. The client is
+    being rate limited." response. No Retry-After or X-RateLimit-* response headers are declared in
+    any spec. Quantitative limits are published on the APIM product, not in the API contract.
+  ref: rate-limits/73-strings-rate-limits.yml
+
+versioning:
+  scheme: uri-path
+  current: [v1, v2]
+  notes: >-
+    Version lives in the operation path (/api/v1/..., /api/v2/...) rather than in a header or the
+    server URL. v1 and v2 coexist for entity financial data and unified transactions; neither v1
+    operation is marked deprecated in the spec.
+  ref: lifecycle/73-strings-lifecycle.yml
+
+tracing:
+  request_id_header: null
+  notes: No correlation/request-id header is documented on request or response.
+
+field_expansion:
+  supported: false
+metadata:
+  supported: false
+  notes: >-
+    Extensibility is modelled as first-class custom attributes (getCustomAttributeDetails,
+    getEntityAttributeIds) rather than a free-form metadata bag.

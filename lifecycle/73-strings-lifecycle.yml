@@ -1,0 +1,46 @@
+generated: '2026-08-05'
+method: derived
+source: >-
+  openapi/*.yml; https://api-accord-eut-73strings.developer.azure-api.net/developer/apis;
+  https://www.73strings.com/ (page sitemap)
+versioning:
+  scheme: uri-path
+  current: v2
+  in_use: [v1, v2]
+  docs: null
+  notes: >-
+    Version is carried in the operation path (/api/v1/..., /api/v2/...). Two operations have a v2
+    alongside a live v1: entityFinancialData (v1) / streamEntityFinancialData (v2) and
+    unifiedTransaction (v1) / unifiedTransaction-v2 (v2). APIM apiVersion is null on every API — no
+    version set is configured at the gateway, so version selection is per-operation path only.
+    All six OpenAPI documents carry info.version "1.0".
+deprecation:
+  policy_url: null
+  sunset_header: false
+  notes: >-
+    No deprecation or sunset policy is published, no operation carries `deprecated: true`, and no
+    Sunset/Deprecation response headers are declared. The v1 operations superseded by v2 are not
+    marked deprecated. No Deprecation pointer is wired in apis.yml.
+status_page:
+  url: null
+  probed:
+  - {url: 'https://www.73strings.com/status', status: 404}
+  - {url: 'https://status.73strings.com/', status: 000, note: host does not resolve}
+  notes: >-
+    No public status page was found. No StatusPage pointer is wired in apis.yml.
+sla:
+  url: null
+  uptime_target: null
+  notes: >-
+    No published SLA. The Transaction API description states explicitly that the APIs "do not
+    orchestrate synchronization or enforce real-time guarantees".
+changelog:
+  url: null
+  notes: >-
+    No dated API changelog or release-notes page exists on the developer portal or the marketing
+    site. Company news is published at https://www.73strings.com/insights/news/ but is corporate
+    news, not API release notes.
+deprecated_operations: []
+support:
+  contact: support@73strings.com
+  source: openapi info.contact.email on all six APIs

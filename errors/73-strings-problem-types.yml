@@ -1,0 +1,105 @@
+generated: '2026-08-05'
+method: derived
+source: openapi/*.yml (4xx/5xx responses and documented response examples across all six APIs)
+format: proprietary
+rfc9457: false
+description: >-
+  73 Strings does not use RFC 9457 problem+json. Every operation returns the same
+  application/json envelope on success and on failure, and a business-level failure can be carried
+  on an HTTP 200. Agents must read `success` and `errorCode`, not the HTTP status alone.
+
+envelope:
+  media_type: application/json
+  fields:
+  - {name: response, description: Payload on success; empty array/object on failure}
+  - {name: success, type: boolean}
+  - {name: message, type: string, description: Human-readable outcome message}
+  - {name: errorCode, type: string, description: 73 Strings error code; null on success}
+  example_failure: '{"response": [], "success": false, "message": "Data not found.", "errorCode": "EXCE00021"}'
+
+error_codes:
+- code: EXCE00020
+  http_status: [400]
+  message: Fields cannot be null or empty.
+  meaning: A required field in the request body was omitted, null, or an empty string.
+  remediation: >-
+    Populate every required field for the operation. orgId and userId are mandatory on every
+    request across the whole surface.
+- code: EXCE00021
+  http_status: [200]
+  message: Data not found.
+  meaning: >-
+    The request was well-formed and authorized but matched no records in the caller's organization.
+    Documented as a "No Data Example" on HTTP 200, not on 404.
+  remediation: >-
+    Treat as an empty result, not a transport failure. Verify entity/company identifiers exist in
+    the organization and that the version/reporting-date filters are in range.
+- code: EXCE00028
+  http_status: [400, 401, 500]
+  messages:
+  - Invalid input, please try again
+  - Invalid request parameters.
+  - Access denied due to invalid subscription key. Please provide a valid key with active subscription.
+  - Internal server error. Please try again later or contact support.
+  meaning: >-
+    A general-purpose code reused across malformed input, subscription-key rejection, and server
+    faults. The HTTP status and `message` field disambiguate it, not the code.
+  remediation: >-
+    On 401, confirm the subscription-key header carries a key with an active APIM product
+    subscription. On 400, validate the request body against the operation schema. On 500, retry
+    with backoff and contact support@73strings.com.
+- code: VALIDATION_ERROR
+  http_status: [422]
+  meaning: >-
+    Per-object validation failure in bulk transaction ingestion. The response identifies which
+    submitted transaction objects failed and why.
+  remediation: >-
+    Correct the identified objects and resubmit. Successfully validated objects in the same batch
+    are reported separately via HTTP 207.
+  operations: [unifiedTransaction-v2, unifiedTransaction, GTN_FUND_TRANSACTION]
+
+problems:
+- status: 400
+  title: Invalid input, missing parameters.
+  count_operations: 22
+  codes: [EXCE00020, EXCE00028]
+- status: 401
+  title: Invalid or missing Subscription key.
+  count_operations: 22
+  codes: [EXCE00028]
+- status: 404
+  title: Resource not found
+  count_operations: 6
+- status: 405
+  title: Request with incorrect HTTPS method.
+  count_operations: 15
+  note: All product operations are POST; any other method on the path returns 405.
+- status: 422
+  title: Validation failure for the submitted transaction objects.
+  count_operations: 1
+  codes: [VALIDATION_ERROR]
+- status: 429
+  title: Too many requests sent in a short period. The client is being rate limited.
+  count_operations: 16
+  note: No Retry-After or X-RateLimit-* header is declared in any spec.
+- status: 500
+  title: Internal server error.
+  count_operations: 22
+  codes: [EXCE00028]
+- status: 504
+  title: >-
+    Gateway timeout. Processing state is indeterminate; some, all, or none of the submitted objects
+    may have been persisted.
+  count_operations: 1
+  note: >-
+    Explicitly indeterminate on bulk transaction ingest. Because there is no idempotency key,
+    a blind retry after 504 can duplicate work — re-read with getTransactionData before resubmitting.
+
+non_error_statuses:
+- status: 202
+  title: Request accepted for processing, but not yet completed.
+  count_operations: 18
+  note: No polling endpoint or callback contract is documented for the accepted work.
+- status: 207
+  title: The request was partially successful and valid request data has been returned.
+  count_operations: 3

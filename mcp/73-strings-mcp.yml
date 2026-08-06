@@ -1,0 +1,99 @@
+generated: '2026-08-05'
+method: derived
+status: candidate
+source: openapi/*.yml (six 73 Strings product APIs)
+search_result:
+  official_hosted_server: none
+  probes:
+  - url: https://api.73strings.com/mcp
+    method: POST tools/list
+    status: 404
+  - url: https://api-accord-eut-73strings.azure-api.net/mcp
+    method: POST tools/list
+    status: 404
+  - url: https://mcp.73strings.com/
+    method: DNS
+    status: '000'
+    note: host does not resolve
+  registries_checked:
+  - npm (@modelcontextprotocol scope, "73strings" search)
+  - GitHub org github.com/73Strings (0 public repos)
+  - web search
+  third_party: []
+  note: No first-party or third-party MCP server for 73 Strings was found. The tool list below is a CANDIDATE derived
+    from the published OpenAPI operations, not a server 73 Strings operates.
+server:
+  name: 73-strings
+  transport: http
+  url: null
+  auth: subscription-key header (Azure API Management product subscription)
+tools:
+- name: get_attribute_ids
+  description: Get Attributes List
+  source_operation: openapi/73-strings-asset-info-openapi.yml#getAttributeIDs
+- name: get_entity_business_units
+  description: Get Business Units
+  source_operation: openapi/73-strings-asset-info-openapi.yml#getEntityBusinessUnits
+- name: get_entity_list
+  description: Get Entity List
+  source_operation: openapi/73-strings-asset-info-openapi.yml#getEntityList
+- name: get_entity_securities_list
+  description: Get Securities List
+  source_operation: openapi/73-strings-asset-info-openapi.yml#getEntitySecuritiesList
+- name: get_version_list
+  description: Get Version List
+  source_operation: openapi/73-strings-asset-info-openapi.yml#getVersionList
+- name: get_captable_data
+  description: Get Captable Data
+  source_operation: openapi/73-strings-captable-openapi.yml#getCaptableData
+- name: get_document_details_by_document_idand_company_id
+  description: Get Entity Document Download FIle
+  source_operation: openapi/73-strings-documents-openapi.yml#getDocumentDetailsByDocumentIDAndCompanyID
+- name: get_document_id_for_company_id
+  description: Get Entity Document List
+  source_operation: openapi/73-strings-documents-openapi.yml#getDocumentIdForCompanyID
+- name: get_all_financial_texts
+  description: Get All Financial Texts
+  source_operation: openapi/73-strings-financial-data-openapi.yml#getAllFinancialTexts
+- name: entity_bu_financial_data
+  description: Get BU Financial Data
+  source_operation: openapi/73-strings-financial-data-openapi.yml#entityBuFinancialData
+- name: entity_financial_data
+  description: Get Entity Financial Data
+  source_operation: openapi/73-strings-financial-data-openapi.yml#entityFinancialData
+- name: stream_entity_financial_data
+  description: Get Entity Financial Data V2
+  source_operation: openapi/73-strings-financial-data-openapi.yml#streamEntityFinancialData
+- name: entity_security_financial_data
+  description: Get Security Financial Data
+  source_operation: openapi/73-strings-financial-data-openapi.yml#entitySecurityFinancialData
+- name: company_financial_data
+  description: Save Entity Financial Data
+  source_operation: openapi/73-strings-financial-data-openapi.yml#companyFinancialData
+- name: get_custom_attribute_details
+  description: Get Custom Attribute Data
+  source_operation: openapi/73-strings-qualitative-data-openapi.yml#getCustomAttributeDetails
+- name: get_general_details
+  description: Get Entity General Details
+  source_operation: openapi/73-strings-qualitative-data-openapi.yml#getGeneralDetails
+- name: get_qualitative_analysis_data
+  description: Get Entity Qualitative Analysis Data
+  source_operation: openapi/73-strings-qualitative-data-openapi.yml#getQualitativeAnalysisData
+- name: unified_transaction_v2
+  description: Create or update transactions in bulk (V2)
+  source_operation: openapi/73-strings-transaction-api-openapi.yml#unifiedTransaction-v2
+- name: unified_transaction
+  description: Create/Update Transaction
+  source_operation: openapi/73-strings-transaction-api-openapi.yml#unifiedTransaction
+- name: get_transaction_data
+  description: Get Transaction Data
+  source_operation: openapi/73-strings-transaction-api-openapi.yml#getTransactionData
+- name: get_transaction_types
+  description: Get Transaction Types
+  source_operation: openapi/73-strings-transaction-api-openapi.yml#getTransactionTypes
+- name: get_transaction_versions
+  description: Get Transaction Versions
+  source_operation: openapi/73-strings-transaction-api-openapi.yml#getTransactionVersions
+- name: gtn_fund_transaction
+  description: GTN Fund Transactions API
+  source_operation: openapi/73-strings-transaction-api-openapi.yml#GTN_FUND_TRANSACTION

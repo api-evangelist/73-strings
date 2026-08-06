@@ -1,0 +1,34 @@
+generated: '2026-08-05'
+method: derived
+source: openapi/73-strings-asset-info-openapi.yml, openapi/73-strings-captable-openapi.yml,
+  openapi/73-strings-documents-openapi.yml, openapi/73-strings-financial-data-openapi.yml, openapi/73-strings-qualitative-data-openapi.yml,
+  openapi/73-strings-transaction-api-openapi.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+  - query
+schemes:
+- name: apiKeyHeader
+  type: apiKey
+  in: header
+  parameter: subscription-key
+  sources:
+  - openapi/73-strings-asset-info-openapi.yml
+  - openapi/73-strings-captable-openapi.yml
+  - openapi/73-strings-documents-openapi.yml
+  - openapi/73-strings-financial-data-openapi.yml
+  - openapi/73-strings-qualitative-data-openapi.yml
+  - openapi/73-strings-transaction-api-openapi.yml
+- name: apiKeyQuery
+  type: apiKey
+  in: query
+  parameter: subscription-key
+  sources:
+  - openapi/73-strings-asset-info-openapi.yml
+  - openapi/73-strings-captable-openapi.yml
+  - openapi/73-strings-documents-openapi.yml
+  - openapi/73-strings-financial-data-openapi.yml
+  - openapi/73-strings-qualitative-data-openapi.yml
+  - openapi/73-strings-transaction-api-openapi.yml

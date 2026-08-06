@@ -1,0 +1,46 @@
+generated: '2026-08-05'
+method: probed
+source: live GET of /.well-known/* on every 73 Strings host in apis.yml
+note: >-
+  No /.well-known/ discovery document was found on any 73 Strings host. Every path below was
+  probed anonymously and returned 404. The marketing site (Next.js) and the Azure API Management
+  developer portal both answer 404 with an HTML body; the Azure APIM gateway answers 404 with a
+  JSON body ({"statusCode":404,"message":"Resource not found"}). Recorded as evidence of absence —
+  no WellKnown or SecurityTxt pointer is wired, because nothing was found.
+hosts:
+- host: https://www.73strings.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+- host: https://api-accord-eut-73strings.azure-api.net
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/oauth-protected-resource, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+- host: https://api-usa-73strings.azure-api.net
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/oauth-protected-resource, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+- host: https://api-accord-eut-73strings.developer.azure-api.net
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+- host: https://api-usa-73strings.developer.azure-api.net
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}

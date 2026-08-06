@@ -1,0 +1,30 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for 73 Strings Asset Info
+  version: 1.0.0
+extends: openapi/73-strings-asset-info-openapi.yml
+x-generated: '2026-08-05'
+x-method: generated
+x-source: Assembled from the 73 Strings Azure API Management developer-portal Data API; enhancements derived from
+  the repo artifacts.
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: 73-strings
+    x-apievangelist-profile: https://github.com/api-evangelist/73-strings
+    x-spec-provenance: Harvested from https://api-accord-eut-73strings.developer.azure-api.net/developer/apis/asset-info?api-version=2022-04-01-preview
+      — the anonymous export returns paths:{}, so operations, parameters, request/response representations, examples
+      and component schemas were assembled from the same portal Data API operations and schemas endpoints.
+- target: $
+  update:
+    x-conventions: conventions/73-strings-conventions.yml
+    x-error-catalog: errors/73-strings-problem-types.yml
+    x-data-model: data-model/73-strings-data-model.yml
+    x-rate-limits: rate-limits/73-strings-rate-limits.yml
+    x-authentication: authentication/73-strings-authentication.yml
+- target: $.paths.*.*
+  update:
+    x-error-envelope: Responses use the proprietary {response, success, message, errorCode} envelope. A business
+      failure can arrive on HTTP 200 (errorCode EXCE00021). Read success/errorCode, not the HTTP status alone.
+    x-idempotency: none — no idempotency key is supported on this API
+    x-tenancy: orgId and userId are mandatory in the request body and scope all data access

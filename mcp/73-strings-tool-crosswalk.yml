@@ -1,0 +1,190 @@
+generated: '2026-08-05'
+method: derived
+source: mcp/73-strings-mcp.yml + openapi/*.yml
+note: The MCP surface is a CANDIDATE derived from OpenAPI, so every binding is 1:1 by construction and there are
+  no mcp_only or rest_only divergences. This crosswalk records the proposed tool-to-operation contract; each tool
+  inherits its real inputSchema from the referenced operation's requestBody in the OpenAPI. It is not a map of a
+  server 73 Strings runs.
+surfaces:
+  openapi:
+  - openapi/73-strings-asset-info-openapi.yml
+  - openapi/73-strings-captable-openapi.yml
+  - openapi/73-strings-documents-openapi.yml
+  - openapi/73-strings-financial-data-openapi.yml
+  - openapi/73-strings-qualitative-data-openapi.yml
+  - openapi/73-strings-transaction-api-openapi.yml
+  graphql: null
+  mcp:
+    url: null
+    status: candidate
+    gated: false
+crosswalk:
+- tool: get_attribute_ids
+  category: Asset Info
+  rest:
+  - getAttributeIDs
+  binding: rest
+  confidence: high
+  note: 1:1 derived from POST /api/v1/ems/getEntityAttributeIds in openapi/73-strings-asset-info-openapi.yml
+- tool: get_entity_business_units
+  category: Asset Info
+  rest:
+  - getEntityBusinessUnits
+  binding: rest
+  confidence: high
+  note: 1:1 derived from POST /api/v1/ems/getEntityBusinessUnits in openapi/73-strings-asset-info-openapi.yml
+- tool: get_entity_list
+  category: Asset Info
+  rest:
+  - getEntityList
+  binding: rest
+  confidence: high
+  note: 1:1 derived from POST /api/v1/ems/getEntityList in openapi/73-strings-asset-info-openapi.yml
+- tool: get_entity_securities_list
+  category: Asset Info
+  rest:
+  - getEntitySecuritiesList
+  binding: rest
+  confidence: high
+  note: 1:1 derived from POST /api/v1/ems/getEntitySecuritiesList in openapi/73-strings-asset-info-openapi.yml
+- tool: get_version_list
+  category: Asset Info
+  rest:
+  - getVersionList
+  binding: rest
+  confidence: high
+  note: 1:1 derived from POST /api/v1/version-list in openapi/73-strings-asset-info-openapi.yml
+- tool: get_captable_data
+  category: Captable
+  rest:
+  - getCaptableData
+  binding: rest
+  confidence: high
+  note: 1:1 derived from POST /api/v1/ems/captable/data in openapi/73-strings-captable-openapi.yml
+- tool: get_document_details_by_document_idand_company_id
+  category: Documents
+  rest:
+  - getDocumentDetailsByDocumentIDAndCompanyID
+  binding: rest
+  confidence: high
+  note: 1:1 derived from POST /api/v1/ems/getEntityDocumentDownloadFIle in openapi/73-strings-documents-openapi.yml
+- tool: get_document_id_for_company_id
+  category: Documents
+  rest:
+  - getDocumentIdForCompanyID
+  binding: rest
+  confidence: high
+  note: 1:1 derived from POST /api/v1/ems/getEntityDocumentList in openapi/73-strings-documents-openapi.yml
+- tool: get_all_financial_texts
+  category: Financial Data
+  rest:
+  - getAllFinancialTexts
+  binding: rest
+  confidence: high
+  note: 1:1 derived from POST /api/v1/data/getAllFinancialTexts in openapi/73-strings-financial-data-openapi.yml
+- tool: entity_bu_financial_data
+  category: Financial Data
+  rest:
+  - entityBuFinancialData
+  binding: rest
+  confidence: high
+  note: 1:1 derived from POST /api/v1/ems/entityBuFinancialData in openapi/73-strings-financial-data-openapi.yml
+- tool: entity_financial_data
+  category: Financial Data
+  rest:
+  - entityFinancialData
+  binding: rest
+  confidence: high
+  note: 1:1 derived from POST /api/v1/ems/entityFinancialData in openapi/73-strings-financial-data-openapi.yml
+- tool: stream_entity_financial_data
+  category: Financial Data
+  rest:
+  - streamEntityFinancialData
+  binding: rest
+  confidence: high
+  note: 1:1 derived from POST /api/v2/ems/entityFinancialData in openapi/73-strings-financial-data-openapi.yml
+- tool: entity_security_financial_data
+  category: Financial Data
+  rest:
+  - entitySecurityFinancialData
+  binding: rest
+  confidence: high
+  note: 1:1 derived from POST /api/v1/ems/entitySecurityFinancialData in openapi/73-strings-financial-data-openapi.yml
+- tool: company_financial_data
+  category: Financial Data
+  rest:
+  - companyFinancialData
+  binding: rest
+  confidence: high
+  note: 1:1 derived from POST /api/v1/ems/saveEntityFinancialData in openapi/73-strings-financial-data-openapi.yml
+- tool: get_custom_attribute_details
+  category: Qualitative Data
+  rest:
+  - getCustomAttributeDetails
+  binding: rest
+  confidence: high
+  note: 1:1 derived from POST /api/v1/ems/customAttributeData in openapi/73-strings-qualitative-data-openapi.yml
+- tool: get_general_details
+  category: Qualitative Data
+  rest:
+  - getGeneralDetails
+  binding: rest
+  confidence: high
+  note: 1:1 derived from POST /api/v1/ems/getEntityGeneralDetails in openapi/73-strings-qualitative-data-openapi.yml
+- tool: get_qualitative_analysis_data
+  category: Qualitative Data
+  rest:
+  - getQualitativeAnalysisData
+  binding: rest
+  confidence: high
+  note: 1:1 derived from POST /api/v1/ems/getEntityQualitativeAnalysisData in openapi/73-strings-qualitative-data-openapi.yml
+- tool: unified_transaction_v2
+  category: Transaction API
+  rest:
+  - unifiedTransaction-v2
+  binding: rest
+  confidence: high
+  note: 1:1 derived from POST /api/v2/unifiedTransaction in openapi/73-strings-transaction-api-openapi.yml
+- tool: unified_transaction
+  category: Transaction API
+  rest:
+  - unifiedTransaction
+  binding: rest
+  confidence: high
+  note: 1:1 derived from POST /api/v1/unifiedTransaction in openapi/73-strings-transaction-api-openapi.yml
+- tool: get_transaction_data
+  category: Transaction API
+  rest:
+  - getTransactionData
+  binding: rest
+  confidence: high
+  note: 1:1 derived from POST /api/v1/transactionData in openapi/73-strings-transaction-api-openapi.yml
+- tool: get_transaction_types
+  category: Transaction API
+  rest:
+  - getTransactionTypes
+  binding: rest
+  confidence: high
+  note: 1:1 derived from POST /api/v1/transactionType in openapi/73-strings-transaction-api-openapi.yml
+- tool: get_transaction_versions
+  category: Transaction API
+  rest:
+  - getTransactionVersions
+  binding: rest
+  confidence: high
+  note: 1:1 derived from POST /api/v1/transactionVersion in openapi/73-strings-transaction-api-openapi.yml
+- tool: gtn_fund_transaction
+  category: Transaction API
+  rest:
+  - GTN_FUND_TRANSACTION
+  binding: rest
+  confidence: high
+  note: 1:1 derived from POST /api/v1/putfundTransactions in openapi/73-strings-transaction-api-openapi.yml
+mcp_only: []
+rest_only: []
+coverage:
+  tools_named: 23
+  tools_bound: 23
+  mcp_only: 0
+  rest_ops_total: 23
+  rest_ops_with_tool: 23

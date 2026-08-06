@@ -1,0 +1,2590 @@
+openapi: 3.0.1
+info:
+  title: Transaction API
+  description: The <b>Transaction APIs</b> enable external enterprise customers to <b>ingest and retrieve transaction ledger records</b> within the <b>73 Strings platform</b>.<br><br>These APIs are intended for <b>client-side engineering teams</b> that manage their own data pipelines and require a <b>controlled, structured interface</b> to push transaction data into the platform or retrieve processed transaction information for downstream workflows.<br><br><b>Key capabilities</b><ul><li>Bulk creation and update of transaction ledger records</li><li>Platform-generated <b>Display IDs</b> for stable referencing across workflows</li><li>Retrieval of processed transaction data</li><li>Reference APIs for <b>transaction types</b> and <b>transaction versions</b> to ensure payload correctness</li><li>Partial success handling for bulk ingestion</li></ul><b>Authentication &amp; data scoping</b><ul><li>All APIs are authenticated using a <b>subscription key</b> associated with a <b>User ID</b></li><li><b>Organization ID</b> and <b>User ID</b> are mandatory in request payloads and determine data access</li><li>APIs are multi-tenant by design and return data scoped to the provided organization</li></ul><b>Processing model</b><ul><li>Transactions are pushed via external pipelines (real-time or batch)</li><li>The platform persists and processes the data as per supported transaction structures</li><li>The APIs do not orchestrate synchronization or enforce real-time guarantees</li></ul>
+  contact:
+    name: ''
+    email: support@73strings.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: '1.0'
+servers:
+- url: https://api-accord-eut-73strings.azure-api.net/transactions
+tags:
+- name: Transaction API
+  description: The <b>Transaction APIs</b> enable external enterprise customers to <b>ingest and retrieve transaction ledger records</b> within the <b>73 Strings platform</b>.<br><br>These APIs are intended for <b>client-side engineering teams</b> that manage their own data pipelines and require a <b>controlled, structured interface</b> to push transaction data into the platform or retrieve processed transaction information for downstream workflows.<br><br><b>Key capabilities</b><ul><li>Bulk creation and update of transaction ledger records</li><li>Platform-generated <b>Display IDs</b> for stable referencing across workflows</li><li>Retrieval of processed transaction data</li><li>Reference APIs for <b>transaction types</b> and <b>transaction versions</b> to ensure payload correctness</li><li>Partial success handling for bulk ingestion</li></ul><b>Authentication &amp; data scoping</b><ul><li>All APIs are authenticated using a <b>subscription key</b> associated with a <b>User ID</b></li><li><b>Organization ID</b> and <b>User ID</b> are mandatory in request payloads and determine data access</li><li>APIs are multi-tenant by design and return data scoped to the provided organization</li></ul><b>Processing model</b><ul><li>Transactions are pushed via external pipelines (real-time or batch)</li><li>The platform persists and processes the data as per supported transaction structures</li><li>The APIs do not orchestrate synchronization or enforce real-time guarantees</li></ul>
+paths:
+  /api/v2/unifiedTransaction:
+    post:
+      operationId: unifiedTransaction-v2
+      summary: Create or update transactions in bulk (V2)
+      tags:
+      - Transaction API
+      description: Use this endpoint to submit one or more transaction records to the 73 Strings platform in a single JSON request. Each object in <b>TransactionData</b> is validated and processed independently, so a failure for one object does not automatically prevent other valid objects in the same request from being saved.<br><br><b>How create and update are resolved</b><ul><li>The platform uses <b>multilayeredTransactionMetadata.externalTransactionSourceReferenceId</b> together with the transaction-level <b>asOfDate</b> to decide how each object is processed.</li><li>If <b>externalTransactionSourceReferenceId</b> is new or not provided, the platform creates a new transaction and generates an internal <b>displayId</b>.</li><li>If the same <b>externalTransactionSourceReferenceId</b> and the same <b>asOfDate</b> already exist, the existing as-of-date record is fully replaced by the submitted object. This is a full overwrite, not a merge or patch.</li><li>If the same <b>externalTransactionSourceReferenceId</b> exists with a different <b>asOfDate</b>, the platform creates a new time-series instance under the same logical transaction.</li><li>Do not send <b>displayId</b> in the request. It is generated and managed by the platform. Use a stable <b>externalTransactionSourceReferenceId</b> for transactions that may need to be updated later.</li></ul><b>Request limits and validation</b><ul><li>A request can include up to <b>2,000</b> transaction objects and must not exceed <b>5 MB</b>.</li><li><b>orgId</b> and <b>userId</b> must be authorized for the supplied subscription key.</li><li><b>TransactionData</b> is required and must contain at least one object.</li><li>Dates must use <b>YYYY-MM-DD</b> format. Currency codes must use ISO 4217 three-letter codes, and currency-unit values are case-sensitive.</li><li>Conditional field groups must be sent completely or omitted completely. For example, local amount fields, reporting amount fields, post-money valuation fields, and security fields should not be partially populated.</li><li>The same <b>externalTransactionSourceReferenceId</b> plus the same <b>asOfDate</b> must not appear more than once in a single request because the platform cannot determine which object should take precedence.</li></ul><b>Response behavior</b><ul><li><b>200 OK</b> means all submitted transaction objects were processed successfully.</li><li><b>207 Multi-Status</b> means at least one object succeeded and at least one object failed validation. Successfully processed objects are saved and are not rolled back; correct and resubmit only the failed objects.</li><li>If every submitted object fails validation, the response indicates validation failure and no object from that request is saved.</li><li>If a timeout response is received, verify transaction state before retrying. The server may have processed some or all records before the timeout was returned.</li></ul>
+      parameters:
+      - name: subscription-key
+        in: header
+        required: true
+        description: Subscription key used to authenticate the request. The key must be valid for the orgId and userId supplied in the request body.
+        schema:
+          type: string
+      - name: Content-Type
+        in: header
+        required: true
+        description: Required request content type. Send <b>application/json</b>.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnifiedTransactionV2ReqDTO'
+            examples:
+              default:
+                value:
+                  userId: xxxxe74-bbd3-4fd4-9e2a-0a73173xxxx
+                  orgId: xxxxxbd1-22d2-4e70-9e66-64215axxxxx
+                  TransactionData:
+                  - transactionTypeId: xxxxxxx-3856-4f85-b7f0-0dccfxxxxxxx
+                    transactionDate: '2025-11-22'
+                    versionId: xxxxxxx49-8caf-4394-b39c-a3671fxxxxxx
+                    baseCurrency: INR
+                    baseCurrencyUnit: Lakhs
+                    amount: 1001
+                    asOfDate: '2025-12-31'
+                    localCurrency: USD
+                    localCurrencyUnit: Actual
+                    localAmount: 3000
+                    multilayeredTransactionMetadata:
+                      remarks: API pushed transaction
+                      securityType: CREDIT
+                      securityId: xxxxxx48-452c-4767-97e2-1bf7c16xxxx
+                      externalTransactionSourceReferenceId: ref_2
+                      pps: 10.04
+                      postMoneyValuation: '29404.429'
+                      postMoneyValuationCurrency: USD
+                      postMoneyValuationCurrencyUnit: Millions
+                      ownershipPercentage: 90.2242
+                      externalInvestmentEntityId: CEN02570
+                      externalSecurityId: CEN003100
+                      shareCount: 10
+                      vehicleName: SPV-1
+                      externalOwnerEntityId: samplePS
+                    ownerEntityMappings:
+                    - ownerEntityId: xxxxxb8b-7907-42c5-b95d-8fb728axxxxx
+                    investmentEntityId: xxxxx7ed-8015-4837-8f55-d96d82xxxxx
+                    reportingAmount: 2500
+                    reportingCurrency: USD
+                    reportingCurrencyUnit: Actual
+        description: JSON payload containing the organization, user, and transaction objects to create or update. <b>orgId</b> and <b>userId</b> are validated against the subscription key. <b>TransactionData</b> must contain 1 to 2,000 objects, and the total request payload must not exceed 5 MB.
+      responses:
+        '200':
+          description: All submitted transaction objects were validated and processed successfully. The response includes the total number of submitted objects, the number of invalid objects, and a validity flag.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionProcessResponse'
+              examples:
+                Success Example:
+                  description: Success Example
+                  value:
+                    response:
+                      totalRecordsCount: 2
+                      invalidEntriesCount: 0
+                      valid: true
+                    success: true
+                    message: All transactions processed successfully.
+        '207':
+          description: Partial success. At least one transaction object was processed successfully and at least one object failed validation. Successful objects are persisted; inspect failedTransactions, correct those objects, and resubmit only the failed records.
+          content:
+            application/json:
+              examples:
+                Partial Success Example:
+                  description: Example showing some transactions failed while others succeeded
+                  value:
+                    response:
+                      failedTransactions:
+                      - transactionDate: '2025-11-21'
+                        transactionTypeId: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                        versionId: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                        baseCurrency: USD
+                        amount: 500
+                        investmentEntityId: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                        asOfDate: '2025-11-13'
+                        multilayeredTransactionMetadata:
+                          externalTransactionSourceReferenceId: XX - transactions 1
+                          securityId: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                        errors:
+                        - field: BaseCurrencyUnit
+                          error: Please add a valid base currency unit
+                        ownerEntityCount: 3
+                        ownerEntityPathwayRepresentation: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                        ownerEntityNamePathwayRepresentation: null / null / null
+                      totalRecordsCount: 2
+                      invalidEntriesCount: 1
+                      valid: false
+                    success: true
+        '400':
+          description: Bad request. The request body is malformed, required top-level fields are missing, TransactionData is empty, or the payload does not conform to the expected JSON structure. No transaction objects are processed for malformed request-level failures.
+          content:
+            application/json:
+              examples:
+                Bad Request Example:
+                  description: Bad Request Example
+                  value:
+                    response: []
+                    success: false
+                    message: Invalid request parameters.
+                    errorCode: EXCE00028
+                Required Fields Can't Be Null Or Empty Example:
+                  description: Required Fields Can't Be Null Or Empty Example
+                  value:
+                    response: []
+                    success: false
+                    message: Fields cannot be null or empty..
+                    errorCode: EXCE00020
+        '401':
+          description: Unauthorized request. The subscription key is missing, invalid, expired, or not authorized for the orgId and userId supplied in the request body.
+          content:
+            application/json:
+              examples:
+                Invalid Subscription key Example:
+                  description: Invalid Subscription key Example
+                  value:
+                    statusCode: 401
+                    message: Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.
+        '404':
+          description: Not found. The endpoint path is incorrect, the API version is unavailable, or a referenced resource cannot be found.
+          content:
+            application/json:
+              examples:
+                Resource Not Found Example:
+                  description: Example when a requested resource does not exist
+                  value:
+                    statusCode: 404
+                    message: Resource not found
+        '422':
+          description: Validation failure for the submitted transaction objects. The response identifies the failed objects and field-level errors. Correct the reported issues before resubmitting.
+          content:
+            application/json:
+              examples:
+                Validation Error Example:
+                  description: Example when all submitted transaction objects fail validation
+                  value:
+                    response:
+                      failedTransactions:
+                      - transactionDate: '2025-11-16'
+                        transactionTypeId: c0292085-1818-460f-94d3-f92079326358
+                        versionId: 9c78a3b4-0f37-4de0-a289-d52bc04f3615
+                        baseCurrencyUnit: Lakhs
+                        amount: 50
+                        investmentEntityId: 64f1db13-91cc-46be-85f1-a963cec04899
+                        asOfDate: '2025-11-10'
+                        multilayeredTransactionMetadata:
+                          externalTransactionSourceReferenceId: EY - transactions 1
+                          securityId: 2601e54d-b5ea-4178-9b19-3b5551f1de7e
+                          securityType: CREDIT
+                        errors:
+                        - field: BaseCurrency
+                          error: Please select a valid base currency
+                      totalRecordsCount: 1
+                      invalidEntriesCount: 1
+                      valid: false
+                    success: false
+                    errorCode: VALIDATION_ERROR
+        '429':
+          description: Too many requests. The organization has exceeded the allowed request concurrency or rate limit. Retry after the indicated interval, if provided.
+          content:
+            application/json:
+              examples:
+                Too Many Requests Example:
+                  description: Example when request concurrency limit is exceeded
+                  value:
+                    statusCode: 429
+                    message: Too many requests. Please retry after the indicated interval.
+        '500':
+          description: Internal server error. The request could not be completed because of an unexpected server-side failure. Retry later or contact support if the issue persists.
+          content:
+            application/json:
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    statusCode: 500
+                    message: Internal server error. Please try again later or contact support.
+        '504':
+          description: Gateway timeout. Processing state is indeterminate; some, all, or none of the submitted objects may have been processed. Verify transaction state before resubmitting to avoid duplicates.
+          content:
+            application/json:
+              examples:
+                Gateway Timeout Example:
+                  description: Example when processing exceeds the gateway timeout
+                  value:
+                    statusCode: 504
+                    message: Gateway timeout. Verify processing state before retrying.
+  /api/v1/unifiedTransaction:
+    post:
+      operationId: unifiedTransaction
+      summary: Create/Update Transaction
+      tags:
+      - Transaction API
+      description: The <b>Create Multiple Transactions API</b> allows users to upload multiple transaction records within the <b>73Strings Transaction Product</b> in a single request.<br><br>It supports bulk creation of financial transaction entries such as <b>Investments</b>, <b>Realizations</b>, <b>Valuations</b>, and <b>Fees</b>, with each record tied to an entity, version, and transaction type.<br><br><b>Key capabilities</b><ul><li>Supports bulk creation of multiple financial transactions in a single API call</li><li>Validates transaction data at an individual record level</li><li>Ensures consistency in financial reporting and cross-system integrations</li></ul><b>Partial success handling</b><ul><li>Returns a <b>207 Multi-Status</b> response when some records are successfully processed</li><li>Provides detailed validation errors for records that fail processing</li></ul
+      parameters:
+      - name: subscription-key
+        in: header
+        required: true
+        description: A unique key that allows you to access and use an API
+        schema:
+          type: string
+      - name: Content-Type
+        in: header
+        required: true
+        description: <b>Content-Type</b> is a required request header.<br><br><ul><li>Defines the data format being sent</li><li>The value must be <b>application/json</b></li></ul>
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnifiedTransactionReqDTO'
+            examples:
+              default:
+                value:
+                  userId: 04156bbe-90c8-4bd2-9c6a-e783a70eda14
+                  orgId: 7c72ed3a-c264-4f61-adee-c1bd4856a5cc
+                  TransactionData:
+                  - transactionTypeId: 402079b7-93cf-435d-9080-151c4594920d
+                    transactionDate: '2022-09-30'
+                    versionId: d3d605b2-2705-469c-89c0-1930497ec856
+                    baseCurrency: GBP
+                    baseCurrencyUnit: Actual
+                    amount: 888.41
+                    asOfDate: '2022-09-30'
+                    localCurrency: USD
+                    localCurrencyUnit: Millions
+                    localAmount: 234.24
+                    reportingAmount: 93.234
+                    reportingCurrency: USD
+                    reportingCurrencyUnit: Millions
+                    ownerEntityMappings:
+                    - ownerEntityId: da17e9ae-a0f8-47e0-a30e-8b8b67c2ca2f
+                    investmentEntityId: b8a58ce2-50d3-4e01-9b4e-125c98068279
+                    multilayeredTransactionMetadata:
+                      remarks: API pushed transaction
+                      securityType: EQUITY
+                      securityId: c5aa7714-9383-4f9f-86bd-a671d6ec69ca
+                      externalTransactionSourceReferenceId: External Fund A Transaction CEN0004
+                      externalInvestmentEntityId: Company 1 Ltd
+                      vehicleName: Vehicle 1
+                      postMoneyValuation: 234.24
+                      postMoneyValuationCurrency: USD
+                      postMoneyValuationCurrencyUnit: Millions
+                      externalSecurityId: CEN089238
+                      externalOwnerEntityId: CEN0280
+                      pps: 24.24
+                      shareCount: 145
+                      ownershipPercentage: 234.24
+        description: Request Parameters Table.
+      responses:
+        '200':
+          description: Successful creation or update of transaction.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionProcessResponse'
+              examples:
+                Success Example:
+                  description: Success Example
+                  value:
+                    response:
+                      totalRecordsCount: 2
+                      invalidEntriesCount: 0
+                      valid: true
+                    success: true
+                    message: All transactions processed successfully.
+        '202':
+          description: Request accepted for processing, but not yet completed.
+          content:
+            application/json:
+              examples:
+                Accepted Example:
+                  description: Accepted Example
+                  value:
+                    response: []
+                    success: true
+                    message: Request accepted and is being processed.
+                    errorCode: null
+        '207':
+          description: Multi-Status - Partial success with some failed transactions
+          content:
+            application/json:
+              examples:
+                Partial Success Example:
+                  description: Example showing some transactions failed while others succeeded
+                  value:
+                    response:
+                      failedTransactions:
+                      - transactionDate: '2025-11-21'
+                        transactionTypeId: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                        versionId: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                        baseCurrency: USD
+                        amount: 500
+                        investmentEntityId: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                        asOfDate: '2025-11-13'
+                        multilayeredTransactionMetadata:
+                          externalTransactionSourceReferenceId: XX - transactions 1
+                          securityId: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                        errors:
+                        - field: BaseCurrencyUnit
+                          error: Please add a valid base currency unit
+                        ownerEntityCount: 3
+                        ownerEntityPathwayRepresentation: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                        ownerEntityNamePathwayRepresentation: null / null / null
+                      totalRecordsCount: 2
+                      invalidEntriesCount: 1
+                      valid: false
+                    success: true
+        '400':
+          description: Invalid input, missing parameters.
+          content:
+            application/json:
+              examples:
+                Bad Request Example:
+                  description: Bad Request Example
+                  value:
+                    response: []
+                    success: false
+                    message: Invalid request parameters.
+                    errorCode: EXCE00028
+                Required Fields Can't Be Null Or Empty Example:
+                  description: Required Fields Can't Be Null Or Empty Example
+                  value:
+                    response: []
+                    success: false
+                    message: Fields cannot be null or empty..
+                    errorCode: EXCE00020
+        '401':
+          description: Invalid or missing Subscription key.
+          content:
+            application/json:
+              examples:
+                Invalid Subscription key Example:
+                  description: Invalid Subscription key Example
+                  value:
+                    statusCode: 401
+                    message: Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              examples:
+                Resource Not Found Example:
+                  description: Example when a requested resource does not exist
+                  value:
+                    statusCode: 404
+                    message: Resource not found
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    statusCode: 500
+                    message: Internal server error. Please try again later or contact support.
+  /api/v1/transactionData:
+    post:
+      operationId: getTransactionData
+      summary: Get Transaction Data
+      tags:
+      - Transaction API
+      description: Retrieves transaction data with pagination support. Supports filtering, sorting, and as-of-date settings for comprehensive transaction data retrieval.
+      parameters:
+      - name: pageNo
+        in: query
+        required: false
+        description: Page number for pagination (zero-based)
+        schema:
+          type: integer
+      - name: pageSize
+        in: query
+        required: false
+        description: Number of records per page
+        schema:
+          type: integer
+      - name: subscription-key
+        in: header
+        required: true
+        description: A unique key that allows you to access and use an API
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionDataReqDTO'
+            examples:
+              default:
+                value:
+                  userId: 0ea63bb5-47c6-4590-9fc2-52fc180d6e8f
+                  orgId: 214fa428-0f39-4c06-9343-d0c51c9b4e34
+                  filters: []
+                  sortList:
+                  - field: lastModifiedDate
+                    direction: desc
+                  asOfDateSettings: LATEST
+        description: Request payload containing userId, orgId, filters, sort criteria, and as-of-date settings for retrieving transaction data.
+      responses:
+        '200':
+          description: Successful retrieval of transaction data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionDataResDTO'
+              examples:
+                Success Example:
+                  description: Success Example
+                  value:
+                    response:
+                      content:
+                      - id: 0ed17793-17d6-4867-af3c-ebca183cb22d
+                        displayId: 7789999
+                        transactionDate: '2025-09-08'
+                        transactionTypeId: 389c4d13-d974-4764-89cb-6bd8013303d3
+                        versionId: 0454b6bb-ea69-4dc0-9c45-a4e34849e71d
+                        baseCurrency: GBP
+                        baseCurrencyUnit: Millions
+                        amount: 25
+                        amountTotal: 25000000
+                        ownerEntityMappings:
+                        - ownerEntityId: 987dd768-8b80-4d5b-b9a8-af6eb3321102
+                          ownerEntityName: ADCF 123
+                        investmentEntityId: ae43ae8f-5fa8-46fa-b8b1-7482e45ff1d7
+                        asOfDate: '2025-09-08'
+                        localAmount: 0
+                        localAmountTotal: 0
+                        localCurrency: SAR
+                        localCurrencyUnit: Actual
+                        multilayeredTransactionMetadata:
+                          externalTransactionSourceReferenceId: qwerty1234567
+                          securityId: null
+                          securityType: null
+                          externalSecurityId: null
+                          externalInvestmentEntityId: null
+                          ownershipPercentage: null
+                          shareCount: null
+                          pps: null
+                          postMoneyValuation: null
+                          postMoneyValuationCurrency: null
+                          postMoneyValuationCurrencyUnit: null
+                          remarks: null
+                          source: null
+                          vehicleName: null
+                          externalOwnerEntityId: null
+                          securityName: null
+                        createdBy: Dev API Integration
+                        createdDate: '2025-09-09T04:59:07Z'
+                        lastModifiedBy: Dev API Integration
+                        lastModifiedDate: '2025-09-09T05:00:07Z'
+                        transactionTypeName: Additional Investment
+                        versionName: Actuals
+                        investmentEntityName: ADCF_Rollover_Testing
+                        valueCarryover: null
+                        orgId: null
+                        ownerEntityPath: null
+                        reportingCurrency: null
+                        reportingCurrencyUnit: Actual
+                        reportingAmount: null
+                        preferredCurrency: BASE
+                        fxRateDate: null
+                        errors: []
+                        ownerEntityPathwayRepresentation: 987dd768-8b80-4d5b-b9a8-af6eb3321102
+                        ownerEntityCount: 1
+                        ownerEntityNamePathwayRepresentation: ADCF 123
+                      pageNo: 0
+                      pageSize: 21
+                      totalElements: 13
+                      totalPages: 0
+                    success: true
+                    message: Success
+                    errorCode: null
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              examples:
+                Resource Not Found Example:
+                  description: Example when a requested resource does not exist
+                  value:
+                    statusCode: 404
+                    message: Resource not found
+  /api/v1/transactionType:
+    post:
+      operationId: getTransactionTypes
+      summary: Get Transaction Types
+      tags:
+      - Transaction API
+      description: This API retrieves a list of transaction types configured in the Transaction Product of the 73Strings platform.<br><br>It allows clients to fetch transaction type metadata such as ID, name, category, description, and configuration details.<br><br><b>Key details</b><ul><li>The response supports filtering, sorting, and pagination to optimize data retrieval for different organizational setups.</li><li>This API is primarily used when clients need to populate dropdowns, map transaction categories, or validate transaction type references before creating transaction data.</li></ul>
+      parameters:
+      - name: pageNo
+        in: query
+        required: false
+        description: Page number to retrieve (0-indexed). Controls which batch of results is fetched.
+        schema:
+          type: integer
+      - name: pageSize
+        in: query
+        required: false
+        description: Number of records to return per page. Optimizes data retrieval for large lists.
+        schema:
+          type: integer
+      - name: subscription-key
+        in: header
+        required: true
+        description: A unique key that allows you to access and use an API
+        schema:
+          type: string
+      - name: Content-Type
+        in: header
+        required: true
+        description: <b>Content-Type</b> is a required request header.<br><br><ul><li>Defines the data format being sent</li><li>The value must be <b>application/json</b></li></ul>
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionTypeReqDTO'
+            examples:
+              default:
+                value:
+                  userId: 0ea63bb5-47c6-4590-9fc2-52fc180d6e8f
+                  orgId: 214fa428-0f39-4c06-9343-d0c51c9b4e34
+                  filters:
+                  - field: transactionTypeClassification
+                    operation: IN
+                    valueSet:
+                    - CASH_FLOW
+                    - VALUATION
+                  sortList:
+                  - field: lastModifiedDate
+                    direction: desc
+        description: Request Parameters Table.
+      responses:
+        '200':
+          description: Successful retrieval of transaction types.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionTypeResDTO'
+              examples:
+                Success Example:
+                  description: Success Example
+                  value:
+                    response:
+                      content:
+                      - id: b446af46-c8f2-4975-98ee-7da33a0d8c0f
+                        createdBy: Dev API Integration
+                        createdDate: '2025-09-08T05:31:16Z'
+                        lastModifiedBy: Dev API Integration
+                        lastModifiedDate: '2025-09-08T05:31:16Z'
+                        name: Unrecycled Fees
+                        dataItem: Unrecycled Fees-CF
+                        description: Charges or expenses that are incurred only once within a specific context or transaction and are not recycled or repeated
+                        transactionCategoryId: db695563-e8ab-416b-b6ee-e76711c6cb04
+                        transactionCategoryName: Others
+                        valueType: POSITIVE
+                        deletable: true
+                      pageNo: 0
+                      pageSize: 21
+                      totalElements: 17
+                      totalPages: 0
+                    success: true
+                    message: Success
+                    errorCode: null
+        '202':
+          description: Request accepted for processing, but not yet completed.
+          content:
+            application/json:
+              examples:
+                Accepted Example:
+                  description: Accepted Example
+                  value:
+                    response: []
+                    success: true
+                    message: Request accepted and is being processed.
+                    errorCode: null
+        '400':
+          description: Invalid input, missing parameters.
+          content:
+            application/json:
+              examples:
+                Bad Request Example:
+                  description: Bad Request Example
+                  value:
+                    response: []
+                    success: false
+                    message: Invalid request parameters.
+                    errorCode: EXCE00028
+                Required Fields Can't Be Null Or Empty Example:
+                  description: Required Fields Can't Be Null Or Empty Example
+                  value:
+                    response: []
+                    success: false
+                    message: Fields cannot be null or empty..
+                    errorCode: EXCE00020
+        '401':
+          description: Invalid or missing Subscription key.
+          content:
+            application/json:
+              examples:
+                Invalid Subscription key Example:
+                  description: Invalid Subscription key Example
+                  value:
+                    statusCode: 401
+                    message: Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              examples:
+                Resource Not Found Example:
+                  description: Example when a requested resource does not exist
+                  value:
+                    statusCode: 404
+                    message: Resource not found
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    statusCode: 500
+                    message: Internal server error. Please try again later or contact support.
+  /api/v1/transactionVersion:
+    post:
+      operationId: getTransactionVersions
+      summary: Get Transaction Versions
+      tags:
+      - Transaction API
+      description: "<p>\nThe <strong>Get Version List API</strong> retrieves all available reporting or transaction versions configured within an organization on the <strong>73Strings Transaction Product</strong>.\n</p>\n\n<p>\nEach version represents a defined data layer (for example, <em>Actuals</em>, <em>Forecast</em>, or <em>Scenario-based</em> data) that is used across financial or transactional modules for reporting and analytics.\n</p>\n\n<p>\nThis API enables clients to:\n</p>\n\n<ul>\n  <li>Fetch all available versions within the organization</li>\n  <li>Identify whether a version is active, fixed, or deletable</li>\n  <li>Integrate version selection into workflows such as creating, editing, or retrieving transactions</li>\n</ul>"
+      parameters:
+      - name: showHidden
+        in: query
+        required: false
+        description: Whether to include hidden versions in the response
+        schema:
+          type: boolean
+      - name: subscription-key
+        in: header
+        required: true
+        description: A unique key that allows you to access and use an API
+        schema:
+          type: string
+      - name: Content-Type
+        in: header
+        required: true
+        description: <b>Content-Type</b> is a required request header.<br><br><ul><li>Defines the data format being sent</li><li>The value must be <b>application/json</b></li></ul>
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionVersionReqDTO'
+            examples:
+              default:
+                value:
+                  userId: 0ea63bb5-47c6-4590-9fc2-52fc180d6e8f
+                  orgId: 214fa428-0f39-4c06-9343-d0c51c9b4e34
+        description: Request Parameters Table.
+      responses:
+        '200':
+          description: Successful retrieval of transaction versions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionVersionResDTO'
+              examples:
+                Success Example:
+                  description: Success Example
+                  value:
+                    response:
+                      data:
+                      - id: 0454b6bb-ea69-4dc0-9c45-a4e34849e71d
+                        name: Actuals
+                        description: Actuals version
+                        sortOrder: 0
+                        isEnabled: true
+                        isFixed: true
+                        isDeletable: false
+                      - id: edb1136e-c177-445f-a52a-151ebdd9379e
+                        name: Forecast
+                        description: Forecast version
+                        sortOrder: 0
+                        isEnabled: true
+                        isFixed: true
+                        isDeletable: false
+                      - id: 7c4afcd9-8049-4e59-8d81-4e31bb034a4e
+                        name: dummy version
+                        description: null
+                        sortOrder: 0
+                        isEnabled: false
+                        isFixed: null
+                        isDeletable: true
+                    success: true
+                    message: Success
+                    errorCode: null
+        '202':
+          description: Request accepted for processing, but not yet completed.
+          content:
+            application/json:
+              examples:
+                Accepted Example:
+                  description: Accepted Example
+                  value:
+                    response: []
+                    success: true
+                    message: Request accepted and is being processed.
+                    errorCode: null
+        '400':
+          description: Invalid input, missing parameters.
+          content:
+            application/json:
+              examples:
+                Bad Request Example:
+                  description: Bad Request Example
+                  value:
+                    response: []
+                    success: false
+                    message: Invalid request parameters.
+                    errorCode: EXCE00028
+                Required Fields Can't Be Null Or Empty Example:
+                  description: Required Fields Can't Be Null Or Empty Example
+                  value:
+                    response: []
+                    success: false
+                    message: Fields cannot be null or empty..
+                    errorCode: EXCE00020
+        '401':
+          description: Invalid or missing Subscription key.
+          content:
+            application/json:
+              examples:
+                Invalid Subscription key Example:
+                  description: Invalid Subscription key Example
+                  value:
+                    statusCode: 401
+                    message: Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              examples:
+                Resource Not Found Example:
+                  description: Example when a requested resource does not exist
+                  value:
+                    statusCode: 404
+                    message: Resource not found
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    statusCode: 500
+                    message: Internal server error. Please try again later or contact support.
+  /api/v1/putfundTransactions:
+    post:
+      operationId: GTN_FUND_TRANSACTION
+      summary: GTN Fund Transactions API
+      tags:
+      - Transaction API
+      description: Process fund-level transactions for Gross to Net (GTN) calculations and reporting.
+      parameters:
+      - name: subscription-key
+        in: header
+        required: true
+        description: A unique key that allows you to access and use an API
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FundDetailsDTO'
+            examples:
+              default:
+                value:
+                  orgId: hu4eb330-4839fbd20-8534gf3bzzxxxx-0958htf3d924fg8bvuc
+                  inputDate: '2021-12-31'
+                  userId: 3ig5fh2-98430hdbn2083f-3853245gfhdnzq0n3v
+                  funds:
+                  - fundId: ievb32f-4983g3f2hd-83ubifdn248300538ghfbdcxn
+                    fundName: Fund 1
+                    transactions:
+                    - date: '2021-05-30'
+                      amount: '100'
+                      currency: USD
+                      type: Distributed
+                      details: Others
+        description: Request body containing fund details.
+      responses:
+        '200':
+          description: Successful update of transaction data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                Successful Example.:
+                  description: Successful Example.
+                  value:
+                    success: true
+                    message: Successfully saved the transaction data
+                    responseCode: OK
+        '400':
+          description: Invalid input, missing parameters.
+          content:
+            application/json:
+              examples:
+                Bad Request Example:
+                  description: Bad Request Example
+                  value:
+                    response: []
+                    success: false
+                    message: Invalid request parameters.
+                    errorCode: EXCE00028
+                Required Fields Can't Be Null Or Empty Example:
+                  description: Required Fields Can't Be Null Or Empty Example
+                  value:
+                    response: []
+                    success: false
+                    message: Fields cannot be null or empty..
+                    errorCode: EXCE00020
+        '401':
+          description: Invalid or missing Subscription key.
+          content:
+            application/json:
+              examples:
+                Invalid Subscription key Example:
+                  description: Invalid Subscription key Example
+                  value:
+                    statusCode: 401
+                    message: Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    statusCode: 500
+                    message: Internal server error. Please try again later or contact support.
+components:
+  securitySchemes:
+    apiKeyHeader:
+      type: apiKey
+      name: subscription-key
+      in: header
+    apiKeyQuery:
+      type: apiKey
+      name: subscription-key
+      in: query
+  schemas:
+    CreateTransactionReqDTO:
+      required:
+      - userId
+      - orgId
+      - TransactionData
+      type: object
+      properties:
+        userId:
+          type: string
+          description: Unique identifier of the user.
+          example: 0ea63bb5-47c6-4590-9fc2-52fc180d6e8f
+        orgId:
+          type: string
+          description: Unique identifier of the organization.
+          example: 214fa428-0f39-4c06-9343-d0c51c9b4e34
+        TransactionData:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionData'
+          description: Array of transaction data objects
+      description: Request parameters for creating a transaction
+    UpdateTransactionReqDTO:
+      required:
+      - userId
+      - orgId
+      - transactionId
+      - transactionTypeId
+      - transactionDate
+      - versionId
+      - baseCurrency
+      - baseCurrencyUnit
+      - amount
+      - investmentEntityId
+      type: object
+      properties:
+        userId:
+          type: string
+          description: Unique identifier of the user.
+          example: 0ea63bb5-47c6-4590-9fc2-52fc180d6e8f
+        orgId:
+          type: string
+          description: Unique identifier of the organization.
+          example: 214fa428-0f39-4c06-9343-d0c51c9b4e34
+        transactionId:
+          type: string
+          description: Unique identifier of the transaction to be updated.
+          example: eb74ff3a-f0a7-487f-9d2c-481112dc6c06
+        transactionTypeId:
+          type: string
+          description: Unique identifier for the transaction type
+          example: 75f88f60-d96e-4912-80f0-f8e148576848
+        transactionDate:
+          type: string
+          description: Date of the transaction
+          format: date
+          example: '2025-09-08'
+        versionId:
+          type: string
+          description: Unique identifier for the version
+          example: 0454b6bb-ea69-4dc0-9c45-a4e34849e71d
+        baseCurrency:
+          type: string
+          description: Base currency code
+          example: GBP
+        baseCurrencyUnit:
+          type: string
+          description: Unit for base currency
+          example: Millions
+        amount:
+          type: number
+          description: Transaction amount
+          example: 50
+        asOfDate:
+          type: string
+          description: As of date for the transaction
+          format: date
+          example: '2025-09-08'
+        localAmount:
+          type: number
+          description: Local currency amount
+          example: 0
+        localCurrency:
+          type: string
+          description: Local currency code
+          example: SAR
+        localCurrencyUnit:
+          type: string
+          description: Unit for local currency
+          example: Actual
+        multilayeredTransactionMetadata:
+          $ref: '#/components/schemas/MultilayeredTransactionMetadata'
+        ownerEntityMappings:
+          type: array
+          items:
+            $ref: '#/components/schemas/OwnerEntityMapping'
+          description: Array of owner entity mappings
+        investmentEntityId:
+          type: string
+          description: Unique identifier for the investment entity
+          example: ae43ae8f-5fa8-46fa-b8b1-7482e45ff1d7
+        reportingAmount:
+          type: number
+          description: Reporting currency amount
+          nullable: true
+        reportingCurrency:
+          type: string
+          description: Reporting currency code
+          nullable: true
+        reportingCurrencyUnit:
+          type: string
+          description: Unit for reporting currency
+          example: Actual
+        displayId:
+          type: integer
+          description: Display ID of the transaction
+          example: 7785749
+      description: Request parameters for updating a transaction
+    TransactionVersionReqDTO:
+      required:
+      - userId
+      - orgId
+      type: object
+      properties:
+        userId:
+          type: string
+          description: Unique identifier of the user, provided by 73 Strings platform.
+          example: 0ea63bb5-47c6-4590-9fc2-52fc180d6e8f
+        orgId:
+          type: string
+          description: 'Unique organization ID associated with the user. Authenticates Organization using the subscription key. '
+          example: 214fa428-0f39-4c06-9343-d0c51c9b4e34
+      description: Request Parameters Table
+    TransactionTypeReqDTO:
+      required:
+      - userId
+      - orgId
+      - filters
+      - sortList
+      type: object
+      properties:
+        userId:
+          type: string
+          description: Unique identifier of the user, provided by 73 Strings platform.
+          example: 0ea63bb5-47c6-4590-9fc2-52fc180d6e8f
+        orgId:
+          type: string
+          description: Unique organization ID associated with the user. Authenticates Organization using the subscription key.
+          example: 214fa428-0f39-4c06-9343-d0c51c9b4e34
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/Filter'
+          description: Defines the filter criteria for transaction classification such as CASH_FLOW or VALUATION.
+        sortList:
+          type: array
+          items:
+            $ref: '#/components/schemas/SortCriteria'
+          description: Defines the sorting logic of the result set.
+      description: Request parameters for retrieving transaction types
+    TransactionDataReqDTO:
+      required:
+      - userId
+      - orgId
+      type: object
+      properties:
+        userId:
+          type: string
+          description: Unique identifier of the user.
+          example: 0ea63bb5-47c6-4590-9fc2-52fc180d6e8f
+        orgId:
+          type: string
+          description: Unique identifier of the organization.
+          example: 214fa428-0f39-4c06-9343-d0c51c9b4e34
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/Filter'
+          description: Array of filters to apply
+        sortList:
+          type: array
+          items:
+            $ref: '#/components/schemas/SortCriteria'
+          description: Array of sort criteria
+        asOfDateSettings:
+          type: string
+          description: As of date settings for transaction data
+          example: LATEST
+      description: Request parameters for retrieving transaction data
+    UnifiedTransactionReqDTO:
+      required:
+      - userId
+      - orgId
+      - TransactionData
+      type: object
+      properties:
+        userId:
+          type: string
+          description: Unique identifier of the user, provided by 73 Strings platform.
+          example: 1a4b3a64-7317-49f2-a0eb-7f023cbd341a
+        orgId:
+          type: string
+          description: 'Unique organization ID associated with the user. Authenticates Organization using the subscription key. '
+          example: b10d0b32-e50b-41ff-80cb-8b5b0adb054a
+        TransactionData:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnifiedTransactionData'
+          description: A list containing one or more transaction records. Each record holds detailed information about a specific transaction event.
+      description: Request parameters for unified create/update transaction
+    UnifiedTransactionV2ReqDTO:
+      required:
+      - userId
+      - orgId
+      - TransactionData
+      type: object
+      properties:
+        userId:
+          type: string
+          description: Unique identifier of the user submitting the request. The user must be authorized for the organization associated with the subscription key.
+          format: uuid
+          example: d2dae30f-7570-4f24-8cc5-e7ead4baf458
+        orgId:
+          type: string
+          description: Unique identifier of the organization. This value must match the organization scope associated with the subscription key.
+          format: uuid
+          example: cfcbb891-1838-48e7-98db-57142094123c
+        TransactionData:
+          maxItems: 2000
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/UnifiedTransactionV2Data'
+          description: Array of transaction objects to create or update. Empty arrays are rejected. The total request payload must not exceed 5 MB.
+      description: V2 request parameters for bulk create/update transaction processing.
+    UnifiedTransactionV2Data:
+      required:
+      - transactionTypeId
+      - versionId
+      - transactionDate
+      - baseCurrency
+      - baseCurrencyUnit
+      - amount
+      - multilayeredTransactionMetadata
+      - ownerEntityMappings
+      - investmentEntityId
+      type: object
+      properties:
+        transactionTypeId:
+          type: string
+          description: Unique identifier of an active transaction type. Retrieve valid IDs from the Transaction Type API.
+          format: uuid
+          example: c0292085-1818-460f-94d3-f92079326358
+        transactionDate:
+          type: string
+          description: 'Date on which the transaction occurred. Use ISO 8601 format: YYYY-MM-DD.'
+          format: date
+          example: '2025-11-16'
+        versionId:
+          type: string
+          description: Unique identifier of the transaction version. Retrieve valid IDs from the Transaction Version API.
+          format: uuid
+          example: 9c78a3b4-0f37-4de0-a289-d52bc04f3615
+        asOfDate:
+          pattern: ^$|^\d{4}-\d{2}-\d{2}$
+          type: string
+          description: Optional as-of date for the transaction data point. When provided, use YYYY-MM-DD format. If omitted or sent as an empty value, the platform uses the date on which the transaction is pushed. Together with externalTransactionSourceReferenceId, the effective as-of date determines whether the request creates a new transaction, overwrites an existing as-of-date instance, or adds a new instance.
+          example: '2025-11-10'
+        baseCurrency:
+          maxLength: 3
+          minLength: 3
+          type: string
+          description: ISO 4217 three-letter base currency code. The value is case-sensitive.
+          example: GBP
+        baseCurrencyUnit:
+          enum:
+          - Actual
+          - Lakhs
+          - Millions
+          - Crores
+          - Billions
+          - Trillions
+          type: string
+          description: Scale in which the base amount is provided. Allowed values are Actual, Lakhs, Millions, Crores, Billions, and Trillions. The value is case-sensitive.
+          example: Lakhs
+        amount:
+          type: number
+          description: Transaction amount in the base currency. Decimal values up to Decimal(42,17) are supported; zero, positive, and negative values are allowed.
+          format: decimal
+          example: 50
+        localCurrency:
+          maxLength: 3
+          minLength: 3
+          type: string
+          description: ISO 4217 three-letter local currency code. If any local amount field is provided, localAmount, localCurrency, and localCurrencyUnit must all be provided.
+          example: INR
+        localCurrencyUnit:
+          enum:
+          - Actual
+          - Lakhs
+          - Millions
+          - Crores
+          - Billions
+          - Trillions
+          type: string
+          description: Scale in which the local amount is provided. Allowed values are Actual, Lakhs, Millions, Crores, Billions, and Trillions. The value is case-sensitive. If any local amount field is provided, localAmount, localCurrency, and localCurrencyUnit must all be provided.
+          example: Actual
+        localAmount:
+          type: number
+          description: Transaction amount in local currency. Decimal values up to Decimal(42,17) are supported; zero, positive, and negative values are allowed. If provided, localCurrency and localCurrencyUnit are also required.
+          format: decimal
+          example: 4000
+        multilayeredTransactionMetadata:
+          $ref: '#/components/schemas/UnifiedMultilayeredTransactionV2Metadata'
+        ownerEntityMappings:
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/UnifiedOwnerEntityMappingV2'
+          description: Owner entity mappings for the transaction. Each ownerEntityId must be a valid owner or immediate parent entity for the investment entity.
+        investmentEntityId:
+          type: string
+          description: Unique 73 Strings system identifier of the investment entity associated with the transaction. Retrieve valid IDs from the Entity List API.
+          format: uuid
+          example: 64f1db13-91cc-46be-85f1-a963cec04899
+        reportingAmount:
+          type: number
+          description: Transaction amount in reporting currency. Decimal values up to Decimal(42,17) are supported; zero, positive, and negative values are allowed. If any reporting amount field is provided, reportingAmount, reportingCurrency, and reportingCurrencyUnit must all be provided.
+          format: decimal
+          example: 2000
+        reportingCurrency:
+          maxLength: 3
+          minLength: 3
+          type: string
+          description: ISO 4217 three-letter reporting currency code. If any reporting amount field is provided, reportingAmount, reportingCurrency, and reportingCurrencyUnit must all be provided.
+          example: USD
+        reportingCurrencyUnit:
+          enum:
+          - Actual
+          - Lakhs
+          - Millions
+          - Crores
+          - Billions
+          - Trillions
+          type: string
+          description: Scale in which the reporting amount is provided. Allowed values are Actual, Lakhs, Millions, Crores, Billions, and Trillions. The value is case-sensitive. If any reporting amount field is provided, reportingAmount, reportingCurrency, and reportingCurrencyUnit must all be provided.
+          example: Actual
+      description: V2 transaction object. displayId is generated by the platform and is not accepted in the request payload. asOfDate is optional; if it is omitted or empty, the platform uses the date on which the transaction is pushed.
+    UnifiedMultilayeredTransactionV2Metadata:
+      type: object
+      properties:
+        remarks:
+          maxLength: 300
+          type: string
+          description: Free-text notes for the transaction.
+          example: API pushed transaction
+        securityId:
+          type: string
+          description: Unique 73 Strings system identifier of the security under the investment entity and owner entity. If securityId is provided, securityType must also be provided.
+          format: uuid
+          example: 2601e54d-b5ea-4178-9b19-3b5551f1de7e
+        securityType:
+          enum:
+          - EQUITY
+          - CREDIT
+          type: string
+          description: Type of security involved in the transaction. Allowed values are EQUITY and CREDIT. The value is case-sensitive and must be uppercase. If securityType is provided, securityId must also be provided.
+          example: CREDIT
+        externalTransactionSourceReferenceId:
+          maxLength: 255
+          type: string
+          description: Client-provided primary reference for the logical transaction. Together with the effective asOfDate, this field determines create/update behavior. Use a stable value across submissions for the same logical transaction. If omitted or new, the platform creates a new transaction; if the value exists with the same effective asOfDate, the existing row is fully overwritten; if the value exists with a new effective asOfDate, a new time-series instance is created.
+          example: EY - transactions 1
+        pps:
+          minimum: 0
+          exclusiveMinimum: true
+          type: number
+          description: Price per share. Must be greater than 0 when provided.
+          example: 10.04
+        postMoneyValuation:
+          type: number
+          description: Post-money valuation amount. Decimal values up to Decimal(42,17) are supported; zero, positive, and negative values are allowed. If any post-money valuation field is provided, postMoneyValuation, postMoneyValuationCurrency, and postMoneyValuationCurrencyUnit must all be provided.
+          format: decimal
+          example: 29404.429
+        postMoneyValuationCurrency:
+          maxLength: 3
+          minLength: 3
+          type: string
+          description: ISO 4217 three-letter currency code for post-money valuation. If any post-money valuation field is provided, all post-money valuation amount, currency, and unit fields must be provided.
+          example: USD
+        postMoneyValuationCurrencyUnit:
+          enum:
+          - Actual
+          - Lakhs
+          - Millions
+          - Crores
+          - Billions
+          - Trillions
+          type: string
+          description: Scale in which post-money valuation is provided. Allowed values are Actual, Lakhs, Millions, Crores, Billions, and Trillions. The value is case-sensitive. If any post-money valuation field is provided, all post-money valuation amount, currency, and unit fields must be provided.
+          example: Lakhs
+        ownershipPercentage:
+          maximum: 100
+          minimum: 0
+          type: number
+          description: Ownership percentage for the transaction. Must be between 0 and 100 when provided.
+          format: decimal
+          example: 60.2242
+        externalInvestmentEntityId:
+          maxLength: 255
+          type: string
+          description: Client-provided external identifier for the investment entity.
+          example: CEN02570
+        externalSecurityId:
+          maxLength: 255
+          type: string
+          description: Client-provided external identifier for the security.
+          example: CEN003100
+        shareCount:
+          minimum: 0
+          exclusiveMinimum: true
+          type: number
+          description: Number of shares. Must be greater than 0 when provided.
+          example: 10
+        vehicleName:
+          maxLength: 255
+          type: string
+          description: SPV or vehicle name associated with the transaction.
+          example: SPV-1
+        externalOwnerEntityId:
+          maxLength: 255
+          type: string
+          description: Client-provided external identifier for the owner entity.
+          example: samplePS
+      description: V2 transaction metadata containing source references, security details, valuation details, ownership metrics, and optional external IDs.
+    UnifiedOwnerEntityMappingV2:
+      required:
+      - ownerEntityId
+      type: object
+      properties:
+        ownerEntityId:
+          type: string
+          description: Unique 73 Strings system identifier of the owner or parent entity associated with the investment entity. Retrieve valid IDs from the Entity List API.
+          format: uuid
+          example: 0ea98f32-5393-441c-b7b0-7e6cc17c485a
+      description: V2 owner entity mapping for a transaction.
+    UnifiedMultilayeredTransactionMetadata:
+      type: object
+      properties:
+        remarks:
+          type: string
+          description: Notes or comments entered for internal or audit purposes.
+          example: sample
+        securityId:
+          type: string
+          description: System generated unique Identifier of the security, which is issued by the Investment Entity and subscribed by Owner Entity. Use GET EntitySecuritiesList API operation to retrieve the security ID
+          example: ''
+        securityType:
+          type: string
+          description: 'Type of the security involved in the transaction. Allowed values are: [EQUITY, CREDIT].'
+          example: ''
+        securityName:
+          type: string
+          description: Name of the security (for informatiional purpose only , not used to identify or populate security's detail in the trasactions)
+          example: ''
+        externalTransactionSourceReferenceId:
+          type: string
+          description: External system or source reference ID for the transaction. Used for traceability during system integrations.
+          example: sampletest
+        pps:
+          type: number
+          description: Price per share (PPS) for the transaction. Relevant for equity-based transactions.
+          example: 10
+        postMoneyValuation:
+          type: number
+          description: Post-money valuation of the entity after investment or distribution. Pass null, inorder to pass empty post money valuation amount. Input the values for all three post money valuation currencies field, or pass nothing for these fields to log empty value.
+          example: 100
+        postMoneyValuationCurrency:
+          type: string
+          description: 'Currency name in which post-money valuation is reported. Allowed inputs are: ISO4217 currency codes.'
+          example: USD
+        postMoneyValuationCurrencyUnit:
+          type: string
+          description: 'Denotes the scale of post money valuation amount, Allowed inputs are: [Actual, Lakhs, Millions, Crores, Billions, Trillions].'
+          example: Actual
+        ownershipPercentage:
+          type: number
+          description: Ownership Percentage of owner entity in the investment. Should lie between 0 and 100
+          example: 50
+        externalInvestmentEntityId:
+          type: string
+          description: External system or source reference ID of the investment entity. Used for traceability during system integrations.
+          example: sample
+        externalSecurityId:
+          type: string
+          description: External system or source reference ID of the security. Used for traceability during system integrations.
+          example: sample
+        shareCount:
+          type: number
+          description: Number of shares involved in the transaction. Used in equity computation and ownership tracking.
+          example: 10
+        vehicleName:
+          type: string
+          description: Name of the investment vehicle (if any) through which the transaction is routed.
+          example: sample
+        externalOwnerEntityId:
+          type: string
+          description: External system or source reference ID of the owner (investor) entity. Used for traceability during system integrations.
+          example: sample
+      description: Container for detailed transaction-level data, capturing additonal info such as investment, security, or ownership-related attributes.
+    TransactionProcessResponse:
+      required:
+      - response
+      - success
+      - message
+      type: object
+      properties:
+        response:
+          type: object
+          properties:
+            totalRecordsCount:
+              type: integer
+              description: Total number of records received for processing
+              format: int32
+              example: 2
+            invalidEntriesCount:
+              type: integer
+              description: Number of invalid records
+              format: int32
+              example: 0
+            valid:
+              type: boolean
+              description: Indicates whether processing was valid
+              example: true
+        success:
+          type: boolean
+          description: Overall API execution status
+          example: true
+        message:
+          type: string
+          description: Human-readable status message
+          example: All transactions processed successfully.
+    UnifiedTransactionResDTO:
+      type: object
+      properties:
+        response:
+          $ref: '#/components/schemas/TransactionResponse'
+        success:
+          type: boolean
+          description: Indicates the status of the request
+          example: true
+        message:
+          type: string
+          description: Explanation of the API response
+          example: Success
+        errorCode:
+          type: string
+          description: Error code if request fails
+          nullable: true
+      description: Response parameters for unified create/update transaction
+    Filter:
+      required:
+      - field
+      - operation
+      - valueSet
+      type: object
+      properties:
+        field:
+          type: string
+          description: Specifies which field of transaction type to filter by. Accepted Value - <b>transactionTypeClassification</b>
+          example: transactionTypeClassification
+        operation:
+          enum:
+          - IS_LESS_THAN_EQUAL_TO
+          - IN
+          - 'NULL'
+          - BETWEEN
+          - IS_GREATER_THAN_EQUAL_TO
+          - NOT_NULL
+          - IS
+          type: string
+          description: 'Logical operation used for filtering. Accepted Value: <b>IN</b>'
+        valueSet:
+          minItems: 1
+          type: array
+          items:
+            enum:
+            - CASH_FLOW
+            - VALUATION
+            type: string
+          description: List of acceptable values for the filter. 1) <b>CASH_FLOW</b> , 2) <b>VALUATION</b>
+      description: Request Parameters Table
+    SortCriteria:
+      required:
+      - field
+      - direction
+      type: object
+      properties:
+        field:
+          type: string
+          description: 'Field name used for sorting.Accepted Value: lastModifiedDate'
+          example: lastModifiedDate
+        direction:
+          enum:
+          - asc
+          - desc
+          type: string
+          description: 'Sorting direction, either asc (ascending) or desc (descending). Accepted Values: 1) <b>asc</b> , 2) <b>desc</b>'
+          example: desc
+      description: Defines the sorting logic of the result set.
+    CreateTransactionResDTO:
+      type: object
+      properties:
+        response:
+          $ref: '#/components/schemas/TransactionResponse'
+        success:
+          type: boolean
+          description: Indicates the status of the request
+          example: true
+        message:
+          type: string
+          description: Explanation of the API response
+          example: Success
+        errorCode:
+          type: string
+          description: Error code if request fails
+          nullable: true
+      description: Response parameters when transaction is created
+    UpdateTransactionResDTO:
+      type: object
+      properties:
+        response:
+          $ref: '#/components/schemas/TransactionUpdateResponse'
+        success:
+          type: boolean
+          description: Indicates the status of the request
+          example: true
+        message:
+          type: string
+          description: Explanation of the API response
+          example: Success
+        errorCode:
+          type: string
+          description: Error code if request fails
+          nullable: true
+      description: Response parameters when transaction is updated
+    TransactionVersionResDTO:
+      type: object
+      properties:
+        response:
+          $ref: '#/components/schemas/TransactionVersionData'
+        success:
+          type: boolean
+          description: Indicates if the API execution was successful.
+          example: true
+        message:
+          type: string
+          description: Message from the API execution.
+          example: Success
+        errorCode:
+          type: string
+          description: Optional error code, if any issue occurs.
+          nullable: true
+      description: Wrapper object containing metadata and version data returned by the API.
+    TransactionTypeResDTO:
+      type: object
+      properties:
+        response:
+          $ref: '#/components/schemas/TransactionTypeData'
+        success:
+          type: boolean
+          description: Indicates if the API execution was successful.
+          example: true
+        message:
+          type: string
+          description: Message from the API execution.
+          example: Success
+        errorCode:
+          type: string
+          description: Optional error code, if any issue occurs.
+          nullable: true
+      description: Wrapper object containing paginated transaction type details.
+    TransactionDataResDTO:
+      type: object
+      properties:
+        response:
+          $ref: '#/components/schemas/TransactionDataResponse'
+        success:
+          type: boolean
+          description: Indicates the status of the request
+          example: true
+        message:
+          type: string
+          description: Explanation of the API response
+          example: Success
+        errorCode:
+          type: string
+          description: Error code if request fails
+          nullable: true
+      description: Response parameters when transaction data is retrieved
+    TransactionData:
+      type: object
+      properties:
+        transactionTypeId:
+          type: string
+          description: Unique identifier for the transaction type
+          example: 389c4d13-d974-4764-89cb-6bd8013303d3
+        transactionDate:
+          type: string
+          description: Date of the transaction
+          format: date
+          example: '2025-09-08'
+        versionId:
+          type: string
+          description: Unique identifier for the version
+          example: 0454b6bb-ea69-4dc0-9c45-a4e34849e71d
+        baseCurrency:
+          type: string
+          description: Base currency code
+          example: USD
+        baseCurrencyUnit:
+          type: string
+          description: Unit for base currency
+          example: Millions
+        amount:
+          type: number
+          description: Transaction amount
+          example: 25
+        asOfDate:
+          type: string
+          description: As of date for the transaction
+          format: date
+          example: '2025-09-08'
+        localAmount:
+          type: number
+          description: Local currency amount
+          example: 0
+        localCurrency:
+          type: string
+          description: Local currency code
+          example: SAR
+        localCurrencyUnit:
+          type: string
+          description: Unit for local currency
+          example: Actual
+        multilayeredTransactionMetadata:
+          $ref: '#/components/schemas/MultilayeredTransactionMetadata'
+        ownerEntityMappings:
+          type: array
+          items:
+            $ref: '#/components/schemas/OwnerEntityMapping'
+          description: Array of owner entity mappings
+        investmentEntityId:
+          type: string
+          description: Unique identifier for the investment entity
+          example: ae43ae8f-5fa8-46fa-b8b1-7482e45ff1d7
+        reportingAmount:
+          type: number
+          description: Reporting currency amount
+          nullable: true
+        reportingCurrency:
+          type: string
+          description: Reporting currency code
+          nullable: true
+        reportingCurrencyUnit:
+          type: string
+          description: Unit for reporting currency
+          example: Actual
+      description: Transaction data details
+    OwnerEntityMapping:
+      type: object
+      properties:
+        ownerEntityId:
+          type: string
+          description: Unique identifier for the owner entity
+          example: 987dd768-8b80-4d5b-b9a8-af6eb3321102
+      description: Owner entity mapping details
+    TransactionResponse:
+      type: object
+      properties:
+        transactionDtoList:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionDto'
+          description: List of transaction objects. Each item represents the processed outcome of one transaction request, including metadata, computed fields, and validation status.
+        totalRecordsCount:
+          type: integer
+          description: Total number of records
+          example: 1
+        invalidEntriesCount:
+          type: integer
+          description: Number of invalid entries
+          example: 0
+        valid:
+          type: boolean
+          description: Indicates if the transaction is valid
+          example: true
+      description: Transaction response details
+    TransactionUpdateResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the transaction
+          nullable: true
+        displayId:
+          type: integer
+          description: Display ID of the transaction populated on the platform. This is mandatory in order to update existing transaction
+          example: 7785749
+        transactionDate:
+          type: string
+          description: Transaction date
+          format: date
+          example: '2025-09-08'
+        transactionTypeId:
+          type: string
+          description: Transaction type ID
+          example: 75f88f60-d96e-4912-80f0-f8e148576848
+        versionId:
+          type: string
+          description: Version ID
+          example: 0454b6bb-ea69-4dc0-9c45-a4e34849e71d
+        baseCurrency:
+          type: string
+          description: Base currency
+          example: GBP
+        baseCurrencyUnit:
+          type: string
+          description: Base currency unit
+          example: Millions
+        amount:
+          type: number
+          description: Transaction amount
+          example: 50
+        amountTotal:
+          type: number
+          description: Total amount
+          nullable: true
+        ownerEntityMappings:
+          type: array
+          items:
+            $ref: '#/components/schemas/OwnerEntityMapping'
+          description: Owner entity mappings
+        investmentEntityId:
+          type: string
+          description: Investment entity ID
+          example: ae43ae8f-5fa8-46fa-b8b1-7482e45ff1d7
+        asOfDate:
+          type: string
+          description: As of date
+          format: date
+          example: '2025-09-08'
+        localAmount:
+          type: number
+          description: Local amount
+          example: 0
+        localAmountTotal:
+          type: number
+          description: Total local amount
+          example: 0
+        localCurrency:
+          type: string
+          description: Local currency
+          example: SAR
+        localCurrencyUnit:
+          type: string
+          description: Local currency unit
+          example: Actual
+        multilayeredTransactionMetadata:
+          $ref: '#/components/schemas/MultilayeredTransactionMetadataResponse'
+        transactionTypeName:
+          type: string
+          description: Transaction type name
+          nullable: true
+        versionName:
+          type: string
+          description: Version name
+          nullable: true
+        investmentEntityName:
+          type: string
+          description: Investment entity name
+          nullable: true
+        valueCarryover:
+          type: number
+          description: Value carryover
+          nullable: true
+        orgId:
+          type: string
+          description: Organization ID
+          nullable: true
+        ownerEntityPath:
+          type: string
+          description: Owner entity path
+          nullable: true
+        reportingCurrency:
+          type: string
+          description: Reporting currency
+          nullable: true
+        reportingCurrencyUnit:
+          type: string
+          description: Reporting currency unit
+          example: Actual
+        reportingAmount:
+          type: number
+          description: Reporting amount
+          nullable: true
+        preferredCurrency:
+          type: string
+          description: Preferred currency
+          example: BASE
+        fxRateDate:
+          type: string
+          description: FX rate date
+          nullable: true
+        errors:
+          type: array
+          items:
+            type: string
+          description: List of errors
+        ownerEntityPathwayRepresentation:
+          type: string
+          description: Owner entity pathway representation
+          example: 987dd768-8b80-4d5b-b9a8-af6eb3321102
+        ownerEntityCount:
+          type: integer
+          description: Owner entity count
+          example: 1
+        ownerEntityNamePathwayRepresentation:
+          type: string
+          description: Owner entity name pathway representation
+          example: 'null'
+      description: Transaction update response details
+    TransactionVersionData:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/VersionData'
+          description: List of version objects available within the organization.
+      description: Transaction version data
+    VersionData:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the version used across transaction or reporting modules.
+          example: 0454b6bb-ea69-4dc0-9c45-a4e34849e71d
+        name:
+          type: string
+          description: Display name of the version (e.g., “Actuals”, “Forecast”).
+          example: Actuals
+        description:
+          type: string
+          description: Business description of the version. May be null if not defined.
+          nullable: true
+          example: Actuals version
+        sortOrder:
+          type: integer
+          description: Defines the display or processing order of versions in the system interface.
+          example: 0
+        isEnabled:
+          type: boolean
+          description: Indicates whether this version is active and available for data entry or reporting.
+          example: true
+        isFixed:
+          type: boolean
+          description: Specifies if the version is system-fixed and cannot be edited by users.
+          nullable: true
+        isDeletable:
+          type: boolean
+          description: Indicates whether the version can be deleted or is protected on the 73 Strings application.
+          example: false
+      description: Version data details
+    TransactionTypeData:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionTypeContent'
+          description: List of transaction type objects retrieved from the 73Strings platform.
+        pageNo:
+          type: integer
+          description: Current page number of the paginated response.
+          example: 0
+        pageSize:
+          type: integer
+          description: Number of records in the current page.
+          example: 21
+        totalElements:
+          type: integer
+          description: Total number of transaction types matching the criteria.
+          example: 17
+        totalPages:
+          type: integer
+          description: Total number of available pages.
+          example: 0
+      description: Transaction type data with pagination
+    TransactionTypeContent:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique ID of the transaction type within the platform.
+          example: 389c4d13-d974-4764-89cb-6bd8013303d3
+        createdBy:
+          type: string
+          description: Name of the user or system that created this transaction type.
+          example: Dev API Integration
+        createdDate:
+          type: string
+          description: Date and time when this transaction type was created.
+          format: date-time
+          example: '2025-09-08T05:31:16Z'
+        lastModifiedBy:
+          type: string
+          description: Name of the user or system that last updated the transaction type.
+          example: Dev API Integration
+        lastModifiedDate:
+          type: string
+          description: Timestamp of the latest modification.
+          format: date-time
+          example: '2025-09-08T05:31:16Z'
+        name:
+          type: string
+          description: Name of the transaction type.
+          example: Additional Investment
+        dataItem:
+          type: string
+          description: Internal reference for the transaction type
+          example: Additional Investment-CF
+        description:
+          type: string
+          description: Business explanation provided by users for the transaction type.
+          example: Any further capital injected into an existing financial endeavor or asset beyond the original investment
+        transactionCategoryId:
+          type: string
+          description: Unique ID of the category under which the transaction type falls.
+          example: 9ce62901-efd5-4726-aad0-17034633609e
+        transactionCategoryName:
+          type: string
+          description: Category name defining the transaction type’s functional grouping.
+          example: Investments
+        valueType:
+          type: string
+          description: Defines whether the transaction value is positive or negative (affecting fund movement direction).
+          example: POSITIVE
+        deletable:
+          type: boolean
+          description: Indicates how values persist across reporting periods (e.g., DEFAULT, NONE).
+          example: false
+      description: List of transaction type objects retrieved from the 73Strings platform.
+    TransactionDataResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionDto'
+          description: List of transaction data
+        pageNo:
+          type: integer
+          description: Current page number
+          example: 0
+        pageSize:
+          type: integer
+          description: Page size
+          example: 21
+        totalElements:
+          type: integer
+          description: Total number of elements
+          example: 13
+        totalPages:
+          type: integer
+          description: Total number of pages
+          example: 0
+      description: Transaction data response with pagination
+    TransactionDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique system-generated identifier for the transaction record (null if creation/updates fails).
+          example: ab1fb6d4-4379-4849-a4d6-36177a6b7c34
+        displayId:
+          type: integer
+          description: Transaction IDshown in the platform for referencing transactions (null for invalid entries). Used for retrieval or update operations.
+          example: 16764192
+        transactionDate:
+          type: string
+          description: The date the transaction occurred or is considered effective.
+          format: date
+          example: '2025-09-08'
+        transactionTypeId:
+          type: string
+          description: Unique Id representing Transaction type.
+          example: 389c4d13-d974-4764-89cb-6bd8013303d3
+        versionId:
+          type: string
+          description: Unique ID of the transaction record’s version for reporting context (e.g., Forecast, Actuals).
+          example: 0454b6bb-ea69-4dc0-9c45-a4e34849e71d
+        baseCurrency:
+          type: string
+          description: The currency in which the transaction’s base values are recorded.
+          example: USD
+        baseCurrencyUnit:
+          type: string
+          description: Denotes the scale of the base transacttional amount [Actual, Lakhs,Millions, Crores, Billions, Trillions].
+          example: Millions
+        amount:
+          type: number
+          description: Amount of the transaction in base currency. Represents the key monetary value driving reporting and calculations.
+          example: 25
+        amountTotal:
+          type: number
+          description: Computed absolute base amount (may include scaling, conversion, or ownership adjustments)
+          example: 25000000
+        ownerEntityMappings:
+          type: array
+          items:
+            $ref: '#/components/schemas/OwnerEntityMappingResponse'
+          description: List of parent (ancestors) entities associated with the transaction (funds, investment vehicles, or holding companies).
+        investmentEntityId:
+          type: string
+          description: Identifier of the investment entity associated with the transaction.
+          example: ae43ae8f-5fa8-46fa-b8b1-7482e45ff1d7
+        asOfDate:
+          type: string
+          description: The date as of which the transaction record is considered effective within the investment.
+          format: date
+          example: '2025-09-08'
+        localAmount:
+          type: number
+          description: Amount in local currency as provided in the input payload.
+          example: 0
+        localAmountTotal:
+          type: number
+          description: Computed absolute base amount (may include scaling, conversion, or ownership adjustments)
+          example: 0
+        localCurrency:
+          type: string
+          description: Represents the local currency in which the transaction is recorded.
+          example: SAR
+        localCurrencyUnit:
+          type: string
+          description: Denotes the scale of the base transacttional amount [Actual, Lakhs,Millions, Crores, Billions, Trillions].
+          example: Actual
+        multilayeredTransactionMetadata:
+          $ref: '#/components/schemas/MultilayeredTransactionMetadataResponse'
+        createdBy:
+          type: string
+          description: User who created the transaction
+          example: Dev API Integration
+        createdDate:
+          type: string
+          description: Creation date and time
+          format: date-time
+          example: '2025-09-09T04:59:07Z'
+        lastModifiedBy:
+          type: string
+          description: User who last modified the transaction
+          example: Dev API Integration
+        lastModifiedDate:
+          type: string
+          description: Last modification date and time
+          format: date-time
+          example: '2025-09-09T05:00:07Z'
+        transactionTypeName:
+          type: string
+          description: Name of the transaction type.
+          example: Additional Investment
+        versionName:
+          type: string
+          description: Name of the version for the transaction record.
+          example: Actuals
+        investmentEntityName:
+          type: string
+          description: Name of the investment entity provided in the platform.
+          example: ADCF_Rollover_Testing
+        valueCarryover:
+          type: number
+          description: Value carried over from prior transactions or versions, if applicable.
+          nullable: true
+        orgId:
+          type: string
+          description: Unique identifier of Organization under which the transaction resides.
+          nullable: true
+        ownerEntityPath:
+          type: string
+          description: Hierarchical path representation of owner entities.
+          nullable: true
+        reportingCurrency:
+          type: string
+          description: The currency in which the transaction’s reporting values are recorded.
+          nullable: true
+        reportingCurrencyUnit:
+          type: string
+          description: Denotes the scale of reporting transactional amount [Actual, Lakhs,Millions, Crores, Billions, Trillions].
+          example: Actual
+        reportingAmount:
+          type: number
+          description: Transaction amount in the designated reporting currency.
+          nullable: true
+        preferredCurrency:
+          type: string
+          description: Indicates preferred currency (“BASE”, “LOCAL”, or “REPORTING”) selected for the organization
+          example: BASE
+        fxRateDate:
+          type: string
+          description: Date used for FX conversion rate reference.
+          nullable: true
+        errors:
+          type: array
+          items:
+            type: string
+          description: List of validation errors for the transaction. Empty if the record was processed successfully.
+        ownerEntityPathwayRepresentation:
+          type: string
+          description: System-generated concatenation of owner entity IDs in hierarchical order.
+          example: 987dd768-8b80-4d5b-b9a8-af6eb3321102
+        ownerEntityCount:
+          type: integer
+          description: Count of owner entities in the hierarchy that is linked to this transaction.
+          example: 1
+        ownerEntityNamePathwayRepresentation:
+          type: string
+          description: Concatenation of owner entity names implying investment entitiy’s owners hierarchy
+          example: ADCF 123
+        isDelete:
+          type: boolean
+          description: Flag indicating if this transaction record is marked for deletion (falsemeans active).
+          example: false
+        isDeleteAll:
+          type: boolean
+          description: Indicates whether all instance of the same transactions are flagged for deletion.
+          example: false
+      description: List of transaction objects. Each item represents the processed outcome of one transaction request, including metadata, computed fields, and validation status.
+    OwnerEntityMappingResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier
+          example: e4e89dee-2887-4773-9f53-098368751f28
+        transactionId:
+          type: string
+          description: Transaction ID
+          example: ab1fb6d4-4379-4849-a4d6-36177a6b7c34
+        ownerEntityId:
+          type: string
+          description: Unique Id of parent entities in the same hierarchy.
+          example: 987dd768-8b80-4d5b-b9a8-af6eb3321102
+        ownerEntityName:
+          type: string
+          description: Name of the owner entity provided in the platform.
+          example: ADCF 123
+      description: List of parent (ancestors) entities associated with the transaction (funds, investment vehicles, or holding companies).
+    MultilayeredTransactionMetadataResponse:
+      type: object
+      properties:
+        externalTransactionSourceReferenceId:
+          type: string
+          description: External system or reference ID identifying the transaction’s origin (for integrations or audit trails).
+          example: XXXXXXXX-XXXXXX-XXXXXXXXX
+        securityId:
+          type: string
+          description: Unique Id of the security linked to the transaction.
+          nullable: true
+        securityType:
+          type: string
+          description: Type of the security (e.g., “CREDIT”, “EQUITY”). “null” if validation failed or not mapped.
+          nullable: true
+        externalSecurityId:
+          type: string
+          description: External identifier of the security from an external system during system integrations.
+          nullable: true
+        externalInvestmentEntityId:
+          type: string
+          description: External ID of the investment entity for integration with third-party systems.
+          nullable: true
+        ownershipPercentage:
+          type: number
+          description: Ownership Percentage of owner entity in the investment.
+          nullable: true
+        shareCount:
+          type: number
+          description: Number of shares involved for the transactions.
+          nullable: true
+        pps:
+          type: number
+          description: Price per share (PPS) of the equity based securities.
+          nullable: true
+        postMoneyValuation:
+          type: number
+          description: Post-money valuation of the entity after investment or distribution.
+          nullable: true
+        postMoneyValuationCurrency:
+          type: string
+          description: Currency name in which post-money valuation is reported.
+          nullable: true
+        postMoneyValuationCurrencyUnit:
+          type: string
+          description: Denotes the scale of post money valuation amount [Actual, Lakhs,Millions, Crores, Billions, Trillions].
+          nullable: true
+        remarks:
+          type: string
+          description: Remarks provided for audit or contextual information.
+          nullable: true
+        source:
+          type: string
+          description: External system or source reference ID for the transaction. Used for traceability during system integrations.
+          nullable: true
+        vehicleName:
+          type: string
+          description: Name of the investment vehicle (if any) through which the transaction is routed.
+          nullable: true
+        externalOwnerEntityId:
+          type: string
+          description: External system or source reference ID of the owner (investor) entity. Used for traceability during system integrations.
+          nullable: true
+        securityName:
+          type: string
+          description: Name of the security associated with this transaction.
+          nullable: true
+      description: Detailed metadata object containing investment-specific and security-related attributes for deeper analytics and validation.
+    MultilayeredTransactionMetadata:
+      type: object
+      properties:
+        remarks:
+          type: string
+          description: Remarks for the transaction
+          nullable: true
+        securityType:
+          type: string
+          description: Type of security
+          nullable: true
+        securityId:
+          type: string
+          description: Security identifier
+          nullable: true
+        externalTransactionSourceReferenceId:
+          type: string
+          description: External reference ID for the transaction
+          nullable: true
+          example: qwerty1234567
+        pps:
+          type: number
+          description: Price per share
+          nullable: true
+        postMoneyValuation:
+          type: number
+          description: Post-money valuation
+          nullable: true
+        postMoneyValuationCurrency:
+          type: string
+          description: Currency for post-money valuation
+          nullable: true
+        postMoneyValuationCurrencyUnit:
+          type: string
+          description: Currency unit for post-money valuation
+          nullable: true
+        ownershipPercentage:
+          type: number
+          description: Ownership percentage
+          nullable: true
+        externalInvestmentEntityId:
+          type: string
+          description: External investment entity ID
+          nullable: true
+        externalSecurityId:
+          type: string
+          description: External security ID
+          nullable: true
+        shareCount:
+          type: number
+          description: Share count
+          nullable: true
+        securityName:
+          type: string
+          description: Name of the security
+          nullable: true
+        vehicleName:
+          type: string
+          description: Vehicle name
+          nullable: true
+        externalOwnerEntityId:
+          type: string
+          description: External owner entity ID
+          nullable: true
+      description: Multilayered transaction metadata
+    UnifiedOwnerEntityMapping:
+      required:
+      - ownerEntityId
+      type: object
+      properties:
+        ownerEntityId:
+          type: string
+          description: Unique ID of owner (parent) entity generated by the platform. This can be retreived from EntityListAPI operation.
+          example: 0ea98f32-5393-441c-b7b0-7e6cc17c485a
+      description: Unified owner entity mapping details using names
+    UnifiedTransactionData:
+      required:
+      - transactionTypeId
+      - versionId
+      - transactionDate
+      - baseCurrency
+      - baseCurrencyUnit
+      - amount
+      - ownerEntityMappings
+      - investmentEntityId
+      type: object
+      properties:
+        transactionTypeId:
+          type: string
+          description: Unique ID representing transaction type. This can be retrieved from transactionType API operation.
+          example: '23796437'
+        displayId:
+          type: string
+          description: Display ID of the transaction populated on the platform. This field becomes mandatory in order to update the existing transaction
+          example: '23796437'
+        asOfDate:
+          type: string
+          description: As of date for the transaction.
+          format: YYYY-MM-DD
+          example: '2020-01-01'
+        transactionDate:
+          type: string
+          description: The effective date when the transaction occurred.
+          format: YYYY-MM-DD
+          example: '2020-01-01'
+        versionId:
+          type: string
+          description: Unique ID of the transaction record’s version for reporting context (e.g., Forecast, Actuals). This can be retrieved from transactionVersion API operation.
+          example: 3239-29XXXX-98492-XXXXX-398989874893209
+        baseCurrency:
+          type: string
+          description: 'Denotes the currency of the base transactional amount. Allowed inputs are: ISO4217 currency codes.'
+          example: USD
+        baseCurrencyUnit:
+          type: string
+          description: 'Scale of the Base currency amount , Allowed inputs are: [Actual, Lakhs, Millions, Crores, Billions, Trillions].'
+          example: Actual
+        amount:
+          type: number
+          description: Amount of the transaction in base currency. This field becomes mandatory in order to update the existing transaction
+          example: 500
+        localCurrency:
+          type: string
+          description: 'The local currency in which the transaction is recorded. Allowed inputs are: ISO4217 currency codes.'
+          example: INR
+        localCurrencyUnit:
+          type: string
+          description: 'Denotes the scale of the local transactional amount , Allowed inputs are: [Actual, Lakhs, Millions, Crores, Billions, Trillions].'
+          example: Actual
+        localAmount:
+          type: number
+          description: Amount of the transaction in the local currency. Pass null, inorder to pass empty local amount. Input the values for all three local currencies field, or pass nothing for these fields to log empty value.
+          example: 10000
+        multilayeredTransactionMetadata:
+          $ref: '#/components/schemas/UnifiedMultilayeredTransactionMetadata'
+        ownerEntityMappings:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnifiedOwnerEntityMapping'
+          description: A list containing information on investment entity’s parent and grand-parents (ancestors) in the same hierarchy.
+        investmentEntityId:
+          type: string
+          description: Unique ID of the investment entity generated by the platform. This can be retreived from EntityListAPI operation.
+          example: 233948-293XXX-309840XXX-938493234
+        reportingAmount:
+          type: number
+          description: Transaction amount in the designated reporting currency. Pass null, inorder to pass empty reporting amount. Input the values for all three reporting currencies field, or pass nothing for these fields to log empty value.
+          example: 500.034
+        reportingCurrency:
+          type: string
+          description: 'The currency in which the transaction’s reporting values are recorded. Allowed inputs are: ISO4217 currency codes.'
+          example: USD
+        reportingCurrencyUnit:
+          type: string
+          description: 'Denotes the scale of reporting transactional amount, Allowed inputs are: [Actual, Lakhs, Millions, Crores, Billions, Trillions].'
+          example: Actual
+      description: A list containing one or more transaction records. Each record holds detailed information about a specific transaction event.
+    FundDetailsDTO:
+      required:
+      - funds
+      - inputDate
+      - orgId
+      - userId
+      type: object
+      properties:
+        orgId:
+          type: string
+          description: Unique identifier associated with the organization.
+          example: 4839fbd20-8534gf3bzzxxxx-0958htf3d924fg8bvuc
+        inputDate:
+          type: string
+          description: "\t\nThe date on which transaction is uploaded in 73 Strings system.\n\nFormat: YYYY-MM-DD"
+          format: date-time
+        userId:
+          type: string
+          description: Unique identifier associated with the user.
+          example: 3ig5fh2-98430hdbn2083f-3853245gfhdnzq0n3v
+        funds:
+          type: array
+          items:
+            $ref: '#/components/schemas/FundDTO'
+          description: Array/List of key-word pairs with fund attributes and their data.
+          example: '12345'
+      description: DTO representing Fund Details
+      xml:
+        name: FundDetailsDTO
+    FundDTO:
+      required:
+      - fundId
+      - fundName
+      - transactions
+      type: object
+      properties:
+        fundId:
+          type: string
+          description: Unique identifier associated with the fund.
+          example: ievb32f-4983g3f2hd-83ubifdn248300538ghfbdcxn
+        fundName:
+          type: string
+          description: Name of the fund
+          example: Fund 1
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionDTO'
+          description: Array/List of key-word pair with transaction attributes and their data.
+      description: DTO representing Fund
+      xml:
+        name: FundDTO
+      example: '12345'
+    TransactionDTO:
+      required:
+      - amount
+      - currency
+      - date
+      - type
+      type: object
+      properties:
+        date:
+          type: string
+          description: Date of transaction.
+          example: '2023-09-15'
+        amount:
+          type: string
+          description: Amount involved in the transaction (In Millions)
+          example: '1000'
+        currency:
+          type: string
+          description: Reporting currency set for the fund.
+          example: USD
+        type:
+          type: string
+          description: 'The kind of transactions made in the fund.
+
+
+            - Interest Expenses
+
+
+            - Expenses
+
+
+            - other net assets
+
+
+            - Drawn/Call
+
+
+            - Distributed
+
+
+            - Distributed (Carry)
+
+
+            - Management Fee
+
+
+            - Carry Provision'
+          example: Distributed
+        details:
+          type: string
+          description: Comments added about the transaction.
+          example: Others
+      description: DTO representing Transaction
+      xml:
+        name: TransactionDTO
+    ApiResponse:
+      type: object
+      properties:
+        response:
+          type: array
+          items:
+            type: object
+            description: List containing the response data.
+            example:
+            - id: '123'
+              name: Sample Data
+          description: List containing the response data.
+          example:
+          - id: '123'
+            name: Sample Data
+        success:
+          type: boolean
+          description: Request’s success status.
+          example: true
+        message:
+          type: string
+          description: Output message depending on success status.
+          example: Success
+        errorCode:
+          type: string
+          description: 'Error response on hitting API request.
+
+
+            null: No errors were encountered.
+
+
+            string: A descriptive error message or code if an issue occurred.'
+          example: EXCE00018
+      description: API response wrapper containing the response data, success status, message, and error code.
+      xml:
+        name: ApiResponse
+    ApiV1TransactionVersionPostRequest:
+      type: boolean
+      x-apim-inline: true
+    ApiV1TransactionVersionPostRequest-1:
+      type: string
+      x-apim-inline: true
+    ApiV1TransactionVersionPostRequest-2:
+      type: string
+      example: application/json
+      x-apim-inline: true
+    ApiV1TransactionTypePostRequest:
+      minimum: 0
+      type: integer
+      x-apim-inline: true
+    ApiV1TransactionTypePostRequest-1:
+      maximum: 100
+      minimum: 1
+      type: integer
+      x-apim-inline: true
+    ApiV1TransactionTypePostRequest-2:
+      type: string
+      x-apim-inline: true
+    ApiV1TransactionTypePostRequest-3:
+      type: string
+      example: application/json
+      x-apim-inline: true
+    ApiV1TransactionDataPostRequest:
+      minimum: 0
+      type: integer
+      x-apim-inline: true
+    ApiV1TransactionDataPostRequest-1:
+      maximum: 100
+      minimum: 1
+      type: integer
+      x-apim-inline: true
+    ApiV1TransactionDataPostRequest-2:
+      type: string
+      x-apim-inline: true
+    ApiV1UnifiedTransactionPostRequest:
+      type: string
+      x-apim-inline: true
+    ApiV1UnifiedTransactionPostRequest-1:
+      type: string
+      x-apim-inline: true
+    ApiV1PutfundTransactionsPostRequest:
+      type: string
+      x-apim-inline: true
+    ApiV2UnifiedTransactionPostRequest:
+      type: string
+      x-apim-inline: true
+    ApiV2UnifiedTransactionPostRequest-1:
+      type: string
+      x-apim-inline: true
+security:
+- {}
+- apiKeyHeader: []
+- apiKeyQuery: []
