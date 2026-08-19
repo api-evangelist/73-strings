@@ -16,7 +16,7 @@ image: https://backend.73strings.com/wp-content/uploads/73-Intelligence_image-1.
 url: https://raw.githubusercontent.com/api-evangelist/73-strings/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-specificationVersion: '0.20'
+specificationVersion: '0.23'
 created: '2026-08-05'
 modified: '2026-08-05'
 x-enrichment:
