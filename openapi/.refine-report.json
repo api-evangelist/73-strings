@@ -1,0 +1,32 @@
+{
+  "provider": "73-strings",
+  "sources": [
+    "73-strings-asset-info-api-openapi.yml",
+    "73-strings-captable-api-openapi.yml",
+    "73-strings-documents-api-openapi.yml",
+    "73-strings-financial-data-api-openapi.yml",
+    "73-strings-qualitative-data-api-openapi.yml",
+    "73-strings-transaction-api-api-openapi.yml"
+  ],
+  "outputs": [
+    "73-strings-asset-info-api-openapi.yml",
+    "73-strings-captable-api-openapi.yml",
+    "73-strings-documents-api-openapi.yml",
+    "73-strings-financial-data-api-openapi.yml",
+    "73-strings-qualitative-data-api-openapi.yml",
+    "73-strings-transaction-api-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "73-strings-asset-info-api-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "73-strings-captable-api-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "73-strings-documents-api-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "73-strings-financial-data-api-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "73-strings-qualitative-data-api-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "73-strings-transaction-api-api-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": []
+}

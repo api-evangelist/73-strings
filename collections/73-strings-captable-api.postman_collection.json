@@ -1,0 +1,464 @@
+{
+  "item": [
+    {
+      "id": "1c452c6e-c0e4-4f5a-83ae-298fdc6e4fd6",
+      "name": "Captable",
+      "description": {
+        "content": "The **Captable APIs**, a RESTful service on 73 Strings, provides comprehensive capital table data including securities, equity, cash positions, and key financial metrics for entities within an organization. The API enables users to retrieve detailed captable information with various aggregations and groupings.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "111b36fc-d86a-4810-8d51-e2c5cc78d97b",
+          "name": "Get Captable Data",
+          "request": {
+            "name": "Get Captable Data",
+            "description": {
+              "content": "The **Captable Data API** retrieves comprehensive capital table information for a specific entity, including security details, equity positions, cash balances, and key financial metrics. This API provides aggregated views of the capital structure across different reporting dates and security groups, enabling detailed analysis of ownership percentages, debt structures, and financial leverage ratios.\n\nKey features include:\n- Security grouping and aggregation by type (e.g., First Lien)\n- Detailed key metrics for financial analysis\n- Cash and equity position reporting\n- Multi-dimensional reporting date aggregations\n- Ownership percentage calculations",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "ems",
+                "captable",
+                "data"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) A unique key that allows you to access and use an API",
+                "key": "subscription-key",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"<string>\",\n  \"orgId\": \"<string>\",\n  \"entityId\": \"<string>\",\n  \"version\": \"<string>\",\n  \"uploadDate\": \"<date>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8bac033e-07c4-44f6-b345-40c4fdb9eb48",
+              "name": "Successful retrieval of captable data.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "captable",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"d2dae30f-7570-4f24-8cc5-e7ead4baf458\",\n  \"orgId\": \"cfcbb891-1838-48e7-98db-57142094123c\",\n  \"entityId\": \"64f1db13-91cc-46be-85f1-a963cec04899\",\n  \"version\": \"Actual\",\n  \"uploadDate\": \"2025-11-17\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": {\n    \"captableHomePage\": {\n      \"id\": \"9fd0de0b-0f9c-4872-bedb-f0b6e6b600a7\",\n      \"valuationDate\": null,\n      \"version\": \"Actual\",\n      \"uploadDate\": \"2025-11-17\",\n      \"currency\": \"USD\",\n      \"unit\": \"Millions\",\n      \"orgId\": \"cfcbb891-1838-48e7-98db-57142094123c\",\n      \"entityId\": \"64f1db13-91cc-46be-85f1-a963cec04899\"\n    },\n    \"reportingDates\": [\n      {\n        \"id\": \"178c2e75-23bb-41d3-851f-3712c9cdb83c\",\n        \"reportingDate\": \"2021-12-31\",\n        \"orgId\": \"cfcbb891-1838-48e7-98db-57142094123c\",\n        \"entityId\": \"64f1db13-91cc-46be-85f1-a963cec04899\",\n        \"uploadDate\": \"2025-11-17\",\n        \"visibility\": true\n      }\n    ],\n    \"homePageGroupedSecurityList\": [\n      {\n        \"groupedSecurityData\": {\n          \"securityGroupName\": \"First Lien\",\n          \"aggregateList\": [\n            {\n              \"id\": \"178c2e75-23bb-41d3-851f-3712c9cdb83c\",\n              \"totalAmountOutstanding\": 20,\n              \"totalDisplayValue\": 20,\n              \"totalOwnershipPercentage\": 10,\n              \"reportingDate\": \"2021-12-31\",\n              \"keyMetricData\": {\n                \"reportingDate\": \"2021-12-31\",\n                \"keyMetrics\": [\n                  {\n                    \"metricKey\": \"paid_interest_rate\",\n                    \"metricValue\": \"-\",\n                    \"displayName\": \"Paid Interest Rate\"\n                  }\n                ]\n              },\n              \"ownedStake\": 2\n            }\n          ]\n        }\n      }\n    ],\n    \"displayName\": \"Total Debt\",\n    \"cashDisplayName\": \"Total Net Debt\",\n    \"equityDisplayName\": \"Total Capitalization\",\n    \"totalEquityDisplayName\": \"Total Equity\",\n    \"captableId\": \"9fd0de0b-0f9c-4872-bedb-f0b6e6b600a7\",\n    \"isAtleastOneCaptableExists\": null,\n    \"financial_metric_enabled\": false,\n    \"financialMetricData\": null,\n    \"isRankValidationFailed\": false,\n    \"rankValidationMessage\": \"All ranks validated successfully.\",\n    \"isEntityManagementApiEnabled\": true\n  },\n  \"success\": true,\n  \"message\": \"Success\",\n  \"errorCode\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4a2a67bd-5211-4f92-bb8c-f41e9aa81c66",
+              "name": "Request accepted for processing, but not yet completed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "captable",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"d2dae30f-7570-4f24-8cc5-e7ead4baf458\",\n  \"orgId\": \"cfcbb891-1838-48e7-98db-57142094123c\",\n  \"entityId\": \"64f1db13-91cc-46be-85f1-a963cec04899\",\n  \"version\": \"Actual\",\n  \"uploadDate\": \"2025-11-17\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": true,\n  \"message\": \"Request accepted and is being processed.\",\n  \"errorCode\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c6372697-9b82-4bef-b9e4-ef9dad591ce1",
+              "name": "Invalid input, missing parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "captable",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"d2dae30f-7570-4f24-8cc5-e7ead4baf458\",\n  \"orgId\": \"cfcbb891-1838-48e7-98db-57142094123c\",\n  \"entityId\": \"64f1db13-91cc-46be-85f1-a963cec04899\",\n  \"version\": \"Actual\",\n  \"uploadDate\": \"2025-11-17\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": false,\n  \"message\": \"Invalid request parameters.\",\n  \"errorCode\": \"EXCE00028\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "83da4298-5eee-4224-bcb8-54756a01bd81",
+              "name": "Invalid or missing Subscription key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "captable",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"d2dae30f-7570-4f24-8cc5-e7ead4baf458\",\n  \"orgId\": \"cfcbb891-1838-48e7-98db-57142094123c\",\n  \"entityId\": \"64f1db13-91cc-46be-85f1-a963cec04899\",\n  \"version\": \"Actual\",\n  \"uploadDate\": \"2025-11-17\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"message\": \"Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6bed4d1f-bcf7-4d62-857f-be1197a29926",
+              "name": "Request with incorrect HTTPS method.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "captable",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"d2dae30f-7570-4f24-8cc5-e7ead4baf458\",\n  \"orgId\": \"cfcbb891-1838-48e7-98db-57142094123c\",\n  \"entityId\": \"64f1db13-91cc-46be-85f1-a963cec04899\",\n  \"version\": \"Actual\",\n  \"uploadDate\": \"2025-11-17\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Method Not Allowed",
+              "code": 405,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 405,\n  \"message\": \"Method Not Allowed. Please use the correct HTTP method.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "98d89c0d-541a-41f1-aca8-707552adec40",
+              "name": "Too many requests sent in a short period. The client is being rate limited.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "captable",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"d2dae30f-7570-4f24-8cc5-e7ead4baf458\",\n  \"orgId\": \"cfcbb891-1838-48e7-98db-57142094123c\",\n  \"entityId\": \"64f1db13-91cc-46be-85f1-a963cec04899\",\n  \"version\": \"Actual\",\n  \"uploadDate\": \"2025-11-17\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"message\": \"Too Many Requests. Please slow down and try again later.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "53731a10-df60-43f0-baa6-e93bc74fcbfd",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "captable",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"d2dae30f-7570-4f24-8cc5-e7ead4baf458\",\n  \"orgId\": \"cfcbb891-1838-48e7-98db-57142094123c\",\n  \"entityId\": \"64f1db13-91cc-46be-85f1-a963cec04899\",\n  \"version\": \"Actual\",\n  \"uploadDate\": \"2025-11-17\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 500,\n  \"message\": \"Internal server error. Please try again later or contact support.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-accord-eut-73strings.azure-api.net/captable",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "noauth"
+  },
+  "info": {
+    "_postman_id": "8e1949f9-e427-424f-a659-3a9c7b78669c",
+    "name": "Captable API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The **Captable APIs**, a RESTful service on 73 Strings, provides comprehensive capital table data including securities, equity, cash positions, and key financial metrics for entities within an organization. The API enables users to retrieve detailed captable information with various aggregations and groupings.\n\nContact Support:\n Email: support@73strings.com",
+      "type": "text/plain"
+    }
+  }
+}

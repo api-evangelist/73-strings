@@ -1,0 +1,2405 @@
+{
+  "item": [
+    {
+      "id": "74e9b1fc-a48b-4382-925c-3d438b0c5a06",
+      "name": "Financial Data",
+      "description": {
+        "content": "The **Financial Data APIs**, a RESTful service on 73 Strings, allows to retrieve comprehensive information of attributes and their values on various cash flow dates in several tags of the Financials, that belongs to a company in the funds across the organization in the 73 Strings platform.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "1707e432-644c-4cd0-bc97-8515f73eac26",
+          "name": "Get All Financial Texts",
+          "request": {
+            "name": "Get All Financial Texts",
+            "description": {
+              "content": "Retrieves textual values of financial attributes (e.g., statements, KPIs) for specified companies, segments, securities, and versions, across given cash flow dates or date ranges.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "data",
+                "getAllFinancialTexts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) A unique key that allows you to access and use the API.",
+                "key": "subscription-key",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"<string>\",\n  \"data\": [\n    {\n      \"attributeId\": \"<string>\",\n      \"companyId\": \"<string>\",\n      \"segmentId\": \"<string,null>\",\n      \"securityId\": \"<string,null>\",\n      \"versionId\": \"<string>\",\n      \"periodType\": \"<string>\",\n      \"cashFlowDate\": \"<string>\",\n      \"startDate\": \"<string>\",\n      \"endDate\": \"<string>\",\n      \"asOfDate\": \"<string>\"\n    },\n    {\n      \"attributeId\": \"<string>\",\n      \"companyId\": \"<string>\",\n      \"segmentId\": \"<string,null>\",\n      \"securityId\": \"<string,null>\",\n      \"versionId\": \"<string>\",\n      \"periodType\": \"<string>\",\n      \"cashFlowDate\": \"<string>\",\n      \"startDate\": \"<string>\",\n      \"endDate\": \"<string>\",\n      \"asOfDate\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3b8094eb-2d13-465f-bfed-01bf2988166f",
+              "name": "Successful retrieval of financial texts.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "data",
+                    "getAllFinancialTexts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use the API.",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n  \"data\": [\n    {\n      \"attributeId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"companyId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"segmentId\": null,\n      \"versionId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"periodType\": \"Quarterly\",\n      \"startDate\": \"2024-12-01\",\n      \"endDate\": \"2025-12-31\",\n      \"asOfDate\": \"2025-07-08\"\n    },\n    {\n      \"attributeId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"companyId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"segmentId\": null,\n      \"securityId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"versionId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"periodType\": \"Annual\",\n      \"startDate\": \"2024-12-01\",\n      \"endDate\": \"2025-12-31\",\n      \"asOfDate\": \"2025-07-08\"\n    },\n    {\n      \"attributeId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"companyId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"segmentId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"versionId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"periodType\": \"Quarterly\",\n      \"cashFlowDate\": \"30-09-2023\",\n      \"startDate\": \"2022-12-01\",\n      \"endDate\": \"2024-12-11\",\n      \"asOfDate\": \"2025-03-12\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": {\n    \"data\": [\n      {\n        \"attributeId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n        \"attributeName\": \"Test Attribute CL\",\n        \"tag\": \"Income Statement\",\n        \"companyId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n        \"companyName\": \"Testing Company\",\n        \"versionId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n        \"versionName\": \"Actual\",\n        \"periodType\": \"Quarterly\",\n        \"cashFlowDate\": \"30-09-2023\",\n        \"startDate\": \"2024-12-01\",\n        \"endDate\": \"2025-12-31\",\n        \"asOfDate\": \"2025-07-08\",\n        \"textValue\": \"Ten thousand\",\n        \"segments\": [\n          {}\n        ],\n        \"errorCodes\": [\n          {}\n        ]\n      }\n    ]\n  },\n  \"success\": true,\n  \"message\": \"Success\",\n  \"errorCode\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1e55752e-8683-4c12-91c9-79f64afc8b6c",
+              "name": "Invalid request parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "data",
+                    "getAllFinancialTexts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use the API.",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n  \"data\": [\n    {\n      \"attributeId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"companyId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"segmentId\": null,\n      \"versionId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"periodType\": \"Quarterly\",\n      \"startDate\": \"2024-12-01\",\n      \"endDate\": \"2025-12-31\",\n      \"asOfDate\": \"2025-07-08\"\n    },\n    {\n      \"attributeId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"companyId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"segmentId\": null,\n      \"securityId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"versionId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"periodType\": \"Annual\",\n      \"startDate\": \"2024-12-01\",\n      \"endDate\": \"2025-12-31\",\n      \"asOfDate\": \"2025-07-08\"\n    },\n    {\n      \"attributeId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"companyId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"segmentId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"versionId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"periodType\": \"Quarterly\",\n      \"cashFlowDate\": \"30-09-2023\",\n      \"startDate\": \"2022-12-01\",\n      \"endDate\": \"2024-12-11\",\n      \"asOfDate\": \"2025-03-12\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "bbc63c9d-3b21-4efd-bdb5-271e54862a67",
+              "name": "Invalid or missing subscription key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "data",
+                    "getAllFinancialTexts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use the API.",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n  \"data\": [\n    {\n      \"attributeId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"companyId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"segmentId\": null,\n      \"versionId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"periodType\": \"Quarterly\",\n      \"startDate\": \"2024-12-01\",\n      \"endDate\": \"2025-12-31\",\n      \"asOfDate\": \"2025-07-08\"\n    },\n    {\n      \"attributeId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"companyId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"segmentId\": null,\n      \"securityId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"versionId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"periodType\": \"Annual\",\n      \"startDate\": \"2024-12-01\",\n      \"endDate\": \"2025-12-31\",\n      \"asOfDate\": \"2025-07-08\"\n    },\n    {\n      \"attributeId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"companyId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"segmentId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"versionId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"periodType\": \"Quarterly\",\n      \"cashFlowDate\": \"30-09-2023\",\n      \"startDate\": \"2022-12-01\",\n      \"endDate\": \"2024-12-11\",\n      \"asOfDate\": \"2025-03-12\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2bba7b3d-ad07-4210-92ed-0bd45f53acc0",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "data",
+                    "getAllFinancialTexts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use the API.",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n  \"data\": [\n    {\n      \"attributeId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"companyId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"segmentId\": null,\n      \"versionId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"periodType\": \"Quarterly\",\n      \"startDate\": \"2024-12-01\",\n      \"endDate\": \"2025-12-31\",\n      \"asOfDate\": \"2025-07-08\"\n    },\n    {\n      \"attributeId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"companyId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"segmentId\": null,\n      \"securityId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"versionId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"periodType\": \"Annual\",\n      \"startDate\": \"2024-12-01\",\n      \"endDate\": \"2025-12-31\",\n      \"asOfDate\": \"2025-07-08\"\n    },\n    {\n      \"attributeId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"companyId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"segmentId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"versionId\": \"xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"periodType\": \"Quarterly\",\n      \"cashFlowDate\": \"30-09-2023\",\n      \"startDate\": \"2022-12-01\",\n      \"endDate\": \"2024-12-11\",\n      \"asOfDate\": \"2025-03-12\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c35a20eb-552c-46b5-99c6-ab510d42e121",
+          "name": "Get BU Financial Data",
+          "request": {
+            "name": "Get BU Financial Data",
+            "description": {
+              "content": "The BU Financial Data API retrieves the financial data for a specific business unit belonging to an entity of type \"company.\" This API returns all data points available in the Financial table for the requested business unit, for the numerical category attributes as entered by users for different reporting periods and cashflow dates.\n\n\nThe endpoint enables clients to access structured, period-based financial information, supporting detailed analysis using both aggregated value and its drill down data for business units within a company. ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "ems",
+                "entityBuFinancialData"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) A unique key that allows you to access and use an API",
+                "key": "subscription-key",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"asOfDate\": \"<string>\",\n  \"attributeNames\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"businessUnitIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"companyName\": \"<string>\",\n  \"currency\": \"<string>\",\n  \"endDate\": \"<string>\",\n  \"entityIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"includeDrillDown\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"orgId\": \"<string>\",\n  \"periodType\": \"<string>\",\n  \"startDate\": \"<string>\",\n  \"units\": \"<string>\",\n  \"userId\": \"<string>\",\n  \"versionId\": \"<string>\",\n  \"versionName\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "cf8829b4-e6ef-469a-99c3-e6e065d311a1",
+              "name": "Successful retrieval of financial data of attributes.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "entityBuFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributeNames\": [],\n  \"entityIds\": [\n    \"2e6f3220-7d22-4e99-829c-87221b4e8119\",\n    \"sdfsfdsfdsf\"\n  ],\n  \"companyName\": \"\",\n  \"asOfDate\": \"\",\n  \"currency\": \"EUR\",\n  \"units\": \"Millions\",\n  \"versionId\": \"\",\n  \"versionName\": \"Budget\",\n  \"startDate\": \"2020-07-04\",\n  \"endDate\": \"2030-07-04\",\n  \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n  \"periodType\": \"Annual\",\n  \"userId\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\",\n  \"businessUnitIds\": [\n    \"41eba2d2-4418-488d-aed6-a7b4be1905ec\",\n    \"9728aad5-6f1b-43d9-a6f1-ab005817768b\",\n    \"asdsad\",\n    \"asdasdasd\"\n  ],\n  \"includeDrillDown\": \"false\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": {\n    \"financialPowerBiResponseDTO\": [\n      {\n        \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n        \"companyId\": \"2e6f3220-7d22-4e99-829c-87221b4e8119\",\n        \"companyName\": \"Tesla\",\n        \"version\": \"Budget\",\n        \"period\": \"Annual\",\n        \"tag\": \"Income Statement\",\n        \"units\": \"Millions\",\n        \"currency\": \"EUR\",\n        \"attributeId\": \"2265d855-d2d2-43ae-b6b7-838f1c05c301\",\n        \"attributeName\": \"Employee Benefit*\",\n        \"cashFlowDate\": \"2023-12-31T12:00:00Z\",\n        \"asOfDate\": \"2025-06-18T12:00:00Z\",\n        \"businessUnitId\": \"41eba2d2-4418-488d-aed6-a7b4be1905ec\",\n        \"businessUnitName\": \"BU 1\",\n        \"trueUpValue\": 24.585781,\n        \"drillDown\": null,\n        \"cellTypeData\": null\n      },\n      {\n        \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n        \"companyId\": \"2e6f3220-7d22-4e99-829c-87221b4e8119\",\n        \"companyName\": \"Tesla\",\n        \"version\": \"Budget\",\n        \"period\": \"Annual\",\n        \"tag\": \"Income Statement\",\n        \"units\": \"Millions\",\n        \"currency\": \"EUR\",\n        \"attributeId\": \"2265d855-d2d2-43ae-b6b7-838f1c05c301\",\n        \"attributeName\": \"Employee Benefit*\",\n        \"cashFlowDate\": \"2024-12-31T12:00:00Z\",\n        \"asOfDate\": \"2025-06-18T12:00:00Z\",\n        \"businessUnitId\": \"41eba2d2-4418-488d-aed6-a7b4be1905ec\",\n        \"businessUnitName\": \"BU 1\",\n        \"trueUpValue\": 32.735337,\n        \"drillDown\": null,\n        \"cellTypeData\": null\n      }\n    ],\n    \"errors\": [\n      {\n        \"success\": false,\n        \"message\": \"Invalid entity id: [sdfsfdsfdsf]\",\n        \"responseCode\": \"BAD_REQUEST\"\n      },\n      {\n        \"success\": false,\n        \"message\": \"Invalid businessUnit ids: [asdsad, asdasdasd]\",\n        \"responseCode\": \"BAD_REQUEST\"\n      }\n    ]\n  },\n  \"success\": true,\n  \"message\": \"Success\",\n  \"errorCode\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9305a1bc-2a64-456f-a31f-2248c21fa3ba",
+              "name": "Request accepted for processing, but not yet completed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "entityBuFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributeNames\": [],\n  \"entityIds\": [\n    \"2e6f3220-7d22-4e99-829c-87221b4e8119\",\n    \"sdfsfdsfdsf\"\n  ],\n  \"companyName\": \"\",\n  \"asOfDate\": \"\",\n  \"currency\": \"EUR\",\n  \"units\": \"Millions\",\n  \"versionId\": \"\",\n  \"versionName\": \"Budget\",\n  \"startDate\": \"2020-07-04\",\n  \"endDate\": \"2030-07-04\",\n  \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n  \"periodType\": \"Annual\",\n  \"userId\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\",\n  \"businessUnitIds\": [\n    \"41eba2d2-4418-488d-aed6-a7b4be1905ec\",\n    \"9728aad5-6f1b-43d9-a6f1-ab005817768b\",\n    \"asdsad\",\n    \"asdasdasd\"\n  ],\n  \"includeDrillDown\": \"false\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": true,\n  \"message\": \"Request accepted and is being processed.\",\n  \"errorCode\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "403ab8f5-ede8-416a-90df-58025cd153e4",
+              "name": "Invalid input, missing parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "entityBuFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributeNames\": [],\n  \"entityIds\": [\n    \"2e6f3220-7d22-4e99-829c-87221b4e8119\",\n    \"sdfsfdsfdsf\"\n  ],\n  \"companyName\": \"\",\n  \"asOfDate\": \"\",\n  \"currency\": \"EUR\",\n  \"units\": \"Millions\",\n  \"versionId\": \"\",\n  \"versionName\": \"Budget\",\n  \"startDate\": \"2020-07-04\",\n  \"endDate\": \"2030-07-04\",\n  \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n  \"periodType\": \"Annual\",\n  \"userId\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\",\n  \"businessUnitIds\": [\n    \"41eba2d2-4418-488d-aed6-a7b4be1905ec\",\n    \"9728aad5-6f1b-43d9-a6f1-ab005817768b\",\n    \"asdsad\",\n    \"asdasdasd\"\n  ],\n  \"includeDrillDown\": \"false\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": false,\n  \"message\": \"Invalid request parameters.\",\n  \"errorCode\": \"EXCE00028\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c66208a0-9caf-4303-bba7-acfea9f550f1",
+              "name": "Invalid or missing Subscription key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "entityBuFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributeNames\": [],\n  \"entityIds\": [\n    \"2e6f3220-7d22-4e99-829c-87221b4e8119\",\n    \"sdfsfdsfdsf\"\n  ],\n  \"companyName\": \"\",\n  \"asOfDate\": \"\",\n  \"currency\": \"EUR\",\n  \"units\": \"Millions\",\n  \"versionId\": \"\",\n  \"versionName\": \"Budget\",\n  \"startDate\": \"2020-07-04\",\n  \"endDate\": \"2030-07-04\",\n  \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n  \"periodType\": \"Annual\",\n  \"userId\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\",\n  \"businessUnitIds\": [\n    \"41eba2d2-4418-488d-aed6-a7b4be1905ec\",\n    \"9728aad5-6f1b-43d9-a6f1-ab005817768b\",\n    \"asdsad\",\n    \"asdasdasd\"\n  ],\n  \"includeDrillDown\": \"false\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"message\": \"Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b088bf16-7e05-446b-b7c5-0eb58777bf48",
+              "name": "Request with incorrect HTTPS method. ",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "entityBuFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributeNames\": [],\n  \"entityIds\": [\n    \"2e6f3220-7d22-4e99-829c-87221b4e8119\",\n    \"sdfsfdsfdsf\"\n  ],\n  \"companyName\": \"\",\n  \"asOfDate\": \"\",\n  \"currency\": \"EUR\",\n  \"units\": \"Millions\",\n  \"versionId\": \"\",\n  \"versionName\": \"Budget\",\n  \"startDate\": \"2020-07-04\",\n  \"endDate\": \"2030-07-04\",\n  \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n  \"periodType\": \"Annual\",\n  \"userId\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\",\n  \"businessUnitIds\": [\n    \"41eba2d2-4418-488d-aed6-a7b4be1905ec\",\n    \"9728aad5-6f1b-43d9-a6f1-ab005817768b\",\n    \"asdsad\",\n    \"asdasdasd\"\n  ],\n  \"includeDrillDown\": \"false\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Method Not Allowed",
+              "code": 405,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 405,\n  \"message\": \"Method Not Allowed. Please use the correct HTTP method.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e5672f61-c2f4-495d-ab29-c296b84bc291",
+              "name": "Too many requests sent in a short period. The client is being rate limited.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "entityBuFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributeNames\": [],\n  \"entityIds\": [\n    \"2e6f3220-7d22-4e99-829c-87221b4e8119\",\n    \"sdfsfdsfdsf\"\n  ],\n  \"companyName\": \"\",\n  \"asOfDate\": \"\",\n  \"currency\": \"EUR\",\n  \"units\": \"Millions\",\n  \"versionId\": \"\",\n  \"versionName\": \"Budget\",\n  \"startDate\": \"2020-07-04\",\n  \"endDate\": \"2030-07-04\",\n  \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n  \"periodType\": \"Annual\",\n  \"userId\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\",\n  \"businessUnitIds\": [\n    \"41eba2d2-4418-488d-aed6-a7b4be1905ec\",\n    \"9728aad5-6f1b-43d9-a6f1-ab005817768b\",\n    \"asdsad\",\n    \"asdasdasd\"\n  ],\n  \"includeDrillDown\": \"false\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"message\": \"Too Many Requests. Please slow down and try again later.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0ed45376-9bc2-4f84-9906-bdab9adb7369",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "entityBuFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributeNames\": [],\n  \"entityIds\": [\n    \"2e6f3220-7d22-4e99-829c-87221b4e8119\",\n    \"sdfsfdsfdsf\"\n  ],\n  \"companyName\": \"\",\n  \"asOfDate\": \"\",\n  \"currency\": \"EUR\",\n  \"units\": \"Millions\",\n  \"versionId\": \"\",\n  \"versionName\": \"Budget\",\n  \"startDate\": \"2020-07-04\",\n  \"endDate\": \"2030-07-04\",\n  \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n  \"periodType\": \"Annual\",\n  \"userId\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\",\n  \"businessUnitIds\": [\n    \"41eba2d2-4418-488d-aed6-a7b4be1905ec\",\n    \"9728aad5-6f1b-43d9-a6f1-ab005817768b\",\n    \"asdsad\",\n    \"asdasdasd\"\n  ],\n  \"includeDrillDown\": \"false\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 500,\n  \"message\": \"Internal server error. Please try again later or contact support.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "68f7f020-71fc-4751-97db-6b05bc830ac3",
+          "name": "Get Entity Financial Data",
+          "request": {
+            "name": "Get Entity Financial Data",
+            "description": {
+              "content": "The 73 Monitor lets users add data of financial statements and other KPIs (Key Performance Indicators) of an entity, which are useful for valuating the entities and also keep a track of their growth especially for fund managers and analysts. The Entity Financial Data API retrieves aggregated financial data (numerical only) as well as its breakdown for specified attributes across multiple entities. Users can request data for a list of entities, and the API will return the aggregated and drilldown values for each attribute across various tags of the financials. such as Income Statement, Balance Sheet, Cash Flows and many more.\n\nThe retrieved financial data includes detailed information for each cashflow date, providing a comprehensive view of financial performance over time.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "ems",
+                "entityFinancialData"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) A unique key that allows you to access and use an API",
+                "key": "subscription-key",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"asOfDate\": \"<string>\",\n  \"attributeNames\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"companyName\": \"<string>\",\n  \"currency\": \"<string>\",\n  \"endDate\": \"<string>\",\n  \"entityIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"orgId\": \"<string>\",\n  \"periodType\": \"<string>\",\n  \"startDate\": \"<string>\",\n  \"units\": \"<string>\",\n  \"userId\": \"<string>\",\n  \"versionId\": \"<string>\",\n  \"versionName\": \"<string>\",\n  \"includeDrillDown\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b07df13c-4b33-4a97-b594-cd3360490d8b",
+              "name": "Successful retrieval of financial data of attributes.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "entityFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributeNames\": [\n    \"Revenue*\",\n    \"Marketing Expenses*\",\n    \"xcvdfbv\"\n  ],\n  \"entityIds\": [\n    \"2e6f3220-7d22-4e99-829c-87221b4e8119\"\n  ],\n  \"companyName\": \"\",\n  \"asOfDate\": \"\",\n  \"currency\": \"EUR\",\n  \"units\": \"Millions\",\n  \"versionId\": \"\",\n  \"versionName\": \"Budget\",\n  \"startDate\": \"2020-07-04\",\n  \"endDate\": \"2030-07-04\",\n  \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n  \"periodType\": \"Annual\",\n  \"userId\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\",\n  \"includeDrillDown\": \"false\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": {\n    \"financialPowerBiResponseDTO\": [\n      {\n        \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n        \"companyId\": \"2e6f3220-7d22-4e99-829c-87221b4e8119\",\n        \"companyName\": \"Tesla\",\n        \"version\": \"Budget\",\n        \"period\": \"Annual\",\n        \"tag\": \"Income Statement\",\n        \"units\": \"Millions\",\n        \"currency\": \"EUR\",\n        \"attributeId\": \"70f49a71-746e-11ec-a730-249684d39778\",\n        \"attributeName\": \"Revenue*\",\n        \"cashFlowDate\": \"2020-12-31T12:00:00Z\",\n        \"asOfDate\": \"2025-06-18T12:00:00Z\",\n        \"trueUpValue\": 1558.822453,\n        \"drillDown\": null,\n        \"cellTypeData\": null\n      },\n      {\n        \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n        \"companyId\": \"2e6f3220-7d22-4e99-829c-87221b4e8119\",\n        \"companyName\": \"Tesla\",\n        \"version\": \"Budget\",\n        \"period\": \"Annual\",\n        \"tag\": \"Income Statement\",\n        \"units\": \"Millions\",\n        \"currency\": \"EUR\",\n        \"attributeId\": \"70f49a71-746e-11ec-a730-249684d39778\",\n        \"attributeName\": \"Revenue*\",\n        \"cashFlowDate\": \"2021-12-31T12:00:00Z\",\n        \"asOfDate\": \"2025-06-18T12:00:00Z\",\n        \"trueUpValue\": 1948.528067,\n        \"drillDown\": null,\n        \"cellTypeData\": null\n      }\n    ],\n    \"errors\": []\n  },\n  \"success\": true,\n  \"message\": \"Success\",\n  \"errorCode\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "607ee8f0-57dd-4811-b2a4-90d5dff9501d",
+              "name": "Request accepted for processing, but not yet completed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "entityFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributeNames\": [\n    \"Revenue*\",\n    \"Marketing Expenses*\",\n    \"xcvdfbv\"\n  ],\n  \"entityIds\": [\n    \"2e6f3220-7d22-4e99-829c-87221b4e8119\"\n  ],\n  \"companyName\": \"\",\n  \"asOfDate\": \"\",\n  \"currency\": \"EUR\",\n  \"units\": \"Millions\",\n  \"versionId\": \"\",\n  \"versionName\": \"Budget\",\n  \"startDate\": \"2020-07-04\",\n  \"endDate\": \"2030-07-04\",\n  \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n  \"periodType\": \"Annual\",\n  \"userId\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\",\n  \"includeDrillDown\": \"false\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": true,\n  \"message\": \"Request accepted and is being processed.\",\n  \"errorCode\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0dfb1c4a-34ef-46d4-9c2c-16d85b9519d1",
+              "name": "Invalid input, missing parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "entityFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributeNames\": [\n    \"Revenue*\",\n    \"Marketing Expenses*\",\n    \"xcvdfbv\"\n  ],\n  \"entityIds\": [\n    \"2e6f3220-7d22-4e99-829c-87221b4e8119\"\n  ],\n  \"companyName\": \"\",\n  \"asOfDate\": \"\",\n  \"currency\": \"EUR\",\n  \"units\": \"Millions\",\n  \"versionId\": \"\",\n  \"versionName\": \"Budget\",\n  \"startDate\": \"2020-07-04\",\n  \"endDate\": \"2030-07-04\",\n  \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n  \"periodType\": \"Annual\",\n  \"userId\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\",\n  \"includeDrillDown\": \"false\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": false,\n  \"message\": \"Invalid request parameters.\",\n  \"errorCode\": \"EXCE00028\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "99b54e5b-bf9d-4ae6-bf42-2e01d73b8b80",
+              "name": "Invalid or missing Subscription key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "entityFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributeNames\": [\n    \"Revenue*\",\n    \"Marketing Expenses*\",\n    \"xcvdfbv\"\n  ],\n  \"entityIds\": [\n    \"2e6f3220-7d22-4e99-829c-87221b4e8119\"\n  ],\n  \"companyName\": \"\",\n  \"asOfDate\": \"\",\n  \"currency\": \"EUR\",\n  \"units\": \"Millions\",\n  \"versionId\": \"\",\n  \"versionName\": \"Budget\",\n  \"startDate\": \"2020-07-04\",\n  \"endDate\": \"2030-07-04\",\n  \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n  \"periodType\": \"Annual\",\n  \"userId\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\",\n  \"includeDrillDown\": \"false\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"message\": \"Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0cd5c2c4-b978-4d09-9d7a-0132c28c3242",
+              "name": "Request with incorrect HTTPS method. ",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "entityFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributeNames\": [\n    \"Revenue*\",\n    \"Marketing Expenses*\",\n    \"xcvdfbv\"\n  ],\n  \"entityIds\": [\n    \"2e6f3220-7d22-4e99-829c-87221b4e8119\"\n  ],\n  \"companyName\": \"\",\n  \"asOfDate\": \"\",\n  \"currency\": \"EUR\",\n  \"units\": \"Millions\",\n  \"versionId\": \"\",\n  \"versionName\": \"Budget\",\n  \"startDate\": \"2020-07-04\",\n  \"endDate\": \"2030-07-04\",\n  \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n  \"periodType\": \"Annual\",\n  \"userId\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\",\n  \"includeDrillDown\": \"false\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Method Not Allowed",
+              "code": 405,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 405,\n  \"message\": \"Method Not Allowed. Please use the correct HTTP method.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "497b83bf-eab3-49b4-8bdf-c1dcc702d7bf",
+              "name": "Too many requests sent in a short period. The client is being rate limited.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "entityFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributeNames\": [\n    \"Revenue*\",\n    \"Marketing Expenses*\",\n    \"xcvdfbv\"\n  ],\n  \"entityIds\": [\n    \"2e6f3220-7d22-4e99-829c-87221b4e8119\"\n  ],\n  \"companyName\": \"\",\n  \"asOfDate\": \"\",\n  \"currency\": \"EUR\",\n  \"units\": \"Millions\",\n  \"versionId\": \"\",\n  \"versionName\": \"Budget\",\n  \"startDate\": \"2020-07-04\",\n  \"endDate\": \"2030-07-04\",\n  \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n  \"periodType\": \"Annual\",\n  \"userId\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\",\n  \"includeDrillDown\": \"false\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"message\": \"Too Many Requests. Please slow down and try again later.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "99c10cbb-9c7c-4d45-8564-0a73d5d9e71d",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "entityFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributeNames\": [\n    \"Revenue*\",\n    \"Marketing Expenses*\",\n    \"xcvdfbv\"\n  ],\n  \"entityIds\": [\n    \"2e6f3220-7d22-4e99-829c-87221b4e8119\"\n  ],\n  \"companyName\": \"\",\n  \"asOfDate\": \"\",\n  \"currency\": \"EUR\",\n  \"units\": \"Millions\",\n  \"versionId\": \"\",\n  \"versionName\": \"Budget\",\n  \"startDate\": \"2020-07-04\",\n  \"endDate\": \"2030-07-04\",\n  \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n  \"periodType\": \"Annual\",\n  \"userId\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\",\n  \"includeDrillDown\": \"false\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 500,\n  \"message\": \"Internal server error. Please try again later or contact support.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bc4e63f4-4688-4156-a801-cc74f556af63",
+          "name": "Get Entity Financial Data V2",
+          "request": {
+            "name": "Get Entity Financial Data V2",
+            "description": {
+              "content": "The Entity Financial Data API retrieves aggregated financial data (numerical only) as well as its breakdown for specified attributes across multiple entities. This endpoint uses Server-Sent Events (SSE) to stream financial data records in real-time, making it efficient for large datasets.\n\n## Streaming Response Format\n```\ndata: {\\\"orgId\\\": \\\"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\\\", \\\"companyName\\\": \\\"Tesla\\\", ...}\\n\\n\ndata: {\\\"orgId\\\": \\\"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\\\", \\\"companyName\\\": \\\"Tesla\\\", ...}\\n\\n\n```\n\nEach line starting with `data: ` contains a JSON object with financial data. Clients should parse these as individual records.\n\n⚠️ **Concurrency Limitation**\n\n\nThis API does not support concurrent streaming sessions. Simultaneous requests from the same client will result in undefined behavior or connection failures. Ensure that your implementation processes one stream at a time before initiating a new request.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "ems",
+                "entityFinancialData"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) A unique key that allows you to access and use an API",
+                "key": "subscription-key",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "text/event-stream"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"asOfDate\": \"<string>\",\n  \"attributeNames\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"companyName\": \"<string>\",\n  \"currency\": \"<string>\",\n  \"endDate\": \"<string>\",\n  \"entityIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"orgId\": \"<string>\",\n  \"periodType\": \"<string>\",\n  \"startDate\": \"<string>\",\n  \"units\": \"<string>\",\n  \"userId\": \"<string>\",\n  \"versionId\": \"<string>\",\n  \"versionName\": \"<string>\",\n  \"includeDrillDown\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0b23bfd3-e218-4a95-ba3d-89f50965e91c",
+              "name": "Successful retrieval of financial data. Returns a stream of Server-Sent Events containing financial records.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "ems",
+                    "entityFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/event-stream"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributeNames\": [\n    \"Revenue*\",\n    \"Marketing Expenses*\"\n  ],\n  \"entityIds\": [\n    \"2e6f3220-7d22-4e99-829c-87221b4e8119\"\n  ],\n  \"companyNames\": null,\n  \"asOfDate\": \"2025-08-13\",\n  \"currency\": \"EUR\",\n  \"units\": \"Millions\",\n  \"versionId\": \"35cf6c3d-d4c7-4c76-af0c-239800e8a482\",\n  \"versionName\": \"Budget\",\n  \"startDate\": \"2020-07-04\",\n  \"endDate\": \"2030-07-04\",\n  \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n  \"periodType\": \"Annual\",\n  \"userId\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\",\n  \"includeDrillDown\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "key": "Cache-Control",
+                  "value": "string",
+                  "description": ""
+                },
+                {
+                  "disabled": false,
+                  "key": "Connection",
+                  "value": "string",
+                  "description": ""
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/event-stream"
+                }
+              ],
+              "body": "data: {\"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\", \"companyId\": \"2e6f3220-7d22-4e99-829c-87221b4e8119\", \"companyName\": \"Tesla\", \"version\": \"Budget\", \"period\": \"Annual\", \"tag\": \"Income Statement\", \"units\": \"Millions\", \"currency\": \"EUR\", \"attributeId\": \"70f49a71-746e-11ec-a730-249684d39778\", \"attributeName\": \"Revenue*\", \"cashFlowDate\": \"2020-12-31T12:00:00.0000000+00:00\", \"asOfDate\": \"2025-06-18T12:00:00.0000000+00:00\", \"trueUpValue\": 1558.822453, \"drillDown\": null, \"cellTypeData\": null}\n\ndata: {\"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\", \"companyId\": \"2e6f3220-7d22-4e99-829c-87221b4e8119\", \"companyName\": \"Tesla\", \"version\": \"Budget\", \"period\": \"Annual\", \"tag\": \"Income Statement\", \"units\": \"Millions\", \"currency\": \"EUR\", \"attributeId\": \"70f49a71-746e-11ec-a730-249684d39779\", \"attributeName\": \"Marketing Expenses*\", \"cashFlowDate\": \"2020-12-31T12:00:00.0000000+00:00\", \"asOfDate\": \"2025-06-18T12:00:00.0000000+00:00\", \"trueUpValue\": 245.5, \"drillDown\": null, \"cellTypeData\": null}\n\n",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e6a856cd-aa34-4ca9-bd44-ba95df1f6be8",
+              "name": "Request accepted for processing, but not yet completed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "ems",
+                    "entityFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributeNames\": [\n    \"Revenue*\",\n    \"Marketing Expenses*\"\n  ],\n  \"entityIds\": [\n    \"2e6f3220-7d22-4e99-829c-87221b4e8119\"\n  ],\n  \"companyNames\": null,\n  \"asOfDate\": \"2025-08-13\",\n  \"currency\": \"EUR\",\n  \"units\": \"Millions\",\n  \"versionId\": \"35cf6c3d-d4c7-4c76-af0c-239800e8a482\",\n  \"versionName\": \"Budget\",\n  \"startDate\": \"2020-07-04\",\n  \"endDate\": \"2030-07-04\",\n  \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n  \"periodType\": \"Annual\",\n  \"userId\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\",\n  \"includeDrillDown\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": true,\n  \"message\": \"Request accepted and is being processed.\",\n  \"errorCode\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "aa30a45e-c324-4c9d-a60d-46338d48856a",
+              "name": "Invalid input, missing parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "ems",
+                    "entityFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributeNames\": [\n    \"Revenue*\",\n    \"Marketing Expenses*\"\n  ],\n  \"entityIds\": [\n    \"2e6f3220-7d22-4e99-829c-87221b4e8119\"\n  ],\n  \"companyNames\": null,\n  \"asOfDate\": \"2025-08-13\",\n  \"currency\": \"EUR\",\n  \"units\": \"Millions\",\n  \"versionId\": \"35cf6c3d-d4c7-4c76-af0c-239800e8a482\",\n  \"versionName\": \"Budget\",\n  \"startDate\": \"2020-07-04\",\n  \"endDate\": \"2030-07-04\",\n  \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n  \"periodType\": \"Annual\",\n  \"userId\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\",\n  \"includeDrillDown\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": false,\n  \"message\": \"Invalid request parameters.\",\n  \"errorCode\": \"EXCE00028\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "95f88bf3-6909-44e2-b457-0efc0a4c7d23",
+              "name": "Invalid or missing Subscription key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "ems",
+                    "entityFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributeNames\": [\n    \"Revenue*\",\n    \"Marketing Expenses*\"\n  ],\n  \"entityIds\": [\n    \"2e6f3220-7d22-4e99-829c-87221b4e8119\"\n  ],\n  \"companyNames\": null,\n  \"asOfDate\": \"2025-08-13\",\n  \"currency\": \"EUR\",\n  \"units\": \"Millions\",\n  \"versionId\": \"35cf6c3d-d4c7-4c76-af0c-239800e8a482\",\n  \"versionName\": \"Budget\",\n  \"startDate\": \"2020-07-04\",\n  \"endDate\": \"2030-07-04\",\n  \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n  \"periodType\": \"Annual\",\n  \"userId\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\",\n  \"includeDrillDown\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"message\": \"Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c2b2cbf8-85f6-40fb-aecc-b0abe2edbd6b",
+              "name": "Request with incorrect HTTPS method.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "ems",
+                    "entityFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributeNames\": [\n    \"Revenue*\",\n    \"Marketing Expenses*\"\n  ],\n  \"entityIds\": [\n    \"2e6f3220-7d22-4e99-829c-87221b4e8119\"\n  ],\n  \"companyNames\": null,\n  \"asOfDate\": \"2025-08-13\",\n  \"currency\": \"EUR\",\n  \"units\": \"Millions\",\n  \"versionId\": \"35cf6c3d-d4c7-4c76-af0c-239800e8a482\",\n  \"versionName\": \"Budget\",\n  \"startDate\": \"2020-07-04\",\n  \"endDate\": \"2030-07-04\",\n  \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n  \"periodType\": \"Annual\",\n  \"userId\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\",\n  \"includeDrillDown\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Method Not Allowed",
+              "code": 405,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 405,\n  \"message\": \"Method Not Allowed. Please use the correct HTTP method.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c74d9c53-0dc8-4682-8c6d-62656882fa5d",
+              "name": "Too many requests sent in a short period. The client is being rate limited.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "ems",
+                    "entityFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributeNames\": [\n    \"Revenue*\",\n    \"Marketing Expenses*\"\n  ],\n  \"entityIds\": [\n    \"2e6f3220-7d22-4e99-829c-87221b4e8119\"\n  ],\n  \"companyNames\": null,\n  \"asOfDate\": \"2025-08-13\",\n  \"currency\": \"EUR\",\n  \"units\": \"Millions\",\n  \"versionId\": \"35cf6c3d-d4c7-4c76-af0c-239800e8a482\",\n  \"versionName\": \"Budget\",\n  \"startDate\": \"2020-07-04\",\n  \"endDate\": \"2030-07-04\",\n  \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n  \"periodType\": \"Annual\",\n  \"userId\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\",\n  \"includeDrillDown\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"message\": \"Too Many Requests. Please slow down and try again later.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "72dd6731-233c-44f8-8b3b-1808bad2c789",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "ems",
+                    "entityFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributeNames\": [\n    \"Revenue*\",\n    \"Marketing Expenses*\"\n  ],\n  \"entityIds\": [\n    \"2e6f3220-7d22-4e99-829c-87221b4e8119\"\n  ],\n  \"companyNames\": null,\n  \"asOfDate\": \"2025-08-13\",\n  \"currency\": \"EUR\",\n  \"units\": \"Millions\",\n  \"versionId\": \"35cf6c3d-d4c7-4c76-af0c-239800e8a482\",\n  \"versionName\": \"Budget\",\n  \"startDate\": \"2020-07-04\",\n  \"endDate\": \"2030-07-04\",\n  \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n  \"periodType\": \"Annual\",\n  \"userId\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\",\n  \"includeDrillDown\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 500,\n  \"message\": \"Internal server error. Please try again later or contact support.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "83b03254-da20-479a-981f-6cc81ee47c82",
+          "name": "Get Security Financial Data",
+          "request": {
+            "name": "Get Security Financial Data",
+            "description": {
+              "content": "The Security Financial Data API retrieves the financial data for a specific securities belonging to an entity of type \"company.\" This API returns all data points available in the Financial table for the requested security, for the numerical category attributes as entered by users for different reporting periods and cashflow dates.\n\n\nThe endpoint enables clients to access structured, period-based financial information, supporting detailed analysis using both aggregated value and its drill down data for securities within a company. ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "ems",
+                "entitySecurityFinancialData"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) A unique key that allows you to access and use an API",
+                "key": "subscription-key",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"asOfDate\": \"<string>\",\n  \"attributeNames\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"companyName\": \"<string>\",\n  \"currency\": \"<string>\",\n  \"endDate\": \"<string>\",\n  \"entityIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"orgId\": \"<string>\",\n  \"periodType\": \"<string>\",\n  \"securityIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"startDate\": \"<string>\",\n  \"units\": \"<string>\",\n  \"userId\": \"<string>\",\n  \"versionName\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "605eaab7-dbcc-41cf-b214-d1371f90cf5e",
+              "name": "Successful retrieval of financial data of attributes.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "entitySecurityFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributeNames\": [\n    \"Revenue*\",\n    \"Marketing Expenses*\",\n    \"xcvdfbv\"\n  ],\n  \"entityIds\": [\n    \"2e6f3220-7d22-4e99-829c-87221b4e8119\"\n  ],\n  \"companyName\": \"\",\n  \"asOfDate\": \"\",\n  \"currency\": \"EUR\",\n  \"units\": \"Millions\",\n  \"versionId\": \"\",\n  \"versionName\": \"Budget\",\n  \"startDate\": \"2020-07-04\",\n  \"endDate\": \"2030-07-04\",\n  \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n  \"periodType\": \"Annual\",\n  \"userId\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\",\n  \"securityIds\": [\n    \"3965b88a-09c5-4ecd-871b-7b0a743b781a\",\n    \"sdfsdf\",\n    \"sdfdsf\"\n  ],\n  \"includeDrillDown\": \"false\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": {\n    \"financialPowerBiResponseDTO\": [\n      {\n        \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n        \"companyId\": \"2e6f3220-7d22-4e99-829c-87221b4e8119\",\n        \"companyName\": \"Tesla\",\n        \"version\": \"Budget\",\n        \"period\": \"Annual\",\n        \"tag\": \"Income Statement\",\n        \"units\": \"Millions\",\n        \"currency\": \"EUR\",\n        \"attributeId\": \"70f49a71-746e-11ec-a730-249684d39778\",\n        \"attributeName\": \"Revenue*\",\n        \"cashFlowDate\": \"2023-12-31T12:00:00Z\",\n        \"asOfDate\": \"2025-06-18T12:00:00Z\",\n        \"securityId\": \"3965b88a-09c5-4ecd-871b-7b0a743b781a\",\n        \"securityName\": \"Sec Ps - 01\",\n        \"trueUpValue\": 431.395186,\n        \"drillDown\": null,\n        \"cellTypeData\": null\n      },\n      {\n        \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n        \"companyId\": \"2e6f3220-7d22-4e99-829c-87221b4e8119\",\n        \"companyName\": \"Tesla\",\n        \"version\": \"Budget\",\n        \"period\": \"Annual\",\n        \"tag\": \"Income Statement\",\n        \"units\": \"Millions\",\n        \"currency\": \"EUR\",\n        \"attributeId\": \"70f49a71-746e-11ec-a730-249684d39778\",\n        \"attributeName\": \"Revenue*\",\n        \"cashFlowDate\": \"2024-12-31T12:00:00Z\",\n        \"asOfDate\": \"2025-06-18T12:00:00Z\",\n        \"securityId\": \"3965b88a-09c5-4ecd-871b-7b0a743b781a\",\n        \"securityName\": \"Sec Ps - 01\",\n        \"trueUpValue\": 253.75885,\n        \"drillDown\": null,\n        \"cellTypeData\": null\n      }\n    ],\n    \"errors\": [\n      {\n        \"success\": false,\n        \"message\": \"Invalid security ids: [sdfsdf, sdfdsf]\",\n        \"responseCode\": \"BAD_REQUEST\"\n      },\n      {\n        \"success\": false,\n        \"message\": \"Invalid attribute name: [XCVDFBV]\",\n        \"responseCode\": \"BAD_REQUEST\"\n      }\n    ]\n  },\n  \"success\": true,\n  \"message\": \"Success\",\n  \"errorCode\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9486d7c9-e3ba-4930-bb48-8a3af5ef60be",
+              "name": "Request accepted for processing, but not yet completed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "entitySecurityFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributeNames\": [\n    \"Revenue*\",\n    \"Marketing Expenses*\",\n    \"xcvdfbv\"\n  ],\n  \"entityIds\": [\n    \"2e6f3220-7d22-4e99-829c-87221b4e8119\"\n  ],\n  \"companyName\": \"\",\n  \"asOfDate\": \"\",\n  \"currency\": \"EUR\",\n  \"units\": \"Millions\",\n  \"versionId\": \"\",\n  \"versionName\": \"Budget\",\n  \"startDate\": \"2020-07-04\",\n  \"endDate\": \"2030-07-04\",\n  \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n  \"periodType\": \"Annual\",\n  \"userId\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\",\n  \"securityIds\": [\n    \"3965b88a-09c5-4ecd-871b-7b0a743b781a\",\n    \"sdfsdf\",\n    \"sdfdsf\"\n  ],\n  \"includeDrillDown\": \"false\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": true,\n  \"message\": \"Request accepted and is being processed.\",\n  \"errorCode\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b711da9f-0a12-4f94-aa9e-a8cf71546ce6",
+              "name": "Invalid input, missing parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "entitySecurityFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributeNames\": [\n    \"Revenue*\",\n    \"Marketing Expenses*\",\n    \"xcvdfbv\"\n  ],\n  \"entityIds\": [\n    \"2e6f3220-7d22-4e99-829c-87221b4e8119\"\n  ],\n  \"companyName\": \"\",\n  \"asOfDate\": \"\",\n  \"currency\": \"EUR\",\n  \"units\": \"Millions\",\n  \"versionId\": \"\",\n  \"versionName\": \"Budget\",\n  \"startDate\": \"2020-07-04\",\n  \"endDate\": \"2030-07-04\",\n  \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n  \"periodType\": \"Annual\",\n  \"userId\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\",\n  \"securityIds\": [\n    \"3965b88a-09c5-4ecd-871b-7b0a743b781a\",\n    \"sdfsdf\",\n    \"sdfdsf\"\n  ],\n  \"includeDrillDown\": \"false\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": false,\n  \"message\": \"Invalid request parameters.\",\n  \"errorCode\": \"EXCE00028\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "559571a9-578c-4eb4-9234-93e34d82e745",
+              "name": "Invalid or missing Subscription key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "entitySecurityFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributeNames\": [\n    \"Revenue*\",\n    \"Marketing Expenses*\",\n    \"xcvdfbv\"\n  ],\n  \"entityIds\": [\n    \"2e6f3220-7d22-4e99-829c-87221b4e8119\"\n  ],\n  \"companyName\": \"\",\n  \"asOfDate\": \"\",\n  \"currency\": \"EUR\",\n  \"units\": \"Millions\",\n  \"versionId\": \"\",\n  \"versionName\": \"Budget\",\n  \"startDate\": \"2020-07-04\",\n  \"endDate\": \"2030-07-04\",\n  \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n  \"periodType\": \"Annual\",\n  \"userId\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\",\n  \"securityIds\": [\n    \"3965b88a-09c5-4ecd-871b-7b0a743b781a\",\n    \"sdfsdf\",\n    \"sdfdsf\"\n  ],\n  \"includeDrillDown\": \"false\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"message\": \"Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d4db3a5c-0822-4876-af6e-aee444441bbc",
+              "name": "Request with incorrect HTTPS method. ",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "entitySecurityFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributeNames\": [\n    \"Revenue*\",\n    \"Marketing Expenses*\",\n    \"xcvdfbv\"\n  ],\n  \"entityIds\": [\n    \"2e6f3220-7d22-4e99-829c-87221b4e8119\"\n  ],\n  \"companyName\": \"\",\n  \"asOfDate\": \"\",\n  \"currency\": \"EUR\",\n  \"units\": \"Millions\",\n  \"versionId\": \"\",\n  \"versionName\": \"Budget\",\n  \"startDate\": \"2020-07-04\",\n  \"endDate\": \"2030-07-04\",\n  \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n  \"periodType\": \"Annual\",\n  \"userId\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\",\n  \"securityIds\": [\n    \"3965b88a-09c5-4ecd-871b-7b0a743b781a\",\n    \"sdfsdf\",\n    \"sdfdsf\"\n  ],\n  \"includeDrillDown\": \"false\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Method Not Allowed",
+              "code": 405,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 405,\n  \"message\": \"Method Not Allowed. Please use the correct HTTP method.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "220d410e-586e-4257-8d63-2c923b15de23",
+              "name": "Too many requests sent in a short period. The client is being rate limited.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "entitySecurityFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributeNames\": [\n    \"Revenue*\",\n    \"Marketing Expenses*\",\n    \"xcvdfbv\"\n  ],\n  \"entityIds\": [\n    \"2e6f3220-7d22-4e99-829c-87221b4e8119\"\n  ],\n  \"companyName\": \"\",\n  \"asOfDate\": \"\",\n  \"currency\": \"EUR\",\n  \"units\": \"Millions\",\n  \"versionId\": \"\",\n  \"versionName\": \"Budget\",\n  \"startDate\": \"2020-07-04\",\n  \"endDate\": \"2030-07-04\",\n  \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n  \"periodType\": \"Annual\",\n  \"userId\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\",\n  \"securityIds\": [\n    \"3965b88a-09c5-4ecd-871b-7b0a743b781a\",\n    \"sdfsdf\",\n    \"sdfdsf\"\n  ],\n  \"includeDrillDown\": \"false\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"message\": \"Too Many Requests. Please slow down and try again later.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "009368fd-3676-4af6-ae2b-dd8b78714a3c",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "entitySecurityFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attributeNames\": [\n    \"Revenue*\",\n    \"Marketing Expenses*\",\n    \"xcvdfbv\"\n  ],\n  \"entityIds\": [\n    \"2e6f3220-7d22-4e99-829c-87221b4e8119\"\n  ],\n  \"companyName\": \"\",\n  \"asOfDate\": \"\",\n  \"currency\": \"EUR\",\n  \"units\": \"Millions\",\n  \"versionId\": \"\",\n  \"versionName\": \"Budget\",\n  \"startDate\": \"2020-07-04\",\n  \"endDate\": \"2030-07-04\",\n  \"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\",\n  \"periodType\": \"Annual\",\n  \"userId\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\",\n  \"securityIds\": [\n    \"3965b88a-09c5-4ecd-871b-7b0a743b781a\",\n    \"sdfsdf\",\n    \"sdfdsf\"\n  ],\n  \"includeDrillDown\": \"false\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 500,\n  \"message\": \"Internal server error. Please try again later or contact support.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "235b1b8a-1293-401f-96db-db58a39cd616",
+          "name": "Save Entity Financial Data",
+          "request": {
+            "name": "Save Entity Financial Data",
+            "description": {
+              "content": "The 73Value Equity product offers robust tools for the valuation of companies, utilizing various financial metrics to provide accurate and insightful assessments. The **putCompanyFinancialData API** is designed to facilitate the creation or updating of financial statement metrics and their data value for various companies.\n\nThis API handles both historical and projected financial data, allowing users to input financials for different cash flow dates and frequency periods. By integrating this data into the 73Value Equity system, users can ensure that their company valuations are based on comprehensive and up-to-date financial information.\n\nThis API is essential for fund managers, analysts, and investors who need to maintain accurate financial records and perform detailed valuations. By leveraging the capabilities of the 73Value Equity product, users can streamline their financial data management and enhance their valuation processes.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "ems",
+                "saveEntityFinancialData"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) A unique key that allows you to access and use an API",
+                "key": "subscription-key",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"<string>\",\n  \"companyData\": [\n    {\n      \"companyId\": \"<string>\",\n      \"companyName\": \"<string>\",\n      \"currency\": \"<string>\",\n      \"historicalFinancials\": [\n        {\n          \"period\": \"<string>\",\n          \"cashFlowDate\": \"<string>\",\n          \"data\": {\n            \"key_0\": \"<object>\",\n            \"key_1\": \"<object>\",\n            \"key_2\": \"<object>\"\n          }\n        },\n        {\n          \"period\": \"<string>\",\n          \"cashFlowDate\": \"<string>\",\n          \"data\": {\n            \"key_0\": \"<object>\",\n            \"key_1\": \"<object>\"\n          }\n        }\n      ],\n      \"projectedFinancials\": [\n        {\n          \"period\": \"<string>\",\n          \"cashFlowDate\": \"<string>\",\n          \"data\": {\n            \"key_0\": \"<object>\",\n            \"key_1\": \"<object>\"\n          }\n        },\n        {\n          \"period\": \"<string>\",\n          \"cashFlowDate\": \"<string>\",\n          \"data\": {\n            \"key_0\": \"<object>\"\n          }\n        }\n      ]\n    },\n    {\n      \"companyId\": \"<string>\",\n      \"companyName\": \"<string>\",\n      \"currency\": \"<string>\",\n      \"historicalFinancials\": [\n        {\n          \"period\": \"<string>\",\n          \"cashFlowDate\": \"<string>\",\n          \"data\": {\n            \"key_0\": \"<object>\"\n          }\n        },\n        {\n          \"period\": \"<string>\",\n          \"cashFlowDate\": \"<string>\",\n          \"data\": {\n            \"key_0\": \"<object>\"\n          }\n        }\n      ],\n      \"projectedFinancials\": [\n        {\n          \"period\": \"<string>\",\n          \"cashFlowDate\": \"<string>\",\n          \"data\": {\n            \"key_0\": \"<object>\",\n            \"key_1\": \"<object>\",\n            \"key_2\": \"<object>\",\n            \"key_3\": \"<object>\",\n            \"key_4\": \"<object>\"\n          }\n        },\n        {\n          \"period\": \"<string>\",\n          \"cashFlowDate\": \"<string>\",\n          \"data\": {\n            \"key_0\": \"<object>\",\n            \"key_1\": \"<object>\"\n          }\n        }\n      ]\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a6fc4f74-a044-425e-9418-e74790df5de4",
+              "name": "Financial data submitted successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "saveEntityFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n  \"companyData\": [\n    {\n      \"companyId\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"companyName\": \"\",\n      \"currency\": \"USD\",\n      \"historicalFinancials\": [\n        {\n          \"period\": \"Annual\",\n          \"cashFlowDate\": \"2021-12-31\",\n          \"data\": {\n            \"Revenue\": 159,\n            \"Cost_of_Goods_Sold\": null,\n            \"Gross_Profit\": 111,\n            \"Total_Operating_Expenses\": 1000,\n            \"EBITDA\": 1000,\n            \"Depreciation_and_Amortization\": 1000,\n            \"Interest_Expense\": 1000,\n            \"Taxes\": 1000,\n            \"Net_Income\": 1000\n          }\n        }\n      ],\n      \"projectedFinancials\": [\n        {\n          \"period\": \"Annual\",\n          \"cashFlowDate\": \"2024-12-31\",\n          \"data\": {\n            \"Revenue\": 60,\n            \"Cost_of_Goods_Sold\": 60,\n            \"Gross_Profit\": 10,\n            \"Selling_General_and_Admin\": 10,\n            \"Other_Expenses\": 10,\n            \"Total_Operating_Expenses\": 10,\n            \"EBITDA\": 10,\n            \"Depreciation_and_Amortization\": 10\n          }\n        }\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"Success\": \"true\",\n  \"message\": \"Data added to the system successfully\",\n  \"responseCode\": \"OK\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "618ba208-6f89-4e91-911d-27ab039ee869",
+              "name": "Request accepted for processing, but not yet completed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "saveEntityFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n  \"companyData\": [\n    {\n      \"companyId\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"companyName\": \"\",\n      \"currency\": \"USD\",\n      \"historicalFinancials\": [\n        {\n          \"period\": \"Annual\",\n          \"cashFlowDate\": \"2021-12-31\",\n          \"data\": {\n            \"Revenue\": 159,\n            \"Cost_of_Goods_Sold\": null,\n            \"Gross_Profit\": 111,\n            \"Total_Operating_Expenses\": 1000,\n            \"EBITDA\": 1000,\n            \"Depreciation_and_Amortization\": 1000,\n            \"Interest_Expense\": 1000,\n            \"Taxes\": 1000,\n            \"Net_Income\": 1000\n          }\n        }\n      ],\n      \"projectedFinancials\": [\n        {\n          \"period\": \"Annual\",\n          \"cashFlowDate\": \"2024-12-31\",\n          \"data\": {\n            \"Revenue\": 60,\n            \"Cost_of_Goods_Sold\": 60,\n            \"Gross_Profit\": 10,\n            \"Selling_General_and_Admin\": 10,\n            \"Other_Expenses\": 10,\n            \"Total_Operating_Expenses\": 10,\n            \"EBITDA\": 10,\n            \"Depreciation_and_Amortization\": 10\n          }\n        }\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": true,\n  \"message\": \"Request accepted and is being processed.\",\n  \"errorCode\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2e96c902-8532-494c-aa61-51c11655583d",
+              "name": "Invalid input, missing parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "saveEntityFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n  \"companyData\": [\n    {\n      \"companyId\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"companyName\": \"\",\n      \"currency\": \"USD\",\n      \"historicalFinancials\": [\n        {\n          \"period\": \"Annual\",\n          \"cashFlowDate\": \"2021-12-31\",\n          \"data\": {\n            \"Revenue\": 159,\n            \"Cost_of_Goods_Sold\": null,\n            \"Gross_Profit\": 111,\n            \"Total_Operating_Expenses\": 1000,\n            \"EBITDA\": 1000,\n            \"Depreciation_and_Amortization\": 1000,\n            \"Interest_Expense\": 1000,\n            \"Taxes\": 1000,\n            \"Net_Income\": 1000\n          }\n        }\n      ],\n      \"projectedFinancials\": [\n        {\n          \"period\": \"Annual\",\n          \"cashFlowDate\": \"2024-12-31\",\n          \"data\": {\n            \"Revenue\": 60,\n            \"Cost_of_Goods_Sold\": 60,\n            \"Gross_Profit\": 10,\n            \"Selling_General_and_Admin\": 10,\n            \"Other_Expenses\": 10,\n            \"Total_Operating_Expenses\": 10,\n            \"EBITDA\": 10,\n            \"Depreciation_and_Amortization\": 10\n          }\n        }\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": false,\n  \"message\": \"Invalid request parameters.\",\n  \"errorCode\": \"EXCE00028\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "26c08d07-d4e0-45e0-a41e-d0e512d3de65",
+              "name": "Invalid or missing Subscription key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "saveEntityFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n  \"companyData\": [\n    {\n      \"companyId\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"companyName\": \"\",\n      \"currency\": \"USD\",\n      \"historicalFinancials\": [\n        {\n          \"period\": \"Annual\",\n          \"cashFlowDate\": \"2021-12-31\",\n          \"data\": {\n            \"Revenue\": 159,\n            \"Cost_of_Goods_Sold\": null,\n            \"Gross_Profit\": 111,\n            \"Total_Operating_Expenses\": 1000,\n            \"EBITDA\": 1000,\n            \"Depreciation_and_Amortization\": 1000,\n            \"Interest_Expense\": 1000,\n            \"Taxes\": 1000,\n            \"Net_Income\": 1000\n          }\n        }\n      ],\n      \"projectedFinancials\": [\n        {\n          \"period\": \"Annual\",\n          \"cashFlowDate\": \"2024-12-31\",\n          \"data\": {\n            \"Revenue\": 60,\n            \"Cost_of_Goods_Sold\": 60,\n            \"Gross_Profit\": 10,\n            \"Selling_General_and_Admin\": 10,\n            \"Other_Expenses\": 10,\n            \"Total_Operating_Expenses\": 10,\n            \"EBITDA\": 10,\n            \"Depreciation_and_Amortization\": 10\n          }\n        }\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"message\": \"Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e382ad0c-4a0a-4c2d-a986-f2f7f2de730f",
+              "name": "Request with incorrect HTTPS method. ",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "saveEntityFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n  \"companyData\": [\n    {\n      \"companyId\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"companyName\": \"\",\n      \"currency\": \"USD\",\n      \"historicalFinancials\": [\n        {\n          \"period\": \"Annual\",\n          \"cashFlowDate\": \"2021-12-31\",\n          \"data\": {\n            \"Revenue\": 159,\n            \"Cost_of_Goods_Sold\": null,\n            \"Gross_Profit\": 111,\n            \"Total_Operating_Expenses\": 1000,\n            \"EBITDA\": 1000,\n            \"Depreciation_and_Amortization\": 1000,\n            \"Interest_Expense\": 1000,\n            \"Taxes\": 1000,\n            \"Net_Income\": 1000\n          }\n        }\n      ],\n      \"projectedFinancials\": [\n        {\n          \"period\": \"Annual\",\n          \"cashFlowDate\": \"2024-12-31\",\n          \"data\": {\n            \"Revenue\": 60,\n            \"Cost_of_Goods_Sold\": 60,\n            \"Gross_Profit\": 10,\n            \"Selling_General_and_Admin\": 10,\n            \"Other_Expenses\": 10,\n            \"Total_Operating_Expenses\": 10,\n            \"EBITDA\": 10,\n            \"Depreciation_and_Amortization\": 10\n          }\n        }\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Method Not Allowed",
+              "code": 405,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 405,\n  \"message\": \"Method Not Allowed. Please use the correct HTTP method.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "17b8040f-6dc4-416f-8471-2ee786ff1159",
+              "name": "Too many requests sent in a short period. The client is being rate limited.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "saveEntityFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n  \"companyData\": [\n    {\n      \"companyId\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"companyName\": \"\",\n      \"currency\": \"USD\",\n      \"historicalFinancials\": [\n        {\n          \"period\": \"Annual\",\n          \"cashFlowDate\": \"2021-12-31\",\n          \"data\": {\n            \"Revenue\": 159,\n            \"Cost_of_Goods_Sold\": null,\n            \"Gross_Profit\": 111,\n            \"Total_Operating_Expenses\": 1000,\n            \"EBITDA\": 1000,\n            \"Depreciation_and_Amortization\": 1000,\n            \"Interest_Expense\": 1000,\n            \"Taxes\": 1000,\n            \"Net_Income\": 1000\n          }\n        }\n      ],\n      \"projectedFinancials\": [\n        {\n          \"period\": \"Annual\",\n          \"cashFlowDate\": \"2024-12-31\",\n          \"data\": {\n            \"Revenue\": 60,\n            \"Cost_of_Goods_Sold\": 60,\n            \"Gross_Profit\": 10,\n            \"Selling_General_and_Admin\": 10,\n            \"Other_Expenses\": 10,\n            \"Total_Operating_Expenses\": 10,\n            \"EBITDA\": 10,\n            \"Depreciation_and_Amortization\": 10\n          }\n        }\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"message\": \"Too Many Requests. Please slow down and try again later.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9b1a45ab-1dd2-4d81-900f-a33fb795d04e",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "saveEntityFinancialData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n  \"companyData\": [\n    {\n      \"companyId\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n      \"companyName\": \"\",\n      \"currency\": \"USD\",\n      \"historicalFinancials\": [\n        {\n          \"period\": \"Annual\",\n          \"cashFlowDate\": \"2021-12-31\",\n          \"data\": {\n            \"Revenue\": 159,\n            \"Cost_of_Goods_Sold\": null,\n            \"Gross_Profit\": 111,\n            \"Total_Operating_Expenses\": 1000,\n            \"EBITDA\": 1000,\n            \"Depreciation_and_Amortization\": 1000,\n            \"Interest_Expense\": 1000,\n            \"Taxes\": 1000,\n            \"Net_Income\": 1000\n          }\n        }\n      ],\n      \"projectedFinancials\": [\n        {\n          \"period\": \"Annual\",\n          \"cashFlowDate\": \"2024-12-31\",\n          \"data\": {\n            \"Revenue\": 60,\n            \"Cost_of_Goods_Sold\": 60,\n            \"Gross_Profit\": 10,\n            \"Selling_General_and_Admin\": 10,\n            \"Other_Expenses\": 10,\n            \"Total_Operating_Expenses\": 10,\n            \"EBITDA\": 10,\n            \"Depreciation_and_Amortization\": 10\n          }\n        }\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 500,\n  \"message\": \"Internal server error. Please try again later or contact support.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-accord-eut-73strings.azure-api.net/financial-data",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "noauth"
+  },
+  "info": {
+    "_postman_id": "977edd74-2814-4e55-836c-f744afb2a3af",
+    "name": "Financial Data API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The **Financial Data APIs**, a RESTful service on 73 Strings, allows to retrieve comprehensive information of attributes and their values on various cash flow dates in several tags of the Financials, that belongs to a company in the funds across the organization in the 73 Strings platform.\n\nContact Support:\n Email: support@73strings.com",
+      "type": "text/plain"
+    }
+  }
+}

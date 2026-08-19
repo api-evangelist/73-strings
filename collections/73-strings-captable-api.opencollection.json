@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Captable API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Captable",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Captable Data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-accord-eut-73strings.azure-api.net/captable/api/v1/ems/captable/data",
+            "headers": [
+              {
+                "name": "subscription-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The **Captable Data API** retrieves comprehensive capital table information for a specific entity, including security details, equity positions, cash balances, and key financial metrics. This API provides aggregated views of the capital structure across different reporting dates and security groups, enabling detailed analysis of ownership percentages, debt structures, and financial leverage ratios.\n\nKey features include:\n- Security grouping and aggregation by type (e.g., First Lien)\n- Detailed k"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

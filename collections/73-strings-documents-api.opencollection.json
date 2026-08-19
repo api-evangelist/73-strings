@@ -1,0 +1,60 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Documents API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Documents",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Entity Document Download FIle",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-accord-eut-73strings.azure-api.net/documents/api/v1/ems/getEntityDocumentDownloadFIle",
+            "headers": [
+              {
+                "name": "subscription-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The **Entity Document Download File API**  retrieves the content of documents that have been uploaded by users in the 73 Strings platform.\n\nThis API allows users to access crucial information contained within these documents, which can be essential for various tasks such as:\n- Extracting key financial and operational data.\n- Automating the organization and categorization of company information.\n- Facilitating compliance checks and due diligence processes.\n- Enhancing data accuracy and consistenc"
+        },
+        {
+          "info": {
+            "name": "Get Entity Document List",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-accord-eut-73strings.azure-api.net/documents/api/v1/ems/getEntityDocumentList",
+            "headers": [
+              {
+                "name": "subscription-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The 73 Strings products offer advanced tools for extracting and analyzing company information within private equity funds. The **Entity Documents List API** is designed to retrieve a comprehensive list of all documents uploaded in a entity by the users.\n\nThis API provides users with essential details about each document, ensuring they have quick access to important metadata information.\n\nBy leveraging the capabilities of the 73Extract and Monitor platform, fund managers, analysts, and investors "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,1692 @@
+openapi: 3.2.0
+info:
+  title: Financial Data API
+  description: The **Financial Data APIs**, a RESTful service on 73 Strings, allows to retrieve comprehensive information of attributes and their values on various cash flow dates in several tags of the Financials, that belongs to a company in the funds across the organization in the 73 Strings platform.
+  contact:
+    name: ''
+    email: support@73strings.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: '1.0'
+servers:
+- url: https://api-accord-eut-73strings.azure-api.net/financial-data
+security:
+- {}
+- apiKeyHeader: []
+- apiKeyQuery: []
+tags:
+- name: Financial Data
+  description: The **Financial Data APIs**, a RESTful service on 73 Strings, allows to retrieve comprehensive information of attributes and their values on various cash flow dates in several tags of the Financials, that belongs to a company in the funds across the organization in the 73 Strings platform.
+paths:
+  /api/v1/data/getAllFinancialTexts:
+    post:
+      operationId: getAllFinancialTexts
+      summary: Get All Financial Texts
+      tags:
+      - Financial Data
+      description: Retrieves textual values of financial attributes (e.g., statements, KPIs) for specified companies, segments, securities, and versions, across given cash flow dates or date ranges.
+      parameters:
+      - name: subscription-key
+        in: header
+        required: true
+        description: A unique key that allows you to access and use the API.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetAllFinancialTextsReq'
+            examples:
+              default:
+                value:
+                  userId: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                  data:
+                  - attributeId: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    companyId: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    segmentId: null
+                    versionId: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    periodType: Quarterly
+                    startDate: '2024-12-01'
+                    endDate: '2025-12-31'
+                    asOfDate: '2025-07-08'
+                  - attributeId: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    companyId: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    segmentId: null
+                    securityId: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    versionId: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    periodType: Annual
+                    startDate: '2024-12-01'
+                    endDate: '2025-12-31'
+                    asOfDate: '2025-07-08'
+                  - attributeId: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    companyId: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    segmentId: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    versionId: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    periodType: Quarterly
+                    cashFlowDate: 30-09-2023
+                    startDate: '2022-12-01'
+                    endDate: '2024-12-11'
+                    asOfDate: '2025-03-12'
+        description: Request payload containing userId and financial text data details.
+      responses:
+        '200':
+          description: Successful retrieval of financial texts.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllFinancialTextsResp'
+              examples:
+                default:
+                  value:
+                    response:
+                      data:
+                      - attributeId: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                        attributeName: Test Attribute CL
+                        tag: Income Statement
+                        companyId: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                        companyName: Testing Company
+                        versionId: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                        versionName: Actual
+                        periodType: Quarterly
+                        cashFlowDate: 30-09-2023
+                        startDate: '2024-12-01'
+                        endDate: '2025-12-31'
+                        asOfDate: '2025-07-08'
+                        textValue: Ten thousand
+                        segments:
+                        - {}
+                        errorCodes:
+                        - {}
+                    success: true
+                    message: Success
+                    errorCode: null
+        '400':
+          description: Invalid request parameters.
+        '401':
+          description: Invalid or missing subscription key.
+        '500':
+          description: Internal server error.
+  /api/v1/ems/entityBuFinancialData:
+    post:
+      operationId: entityBuFinancialData
+      summary: Get BU Financial Data
+      tags:
+      - Financial Data
+      description: 'The BU Financial Data API retrieves the financial data for a specific business unit belonging to an entity of type "company." This API returns all data points available in the Financial table for the requested business unit, for the numerical category attributes as entered by users for different reporting periods and cashflow dates.
+
+
+
+        The endpoint enables clients to access structured, period-based financial information, supporting detailed analysis using both aggregated value and its drill down data for business units within a company. '
+      parameters:
+      - name: subscription-key
+        in: header
+        required: true
+        description: A unique key that allows you to access and use an API
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntityBuFinancialDataReqDTO'
+            examples:
+              default:
+                value:
+                  attributeNames: []
+                  entityIds:
+                  - 2e6f3220-7d22-4e99-829c-87221b4e8119
+                  - sdfsfdsfdsf
+                  companyName: ''
+                  asOfDate: ''
+                  currency: EUR
+                  units: Millions
+                  versionId: ''
+                  versionName: Budget
+                  startDate: '2020-07-04'
+                  endDate: '2030-07-04'
+                  orgId: 8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4
+                  periodType: Annual
+                  userId: 4d32666b-5fa9-489f-93b1-1f5036bd2a41
+                  businessUnitIds:
+                  - 41eba2d2-4418-488d-aed6-a7b4be1905ec
+                  - 9728aad5-6f1b-43d9-a6f1-ab005817768b
+                  - asdsad
+                  - asdasdasd
+                  includeDrillDown: 'false'
+        description: Request payload containing entity Bu financial attribute names, entity ids, company details, currency, time period, business unit ids and include drilldown for retrieving entity bu financial data.
+      responses:
+        '200':
+          description: Successful retrieval of financial data of attributes.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityBuFinancialDataResDTO'
+              examples:
+                Success Example:
+                  description: Success Example
+                  value:
+                    response:
+                      financialPowerBiResponseDTO:
+                      - orgId: 8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4
+                        companyId: 2e6f3220-7d22-4e99-829c-87221b4e8119
+                        companyName: Tesla
+                        version: Budget
+                        period: Annual
+                        tag: Income Statement
+                        units: Millions
+                        currency: EUR
+                        attributeId: 2265d855-d2d2-43ae-b6b7-838f1c05c301
+                        attributeName: Employee Benefit*
+                        cashFlowDate: '2023-12-31T12:00:00Z'
+                        asOfDate: '2025-06-18T12:00:00Z'
+                        businessUnitId: 41eba2d2-4418-488d-aed6-a7b4be1905ec
+                        businessUnitName: BU 1
+                        trueUpValue: 24.585781
+                        drillDown: null
+                        cellTypeData: null
+                      - orgId: 8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4
+                        companyId: 2e6f3220-7d22-4e99-829c-87221b4e8119
+                        companyName: Tesla
+                        version: Budget
+                        period: Annual
+                        tag: Income Statement
+                        units: Millions
+                        currency: EUR
+                        attributeId: 2265d855-d2d2-43ae-b6b7-838f1c05c301
+                        attributeName: Employee Benefit*
+                        cashFlowDate: '2024-12-31T12:00:00Z'
+                        asOfDate: '2025-06-18T12:00:00Z'
+                        businessUnitId: 41eba2d2-4418-488d-aed6-a7b4be1905ec
+                        businessUnitName: BU 1
+                        trueUpValue: 32.735337
+                        drillDown: null
+                        cellTypeData: null
+                      errors:
+                      - success: false
+                        message: 'Invalid entity id: [sdfsfdsfdsf]'
+                        responseCode: BAD_REQUEST
+                      - success: false
+                        message: 'Invalid businessUnit ids: [asdsad, asdasdasd]'
+                        responseCode: BAD_REQUEST
+                    success: true
+                    message: Success
+                    errorCode: null
+                No Data Example:
+                  description: No Data Example
+                  value:
+                    response: []
+                    success: false
+                    message: Data not found.
+                    errorCode: EXCE00021
+        '202':
+          description: Request accepted for processing, but not yet completed.
+          content:
+            application/json:
+              examples:
+                Accepted Example:
+                  description: Accepted Example
+                  value:
+                    response: []
+                    success: true
+                    message: Request accepted and is being processed.
+                    errorCode: null
+        '400':
+          description: Invalid input, missing parameters.
+          content:
+            application/json:
+              examples:
+                Bad Request Example:
+                  description: Bad Request Example
+                  value:
+                    response: []
+                    success: false
+                    message: Invalid request parameters.
+                    errorCode: EXCE00028
+                Required Fields Can't Be Null Or Empty Example:
+                  description: Required Fields Can't Be Null Or Empty Example
+                  value:
+                    response: []
+                    success: false
+                    message: Fields cannot be null or empty..
+                    errorCode: EXCE00020
+        '401':
+          description: Invalid or missing Subscription key.
+          content:
+            application/json:
+              examples:
+                Invalid Subscription key Example:
+                  description: Invalid Subscription key Example
+                  value:
+                    statusCode: 401
+                    message: Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.
+        '405':
+          description: 'Request with incorrect HTTPS method. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                Method not allowed Example:
+                  description: Method not allowed Example
+                  value:
+                    statusCode: 405
+                    message: Method Not Allowed. Please use the correct HTTP method.
+        '429':
+          description: Too many requests sent in a short period. The client is being rate limited.
+          content:
+            application/json:
+              examples:
+                Too Many Request Example.:
+                  description: Too Many Request Example.
+                  value:
+                    statusCode: 429
+                    message: Too Many Requests. Please slow down and try again later.
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    statusCode: 500
+                    message: Internal server error. Please try again later or contact support.
+  /api/v1/ems/entityFinancialData:
+    post:
+      operationId: entityFinancialData
+      summary: Get Entity Financial Data
+      tags:
+      - Financial Data
+      description: 'The 73 Monitor lets users add data of financial statements and other KPIs (Key Performance Indicators) of an entity, which are useful for valuating the entities and also keep a track of their growth especially for fund managers and analysts. The Entity Financial Data API retrieves aggregated financial data (numerical only) as well as its breakdown for specified attributes across multiple entities. Users can request data for a list of entities, and the API will return the aggregated and drilldown values for each attribute across various tags of the financials. such as Income Statement, Balance Sheet, Cash Flows and many more.
+
+
+        The retrieved financial data includes detailed information for each cashflow date, providing a comprehensive view of financial performance over time.'
+      parameters:
+      - name: subscription-key
+        in: header
+        required: true
+        description: A unique key that allows you to access and use an API
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntityFinancialsReqDTO'
+            examples:
+              default:
+                value:
+                  attributeNames:
+                  - Revenue*
+                  - Marketing Expenses*
+                  - xcvdfbv
+                  entityIds:
+                  - 2e6f3220-7d22-4e99-829c-87221b4e8119
+                  companyName: ''
+                  asOfDate: ''
+                  currency: EUR
+                  units: Millions
+                  versionId: ''
+                  versionName: Budget
+                  startDate: '2020-07-04'
+                  endDate: '2030-07-04'
+                  orgId: 8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4
+                  periodType: Annual
+                  userId: 4d32666b-5fa9-489f-93b1-1f5036bd2a41
+                  includeDrillDown: 'false'
+        description: Request payload containing entity financial attribute names, entity ids, company details, currency, time period and include drilldown for retrieving entity financial data.
+      responses:
+        '200':
+          description: Successful retrieval of financial data of attributes.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityFinancialResDTO'
+              examples:
+                Success Example:
+                  description: Success Example
+                  value:
+                    response:
+                      financialPowerBiResponseDTO:
+                      - orgId: 8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4
+                        companyId: 2e6f3220-7d22-4e99-829c-87221b4e8119
+                        companyName: Tesla
+                        version: Budget
+                        period: Annual
+                        tag: Income Statement
+                        units: Millions
+                        currency: EUR
+                        attributeId: 70f49a71-746e-11ec-a730-249684d39778
+                        attributeName: Revenue*
+                        cashFlowDate: '2020-12-31T12:00:00Z'
+                        asOfDate: '2025-06-18T12:00:00Z'
+                        trueUpValue: 1558.822453
+                        drillDown: null
+                        cellTypeData: null
+                      - orgId: 8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4
+                        companyId: 2e6f3220-7d22-4e99-829c-87221b4e8119
+                        companyName: Tesla
+                        version: Budget
+                        period: Annual
+                        tag: Income Statement
+                        units: Millions
+                        currency: EUR
+                        attributeId: 70f49a71-746e-11ec-a730-249684d39778
+                        attributeName: Revenue*
+                        cashFlowDate: '2021-12-31T12:00:00Z'
+                        asOfDate: '2025-06-18T12:00:00Z'
+                        trueUpValue: 1948.528067
+                        drillDown: null
+                        cellTypeData: null
+                      errors: []
+                    success: true
+                    message: Success
+                    errorCode: null
+                No Data Example:
+                  description: No Data Example
+                  value:
+                    response: []
+                    success: false
+                    message: Data not found.
+                    errorCode: EXCE00021
+        '202':
+          description: Request accepted for processing, but not yet completed.
+          content:
+            application/json:
+              examples:
+                Accepted Example:
+                  description: Accepted Example
+                  value:
+                    response: []
+                    success: true
+                    message: Request accepted and is being processed.
+                    errorCode: null
+        '400':
+          description: Invalid input, missing parameters.
+          content:
+            application/json:
+              examples:
+                Bad Request Example:
+                  description: Bad Request Example
+                  value:
+                    response: []
+                    success: false
+                    message: Invalid request parameters.
+                    errorCode: EXCE00028
+                Required Fields Can't Be Null Or Empty Example:
+                  description: Required Fields Can't Be Null Or Empty Example
+                  value:
+                    response: []
+                    success: false
+                    message: Fields cannot be null or empty..
+                    errorCode: EXCE00020
+        '401':
+          description: Invalid or missing Subscription key.
+          content:
+            application/json:
+              examples:
+                Invalid Subscription key Example:
+                  description: Invalid Subscription key Example
+                  value:
+                    statusCode: 401
+                    message: Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.
+        '405':
+          description: 'Request with incorrect HTTPS method. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                Method not allowed Example:
+                  description: Method not allowed Example
+                  value:
+                    statusCode: 405
+                    message: Method Not Allowed. Please use the correct HTTP method.
+        '429':
+          description: Too many requests sent in a short period. The client is being rate limited.
+          content:
+            application/json:
+              examples:
+                Too Many Request Example.:
+                  description: Too Many Request Example.
+                  value:
+                    statusCode: 429
+                    message: Too Many Requests. Please slow down and try again later.
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    statusCode: 500
+                    message: Internal server error. Please try again later or contact support.
+  /api/v2/ems/entityFinancialData:
+    post:
+      operationId: streamEntityFinancialData
+      summary: Get Entity Financial Data V2
+      tags:
+      - Financial Data
+      description: 'The Entity Financial Data API retrieves aggregated financial data (numerical only) as well as its breakdown for specified attributes across multiple entities. This endpoint uses Server-Sent Events (SSE) to stream financial data records in real-time, making it efficient for large datasets.
+
+
+        ## Streaming Response Format
+
+        ```
+
+        data: {\"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\", \"companyName\": \"Tesla\", ...}\n\n
+
+        data: {\"orgId\": \"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\", \"companyName\": \"Tesla\", ...}\n\n
+
+        ```
+
+
+        Each line starting with `data: ` contains a JSON object with financial data. Clients should parse these as individual records.
+
+
+        ⚠️ **Concurrency Limitation**
+
+
+
+        This API does not support concurrent streaming sessions. Simultaneous requests from the same client will result in undefined behavior or connection failures. Ensure that your implementation processes one stream at a time before initiating a new request.'
+      parameters:
+      - name: subscription-key
+        in: header
+        required: true
+        description: A unique key that allows you to access and use an API
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntityFinancialsReqDTO'
+            examples:
+              default:
+                value:
+                  attributeNames:
+                  - Revenue*
+                  - Marketing Expenses*
+                  entityIds:
+                  - 2e6f3220-7d22-4e99-829c-87221b4e8119
+                  companyNames: null
+                  asOfDate: '2025-08-13'
+                  currency: EUR
+                  units: Millions
+                  versionId: 35cf6c3d-d4c7-4c76-af0c-239800e8a482
+                  versionName: Budget
+                  startDate: '2020-07-04'
+                  endDate: '2030-07-04'
+                  orgId: 8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4
+                  periodType: Annual
+                  userId: 4d32666b-5fa9-489f-93b1-1f5036bd2a41
+                  includeDrillDown: false
+        description: Request payload containing entity financial attribute names, entity ids, company details, currency, time period and include drilldown for retrieving entity financial data.
+      responses:
+        '200':
+          description: Successful retrieval of financial data. Returns a stream of Server-Sent Events containing financial records.
+          content:
+            text/event-stream:
+              schema:
+                $ref: '#/components/schemas/ApiV2EmsEntityFinancialDataPost200TextEvent-streamResponse'
+              examples:
+                StreamExample:
+                  description: Example SSE stream with multiple financial records
+                  value: 'data: {"orgId": "8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4", "companyId": "2e6f3220-7d22-4e99-829c-87221b4e8119", "companyName": "Tesla", "version": "Budget", "period": "Annual", "tag": "Income Statement", "units": "Millions", "currency": "EUR", "attributeId": "70f49a71-746e-11ec-a730-249684d39778", "attributeName": "Revenue*", "cashFlowDate": "2020-12-31T12:00:00.0000000+00:00", "asOfDate": "2025-06-18T12:00:00.0000000+00:00", "trueUpValue": 1558.822453, "drillDown": null, "cellTypeData": null}
+
+
+                    data: {"orgId": "8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4", "companyId": "2e6f3220-7d22-4e99-829c-87221b4e8119", "companyName": "Tesla", "version": "Budget", "period": "Annual", "tag": "Income Statement", "units": "Millions", "currency": "EUR", "attributeId": "70f49a71-746e-11ec-a730-249684d39779", "attributeName": "Marketing Expenses*", "cashFlowDate": "2020-12-31T12:00:00.0000000+00:00", "asOfDate": "2025-06-18T12:00:00.0000000+00:00", "trueUpValue": 245.5, "drillDown": null, "cellTypeData": null}
+
+
+                    '
+          headers:
+            Content-Type:
+              description: ''
+              schema:
+                type: string
+            Cache-Control:
+              description: ''
+              schema:
+                type: string
+            Connection:
+              description: ''
+              schema:
+                type: string
+        '202':
+          description: Request accepted for processing, but not yet completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                AcceptedExample:
+                  description: Accepted Example
+                  value:
+                    response: []
+                    success: true
+                    message: Request accepted and is being processed.
+                    errorCode: null
+        '400':
+          description: Invalid input, missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                BadRequestExample:
+                  description: Bad Request Example
+                  value:
+                    response: []
+                    success: false
+                    message: Invalid request parameters.
+                    errorCode: EXCE00028
+        '401':
+          description: Invalid or missing Subscription key.
+          content:
+            application/json:
+              examples:
+                InvalidSubscriptionKey:
+                  description: Invalid Subscription key Example
+                  value:
+                    statusCode: 401
+                    message: Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.
+        '405':
+          description: Request with incorrect HTTPS method.
+          content:
+            application/json:
+              examples:
+                MethodNotAllowed:
+                  description: Method not allowed Example
+                  value:
+                    statusCode: 405
+                    message: Method Not Allowed. Please use the correct HTTP method.
+        '429':
+          description: Too many requests sent in a short period. The client is being rate limited.
+          content:
+            application/json:
+              examples:
+                TooManyRequests:
+                  description: Too Many Request Example
+                  value:
+                    statusCode: 429
+                    message: Too Many Requests. Please slow down and try again later.
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              examples:
+                InternalServerError:
+                  description: Internal Server Error Example
+                  value:
+                    statusCode: 500
+                    message: Internal server error. Please try again later or contact support.
+  /api/v1/ems/entitySecurityFinancialData:
+    post:
+      operationId: entitySecurityFinancialData
+      summary: Get Security Financial Data
+      tags:
+      - Financial Data
+      description: 'The Security Financial Data API retrieves the financial data for a specific securities belonging to an entity of type "company." This API returns all data points available in the Financial table for the requested security, for the numerical category attributes as entered by users for different reporting periods and cashflow dates.
+
+
+
+        The endpoint enables clients to access structured, period-based financial information, supporting detailed analysis using both aggregated value and its drill down data for securities within a company. '
+      parameters:
+      - name: subscription-key
+        in: header
+        required: true
+        description: A unique key that allows you to access and use an API
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntitySecurityFinancialDataReqDTO'
+            examples:
+              default:
+                value:
+                  attributeNames:
+                  - Revenue*
+                  - Marketing Expenses*
+                  - xcvdfbv
+                  entityIds:
+                  - 2e6f3220-7d22-4e99-829c-87221b4e8119
+                  companyName: ''
+                  asOfDate: ''
+                  currency: EUR
+                  units: Millions
+                  versionId: ''
+                  versionName: Budget
+                  startDate: '2020-07-04'
+                  endDate: '2030-07-04'
+                  orgId: 8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4
+                  periodType: Annual
+                  userId: 4d32666b-5fa9-489f-93b1-1f5036bd2a41
+                  securityIds:
+                  - 3965b88a-09c5-4ecd-871b-7b0a743b781a
+                  - sdfsdf
+                  - sdfdsf
+                  includeDrillDown: 'false'
+        description: Request payload containing entity Security financial attribute names, entity ids, company details, currency, time period and security ids for retrieving entity security financial data.
+      responses:
+        '200':
+          description: Successful retrieval of financial data of attributes.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntitySecurityFinancialDataResDTO'
+              examples:
+                Success Example:
+                  description: Success Example
+                  value:
+                    response:
+                      financialPowerBiResponseDTO:
+                      - orgId: 8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4
+                        companyId: 2e6f3220-7d22-4e99-829c-87221b4e8119
+                        companyName: Tesla
+                        version: Budget
+                        period: Annual
+                        tag: Income Statement
+                        units: Millions
+                        currency: EUR
+                        attributeId: 70f49a71-746e-11ec-a730-249684d39778
+                        attributeName: Revenue*
+                        cashFlowDate: '2023-12-31T12:00:00Z'
+                        asOfDate: '2025-06-18T12:00:00Z'
+                        securityId: 3965b88a-09c5-4ecd-871b-7b0a743b781a
+                        securityName: Sec Ps - 01
+                        trueUpValue: 431.395186
+                        drillDown: null
+                        cellTypeData: null
+                      - orgId: 8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4
+                        companyId: 2e6f3220-7d22-4e99-829c-87221b4e8119
+                        companyName: Tesla
+                        version: Budget
+                        period: Annual
+                        tag: Income Statement
+                        units: Millions
+                        currency: EUR
+                        attributeId: 70f49a71-746e-11ec-a730-249684d39778
+                        attributeName: Revenue*
+                        cashFlowDate: '2024-12-31T12:00:00Z'
+                        asOfDate: '2025-06-18T12:00:00Z'
+                        securityId: 3965b88a-09c5-4ecd-871b-7b0a743b781a
+                        securityName: Sec Ps - 01
+                        trueUpValue: 253.75885
+                        drillDown: null
+                        cellTypeData: null
+                      errors:
+                      - success: false
+                        message: 'Invalid security ids: [sdfsdf, sdfdsf]'
+                        responseCode: BAD_REQUEST
+                      - success: false
+                        message: 'Invalid attribute name: [XCVDFBV]'
+                        responseCode: BAD_REQUEST
+                    success: true
+                    message: Success
+                    errorCode: null
+                No Data Example:
+                  description: No Data Example
+                  value:
+                    response: []
+                    success: false
+                    message: Data not found.
+                    errorCode: EXCE00021
+        '202':
+          description: Request accepted for processing, but not yet completed.
+          content:
+            application/json:
+              examples:
+                Accepted Example:
+                  description: Accepted Example
+                  value:
+                    response: []
+                    success: true
+                    message: Request accepted and is being processed.
+                    errorCode: null
+        '400':
+          description: Invalid input, missing parameters.
+          content:
+            application/json:
+              examples:
+                Bad Request Example:
+                  description: Bad Request Example
+                  value:
+                    response: []
+                    success: false
+                    message: Invalid request parameters.
+                    errorCode: EXCE00028
+                Required Fields Can't Be Null Or Empty Example:
+                  description: Required Fields Can't Be Null Or Empty Example
+                  value:
+                    response: []
+                    success: false
+                    message: Fields cannot be null or empty..
+                    errorCode: EXCE00020
+        '401':
+          description: Invalid or missing Subscription key.
+          content:
+            application/json:
+              examples:
+                Invalid Subscription key Example:
+                  description: Invalid Subscription key Example
+                  value:
+                    statusCode: 401
+                    message: Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.
+        '405':
+          description: 'Request with incorrect HTTPS method. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                Method not allowed Example:
+                  description: Method not allowed Example
+                  value:
+                    statusCode: 405
+                    message: Method Not Allowed. Please use the correct HTTP method.
+        '429':
+          description: Too many requests sent in a short period. The client is being rate limited.
+          content:
+            application/json:
+              examples:
+                Too Many Request Example.:
+                  description: Too Many Request Example.
+                  value:
+                    statusCode: 429
+                    message: Too Many Requests. Please slow down and try again later.
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    statusCode: 500
+                    message: Internal server error. Please try again later or contact support.
+  /api/v1/ems/saveEntityFinancialData:
+    post:
+      operationId: companyFinancialData
+      summary: Save Entity Financial Data
+      tags:
+      - Financial Data
+      description: 'The 73Value Equity product offers robust tools for the valuation of companies, utilizing various financial metrics to provide accurate and insightful assessments. The **putCompanyFinancialData API** is designed to facilitate the creation or updating of financial statement metrics and their data value for various companies.
+
+
+        This API handles both historical and projected financial data, allowing users to input financials for different cash flow dates and frequency periods. By integrating this data into the 73Value Equity system, users can ensure that their company valuations are based on comprehensive and up-to-date financial information.
+
+
+        This API is essential for fund managers, analysts, and investors who need to maintain accurate financial records and perform detailed valuations. By leveraging the capabilities of the 73Value Equity product, users can streamline their financial data management and enhance their valuation processes.'
+      parameters:
+      - name: subscription-key
+        in: header
+        required: true
+        description: A unique key that allows you to access and use an API
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntityFinancialDataReqDTO'
+            examples:
+              default:
+                value:
+                  userId: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                  companyData:
+                  - companyId: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    companyName: ''
+                    currency: USD
+                    historicalFinancials:
+                    - period: Annual
+                      cashFlowDate: '2021-12-31'
+                      data:
+                        Revenue: 159
+                        Cost_of_Goods_Sold: null
+                        Gross_Profit: 111
+                        Total_Operating_Expenses: 1000
+                        EBITDA: 1000
+                        Depreciation_and_Amortization: 1000
+                        Interest_Expense: 1000
+                        Taxes: 1000
+                        Net_Income: 1000
+                    projectedFinancials:
+                    - period: Annual
+                      cashFlowDate: '2024-12-31'
+                      data:
+                        Revenue: 60
+                        Cost_of_Goods_Sold: 60
+                        Gross_Profit: 10
+                        Selling_General_and_Admin: 10
+                        Other_Expenses: 10
+                        Total_Operating_Expenses: 10
+                        EBITDA: 10
+                        Depreciation_and_Amortization: 10
+        description: Request body containing company financial data.
+      responses:
+        '200':
+          description: Financial data submitted successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                Successful Example:
+                  description: Successful Example
+                  value:
+                    Success: 'true'
+                    message: Data added to the system successfully
+                    responseCode: OK
+        '202':
+          description: Request accepted for processing, but not yet completed.
+          content:
+            application/json:
+              examples:
+                Accepted Example:
+                  description: Accepted Example
+                  value:
+                    response: []
+                    success: true
+                    message: Request accepted and is being processed.
+                    errorCode: null
+        '400':
+          description: Invalid input, missing parameters.
+          content:
+            application/json:
+              examples:
+                Bad Request Example:
+                  description: Bad Request Example
+                  value:
+                    response: []
+                    success: false
+                    message: Invalid request parameters.
+                    errorCode: EXCE00028
+                Required Fields Can't Be Null Or Empty Example:
+                  description: Required Fields Can't Be Null Or Empty Example
+                  value:
+                    response: []
+                    success: false
+                    message: Fields cannot be null or empty..
+                    errorCode: EXCE00020
+        '401':
+          description: Invalid or missing Subscription key.
+          content:
+            application/json:
+              examples:
+                Invalid Subscription key Example:
+                  description: Invalid Subscription key Example
+                  value:
+                    statusCode: 401
+                    message: Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.
+        '405':
+          description: 'Request with incorrect HTTPS method. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                Method not allowed Example:
+                  description: Method not allowed Example
+                  value:
+                    statusCode: 405
+                    message: Method Not Allowed. Please use the correct HTTP method.
+        '429':
+          description: Too many requests sent in a short period. The client is being rate limited.
+          content:
+            application/json:
+              examples:
+                Too Many Request Example.:
+                  description: Too Many Request Example.
+                  value:
+                    statusCode: 429
+                    message: Too Many Requests. Please slow down and try again later.
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    statusCode: 500
+                    message: Internal server error. Please try again later or contact support.
+components:
+  schemas:
+    EntityFinancialResDTO:
+      type: object
+      properties:
+        orgId:
+          type: string
+          description: Unique identifier of the organization.
+          example: 4839fbd20-8534gf3bzzxxxx-0958htf3d924fg8bvuc
+        companyId:
+          type: string
+          description: Unique identifier of the entity.
+          example: b7eb2b8f-df3b-4b7a-9675-012ac2f3f088
+        version:
+          type: string
+          description: Name of the version, as used in 73strings platform.
+          example: Actual
+        period:
+          type: string
+          description: Period type as mentioned on 73 Strings platform.
+          example: period
+        tag:
+          type: string
+          description: Tag of the attribute
+          example: Income Statement
+        units:
+          type: string
+          description: Units as mentioned in 73 Strings platform.
+          example: Millions
+        currency:
+          type: string
+          description: Currency Codes as per the ISO standard; ISO 4217
+          example: USD
+        attributeId:
+          type: string
+          description: Unique identifier of the attribute. Use Attribute List API to get the IDs of attribute.
+          example: 70f49a71-746e-11ec-a730-249684d39778
+        attributeName:
+          type: string
+          description: Name of the attribute.
+          example: Revenue
+        cashFlowDate:
+          type: string
+          description: 'The date on which financial attribute''s values impact the cash position of the entity. '
+          example: '2024-12-31 00:00:00.0'
+        asOfDate:
+          type: string
+          description: 'The upload date as of which financial date is retrieved.
+
+
+            Format: DD-MM-YYYY'
+          example: '2025-06-07 00:00:00.0'
+        companyName:
+          type: string
+          description: Name of the entity.
+          example: reliance
+        trueUpValue:
+          type: string
+          description: Aggregated value of the attribute in the financials.
+          example: '60.0'
+        drillDown:
+          type: string
+          description: Contains breakdown of the attribute’s true Up value on given cashflow date.
+      description: Retrieved financial data for the requested entities.
+      xml:
+        name: Entity Financial Data
+    ApiV2EmsEntityFinancialDataPost200TextEvent-streamResponse:
+      type: string
+      description: Server-Sent Events stream with each event containing a JSON object of financial data
+      x-apim-inline: true
+    EntityBuFinancialDataResDTO:
+      type: object
+      properties:
+        orgId:
+          type: string
+          description: Unique identifier of the organization.
+          example: 4839fbd20-8534gf3bzzxxxx-0958htf3d924fg8bvuc
+        companyId:
+          type: string
+          description: Unique identifier of the entity.
+          example: 4a827fe8-4749-449a-b528-3bb57b7d96a6
+        version:
+          type: string
+          description: Name of the version, as present in 73 Strings application.
+          example: Budget
+        period:
+          type: string
+          description: Interval over which financial metric is measured or calculated.
+          example: Annual
+        tag:
+          type: string
+          description: Tag to which the attribute belongs to
+          example: Income Statement
+        units:
+          type: string
+          description: The currency units used to display the business unit’s valuation figures. (e.g. Millions, Billions)
+          example: Millions
+        currency:
+          type: string
+          description: The currency in which the business unit’s valuation is calculated and reported.
+          example: USD
+        geography:
+          type: string
+          description: Geography in which entity does business in.
+        sector:
+          type: string
+          description: Sector in which entity operates in.
+        fiscalYearEnd:
+          type: string
+          description: Last month of Financial year in Entity's business.
+          example: '2023-12-31'
+        attributeId:
+          type: string
+          description: Unique identifier of the attribute
+          example: 70f4bc61-746e-11ec-a730-249684d39778
+        attributeName:
+          type: string
+          description: Name of the attribute.
+          example: EBITDA
+        cashFlowDate:
+          type: string
+          description: 'CashFlow date of the finacial data. '
+          example: '2023-12-31 00:00:00.0'
+        asOfDate:
+          type: string
+          description: Upload date as of which financial data is retrieved.
+          example: '2025-06-04 00:00:00.0'
+        companyName:
+          type: string
+          description: Name of the entity.
+          example: Reliance
+        segmentId:
+          type: string
+          description: Business unit id of the requested Entity
+          example: 4a827fe8-4749-449a-b528-3bb57b7d96a6
+        trueUpValue:
+          type: string
+          description: Aggregated value of the attribute on the mentioned cash flow date
+          example: '210.93'
+        drillDown:
+          type: string
+          description: Contains breakdown of the attribute’s true Up value on given cashflow date.
+      description: Retrieved financial data for the requested Business unit.
+      xml:
+        name: Entity Bu Financial Data
+    GetAllFinancialTextsReq:
+      required:
+      - userId
+      - data
+      type: object
+      properties:
+        userId:
+          type: string
+          description: User Id on 73 Strings Platform; provided by 73 Strings team.
+          example: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/FinancialTextReqData'
+    GetAllFinancialTextsResp:
+      type: object
+      properties:
+        response:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/FinancialTextRespData'
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Success
+        errorCode:
+          type:
+          - string
+          - 'null'
+          example: null
+    CompanyData:
+      type: object
+      properties:
+        companyId:
+          type: string
+          description: Unique identifier of the entity
+          example: b7eb2b8f-df3b-4b7a-9675-012ac2f3f088
+        companyName:
+          type: string
+          description: Name of the entity
+          example: Tech Corp
+        currency:
+          type: string
+          description: Reporting currency used for the entity financials
+          example: USD
+        historicalFinancials:
+          type: array
+          items:
+            $ref: '#/components/schemas/FinancialRecord'
+          description: List containing various historical financial metrics and their value.
+        projectedFinancials:
+          type: array
+          items:
+            $ref: '#/components/schemas/FinancialRecord'
+          description: List containing various projected financial metrics and their value.
+      description: Details on the entity's financial data
+    EntityFinancialDataReqDTO:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: Unique Identifier of the User
+          example: 4d32666b-5fa9-489f-93b1-1f5036bd2a41
+        companyData:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyData'
+          description: List containing entity financial data
+      description: Request attributes to save entity financial data
+    EntitySecurityFinancialDataResDTO:
+      type: object
+      properties:
+        orgId:
+          type: string
+          description: Unique identifier associated with the organization.
+          example: 4839fbd20-8534gf3bzzxxxx-0958htf3d924fg8bvuc
+        companyId:
+          type: string
+          description: Unique identifier associated with the entity.
+          example: 0c71522c-3cfa-4b37-b506-d3a7477a09b1
+        version:
+          type: string
+          description: Name of the version as used in 73 Strings application.
+          example: Actual
+        period:
+          type: string
+          description: Period type as mentioned in the 73 strings application
+          example: LTM
+        tag:
+          type: string
+          description: Tag of attribute.
+          example: Income Statement
+        units:
+          type: string
+          description: Units as mentioned in the 73 Strings application.
+          example: Millions
+        currency:
+          type: string
+          description: Currency Codes as per the ISO standard; ISO 4217
+          example: USD
+        attributeId:
+          type: string
+          description: Unique identifier of the attribute.
+          example: 70f49a71-746e-11ec-a730-249684d39778
+        attributeName:
+          type: string
+          description: Name of the attribute.
+          example: Revenue
+        cashFlowDate:
+          type: string
+          description: The date on which financial attribute values impact the cash position of the security.
+          example: '2016-12-31 00:00:00.0'
+        asOfDate:
+          type: string
+          description: 'The upload date as of which financial date is retrieved. Format: DD-MM-YYYY'
+          example: '2025-06-04 00:00:00.0'
+        companyName:
+          type: string
+          description: Name of the entity.
+          example: Reliance
+        securityId:
+          type: string
+          description: List of Unique Identifiers securities of the given entity as stored in 73S system
+          example: 258df365-3ca8-4767-93ac-93cc1963148f
+        trueUpValue:
+          type: string
+          description: Aggregated value of the attribute on the mentioned cash flow date
+          example: '124.0'
+        drillDown:
+          type: string
+          description: Contains breakdown of the attribute’s true Up value on given cashflow date.
+      description: Retrieved financial data for the requested securities.
+      xml:
+        name: Entity Security Financial Data
+    FinancialTextRespData:
+      type: object
+      properties:
+        attributeId:
+          type: string
+          example: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        attributeName:
+          type: string
+          example: Test Attribute CL
+        tag:
+          type: string
+          example: Income Statement
+        companyId:
+          type: string
+          example: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        companyName:
+          type: string
+          example: Testing Company
+        versionId:
+          type: string
+          example: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        versionName:
+          type: string
+          example: Actual
+        periodType:
+          type: string
+          example: Quarterly
+        cashFlowDate:
+          type: string
+          example: 30-09-2023
+        startDate:
+          type: string
+          example: '2024-12-01'
+        endDate:
+          type: string
+          example: '2025-12-31'
+        asOfDate:
+          type: string
+          example: '2025-07-08'
+        textValue:
+          type: string
+          example: Ten thousand
+        segments:
+          type: array
+          items: {}
+        errorCodes:
+          type: array
+          items: {}
+    FinancialTextReqData:
+      type: object
+      properties:
+        attributeId:
+          type: string
+          description: Unique identifier of the financial attribute.
+          example: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        companyId:
+          type: string
+          description: Unique identifier of the company.
+          example: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        segmentId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of the segment, if applicable.
+          example: null
+        securityId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of the security, if applicable.
+          example: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        versionId:
+          type: string
+          description: Unique identifier of the version (e.g., Actual, Budget).
+          example: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        periodType:
+          type: string
+          description: Financial period type.
+          example: Quarterly
+        cashFlowDate:
+          type: string
+          description: Cash flow date in DD-MM-YYYY format (optional).
+          example: 30-09-2023
+        startDate:
+          type: string
+          description: Start date for the reporting period (YYYY-MM-DD).
+          example: '2024-12-01'
+        endDate:
+          type: string
+          description: End date for the reporting period (YYYY-MM-DD).
+          example: '2025-12-31'
+        asOfDate:
+          type: string
+          description: As-of date in DD-MM-YYYY format.
+          example: '2025-07-08'
+    EntityFinancialsReqDTO:
+      required:
+      - asOfDate
+      - attributeNames
+      - companyName
+      - currency
+      - endDate
+      - entityIds
+      - orgId
+      - periodType
+      - startDate
+      - units
+      - userId
+      - versionId
+      - versionName
+      type: object
+      properties:
+        attributeNames:
+          type: array
+          items:
+            type: string
+            description: attributeNames
+            example: '[''Revenue'']'
+          description: 'Attribute names as seen on 73S Monitor;
+
+            Note:This should be an exact match'
+          example: '[''Revenue'']'
+        entityIds:
+          type: array
+          items:
+            type: string
+            description: List of unique identifier of the entities.
+            example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
+          description: List of unique identifier of the entities.
+          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
+        companyName:
+          type: string
+          description: Name of the entity.
+          example: Reliance
+        asOfDate:
+          type: string
+          description: 'The upload date as of which financial date is retrieved. Format: DD-MM-YYYY'
+          example: '2025-06-07 00:00:00.0'
+        currency:
+          type: string
+          description: 'Currency Codes as per the ISO standard; ISO 4217 '
+          example: USD
+        units:
+          type: string
+          description: Financial units used in 73 Strings application.
+          example: Millions
+        versionId:
+          type: string
+          description: Unique identifier of the version.
+          example: c12ce0c7-63f6-4177-b59a-6c9fb5497v21
+        versionName:
+          type: string
+          description: Name of the versiob, as used in 73 Strings application.
+          example: Actual
+        startDate:
+          type: string
+          description: "Cashflow Date from which financial data is retrieved.\n\n Format: DD-MM-YYYY"
+          example: '2010-12-31'
+        endDate:
+          type: string
+          description: 'Cashflow date until which financial data is retrieved.
+
+
+            Format: DD-MM-YYYY'
+          example: '2025-01-01'
+        orgId:
+          type: string
+          description: Unique identifier of the organization.
+          example: b14ce0c7-63f6-4177-b59a-6c9fb54970e3
+        periodType:
+          type: string
+          description: Period type as mentioned on 73S Monitor.
+          example: Annual
+        userId:
+          type: string
+          description: Unique Identifier of the user.
+          example: c52ce0c7-63f6-4177-b59a-6c9fb54970c4
+        includeDrillDown:
+          type: string
+          description: Decision to include the drilldown data of listed attribute on a specific cashflow date.
+      description: Attributes to request to retrieve entity's financial Data.
+      xml:
+        name: Request body of Entity Financials Data
+    EntitySecurityFinancialDataReqDTO:
+      required:
+      - asOfDate
+      - attributeNames
+      - companyName
+      - currency
+      - endDate
+      - entityIds
+      - orgId
+      - periodType
+      - securityIds
+      - startDate
+      - units
+      - userId
+      - versionName
+      type: object
+      properties:
+        attributeNames:
+          type: array
+          items:
+            type: string
+            description: Attribute names as seen on 73S Monitor; This should be an exact match
+            example: '[''EBITDA'',''Gross Profit Margin'']'
+          description: Attribute names as seen on 73S Monitor; This should be an exact match
+          example: '[''EBITDA'',''Gross Profit Margin'']'
+        entityIds:
+          type: array
+          items:
+            type: string
+            description: List of Unique identifiers of the entities.
+            example: C21e0c7-63f6-4177-b59a-6c9fb54970C2
+          description: List of Unique identifiers of the entities.
+          example: C21e0c7-63f6-4177-b59a-6c9fb54970C2
+        companyName:
+          type: string
+          description: Name of the entity.
+          example: Reliance
+        asOfDate:
+          type: string
+          description: 'The upload date as of which financial date is retrieved.
+
+
+            Format: DD-MM-YYYY'
+          example: '2025-06-04 00:00:00.0'
+        currency:
+          type: string
+          description: Currency Codes as per the ISO standard; ISO 4217
+          example: USD
+        units:
+          type: string
+          description: Units as mentioned on the 73 Strings application.
+          example: Millions
+        versionName:
+          type: string
+          description: Name of the version.
+          example: Actual
+        startDate:
+          type: string
+          description: 'Cashflow Date from which financial data is retrieved.
+
+
+            Format: DD-MM-YYYY'
+          example: '2020-06-05'
+        endDate:
+          type: string
+          description: 'Cashflow date until which financial data is retrieved.
+
+
+            Format: DD-MM-YYYY'
+          example: '2030-06-05'
+        orgId:
+          type: string
+          description: List of Unique identifiers of the organization.
+          example: b21e0c7-63f6-4177-b59a-6c9fb54970l2
+        periodType:
+          type: string
+          description: Period type as mentioned on the 73 Strings application.
+          example: Annual
+        userId:
+          type: string
+          description: Unique Identifier of the user.
+          example: c23e0c7-63f6-4177-b59a-6c9fb54970b32
+        securityIds:
+          type: array
+          items:
+            type: string
+            description: List of Unique Identifiers of securities of the given entity as stored in 73S system
+            example: n54e0c7-63f6-4177-b59a-6c9fb5498u32
+          description: List of Unique Identifiers of securities of the given entity as stored in 73S system
+          example: n54e0c7-63f6-4177-b59a-6c9fb5498u32
+      description: Attributes to request to retrieve entity's securities financial Data.
+      xml:
+        name: Request body of Entity Security Financial Data
+    ApiResponse:
+      type: object
+      properties:
+        response:
+          type: array
+          items:
+            type: object
+            description: Response received when request was sent.
+            example:
+            - id: '123'
+              name: Sample Data
+          description: Response is received when request was sent.
+          example:
+          - id: '123'
+            name: Sample Data
+        success:
+          type: boolean
+          description: Request’s success status.
+          example: true
+        message:
+          type: string
+          description: Output message depending on success status.
+          example: Success
+        errorCode:
+          type: string
+          description: 'Error response on hitting API request.
+
+
+            null: No errors were encountered.
+
+
+            string: A descriptive error message or code if an issue occurred.'
+          example: EXCE00018
+      description: Generic API response wrapper containing the response data, success status, message, and error code.
+      xml:
+        name: ApiResponse
+    EntityBuFinancialDataReqDTO:
+      required:
+      - asOfDate
+      - attributeNames
+      - businessUnitIds
+      - companyName
+      - currency
+      - endDate
+      - entityIds
+      - includeDrillDown
+      - orgId
+      - periodType
+      - startDate
+      - units
+      - userId
+      - versionId
+      - versionName
+      type: object
+      properties:
+        attributeNames:
+          type: array
+          items:
+            type: string
+            description: Attribute names as seen on 73S Monitor; This should be an exact match
+            example: '[''EBITDA'']'
+          description: Attribute names as seen on 73S Monitor; This should be an exact match
+          example: '[''EBITDA'']'
+        entityIds:
+          type: array
+          items:
+            type: string
+            description: Unique identifier of the entity. Use Entity List operation under Asset Info API
+            example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
+          description: Unique identifier of the entity. Use Entity List operation under Asset Info API
+          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
+        companyName:
+          type: string
+          description: Name of the entity.
+          example: Reliance
+        asOfDate:
+          type: string
+          description: 'The upload date as of which financial date is retrieved. Format: DD-MM-YYYY'
+          example: '2025-06-04 00:00:00.0'
+        currency:
+          type: string
+          description: 'Currency Codes as per the ISO standard; ISO 4217 '
+          example: USD
+        units:
+          type: string
+          description: 'Units in which retrieved financial data is retrieved, as used in 73 Strings application. '
+          example: Millions
+        versionId:
+          type: string
+          description: Unique Identifier of the version.
+          example: C21e0c7-63f6-4177-b59a-6c9fb54970C2
+        versionName:
+          type: string
+          description: Name of the version, as used in 73 Strings application.
+          example: Budget
+        startDate:
+          type: string
+          description: 'Cashflow Date from which financial data is retrieved. Format: DD-MM-YYYY'
+          example: '2017-12-31'
+        endDate:
+          type: string
+          description: 'Cashflow date until which financial data is retrieved. Format: DD-MM-YYYY'
+          example: '2030-12-31'
+        orgId:
+          type: string
+          description: Organization’s unique Identifier on 73 Strings Platform; Shared by 73 Strings team
+          example: C31ce0c7-63f6-4177-b59a-6c9fb5497081
+        periodType:
+          type: string
+          description: Period type as mentioned on 73S Monitor
+          example: Annual
+        userId:
+          type: string
+          description: User Id on 73 Strings Platform; Shared by 73 Strings team
+          example: n21ce0c7-63f6-4177-b59a-6c9fb54980r1
+        businessUnitIds:
+          type: array
+          items:
+            type: string
+            description: List of Unique Identifiers of Business Unit of the given entity as stored in 73S system
+            example: '[''321ce0c7-63f6-4177-b59a-6c9fb5497034'']'
+          description: List of Unique Identifiers of Business Unit of the given entity as stored in 73S system
+          example: '[''321ce0c7-63f6-4177-b59a-6c9fb5497034'']'
+        includeDrillDown:
+          type: array
+          items:
+            type: string
+            description: Decision to include the drilldown data of listed attribute on a specific cashflow date.
+            example: 'true'
+          description: Decision to include the drilldown data of listed attribute on a specific cashflow date.
+          example: 'true'
+      description: Attributes to request to retrieve entity's Business Units financial Data.
+      xml:
+        name: Request body of Entity Bu Financial Data
+    FinancialRecord:
+      type: object
+      properties:
+        period:
+          type: string
+          description: The frequency period of financial statement (e.g., annual, quarterly).
+          example: Annual
+        cashFlowDate:
+          type: string
+          description: 'The date on which cash flow in or out of the company. Format: YYYY-MM-DD'
+          example: '2021-12-31'
+        data:
+          type: object
+          additionalProperties:
+            type: object
+            description: Historical Financial metrics and their values
+            example:
+              Revenue: 159
+              Cost_of_Goods_Sold: null
+              Gross_Profit: 111
+          description: Projected Financial metrics and their values
+          example:
+            Revenue: '159'
+            Cost_of_Goods_Sold: null
+            Gross_Profit: '111'
+      description: Financial details for various cashflow date and period.
+  securitySchemes:
+    apiKeyHeader:
+      type: apiKey
+      name: subscription-key
+      in: header
+    apiKeyQuery:
+      type: apiKey
+      name: subscription-key
+      in: query

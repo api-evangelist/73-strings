@@ -1,0 +1,123 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Asset Info API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Asset Info",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Attributes List",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-accord-eut-73strings.azure-api.net/assetinfo/api/v1/ems/getEntityAttributeIds",
+            "headers": [
+              {
+                "name": "subscription-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint fetches attribute IDs,Name,Categorical tag based on the provided request data.\nThe API requires a subscription key which must be passed as a header for authentication.\nThe request body contains necessary parameters/body like OrgId , and the response returns a list of attribute ID mappings."
+        },
+        {
+          "info": {
+            "name": "Get Business Units",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-accord-eut-73strings.azure-api.net/assetinfo/api/v1/ems/getEntityBusinessUnits",
+            "headers": [
+              {
+                "name": "subscription-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This API ingests the organization ID, user ID, and company ID, and returns a list of all business unit names and IDs linked to the specified company. If the company ID is null, the API returns a list of all businesses present in the organization."
+        },
+        {
+          "info": {
+            "name": "Get Entity List",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-accord-eut-73strings.azure-api.net/assetinfo/api/v1/ems/getEntityList",
+            "headers": [
+              {
+                "name": "subscription-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "73 Strings provide platforms to users for the valuation of funds, companies and securities of their investments. The getFundAndCompanyList API retrieves funds and companies list a specific user has access to. It enables tracking and management of user related entities.\n\nThis API can be particularly useful for admins handling user management and who to gather entities to which user has access. By leveraging the capabilities of this API, admins can easily enhance their ability to manage user acces"
+        },
+        {
+          "info": {
+            "name": "Get Securities List",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-accord-eut-73strings.azure-api.net/assetinfo/api/v1/ems/getEntitySecuritiesList",
+            "headers": [
+              {
+                "name": "subscription-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "73 Strings provide platforms to users for the valuation of funds, companies and securities of their investments. The getFundAndCompanyList API retrieves funds and companies list a specific user has access to. It enables tracking and management of user related entities.\n\nThis API can be particularly useful for admins handling user management and who to gather entities to which user has access. By leveraging the capabilities of this API, admins can easily enhance their ability to manage user acces"
+        },
+        {
+          "info": {
+            "name": "Get Version List",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-accord-eut-73strings.azure-api.net/assetinfo/api/v1/version-list",
+            "headers": [
+              {
+                "name": "subscription-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "73 Strings provide platforms to users for the valuation of funds, companies and securities of their investments. The getVersionList API retrieves funds and companies list a specific user has access to. It enables tracking and management of user related entities.\n\nThis API can be particularly useful for admins handling user management and who to gather entities to which user has access. By leveraging the capabilities of this API, admins can easily enhance their ability to manage user access to mu"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

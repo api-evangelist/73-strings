@@ -1,0 +1,81 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Qualitative Data API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Qualitative Data",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Custom Attribute Data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-accord-eut-73strings.azure-api.net/qualitative-data/api/v1/ems/customAttributeData",
+            "headers": [
+              {
+                "name": "subscription-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This API is designed to retrieve custom attribute data for multiple entities requested by the company. When the request payload includes a list of entities, the API identifies each one and returns the custom attributes associated with it.\n\nCustom attributes are additionally created custom fields to capture specific details unique to an entity. Since these attributes can vary across different entities, the API ensures that the response provides the correct attribute values mapped to each entity i"
+        },
+        {
+          "info": {
+            "name": "Get Entity General Details",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-accord-eut-73strings.azure-api.net/qualitative-data/api/v1/ems/getEntityGeneralDetails",
+            "headers": [
+              {
+                "name": "subscription-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The 73Value Equity offers robust tools for managing private equity funds, allowing users to create multiple funds and add companies across these funds for the valuation of both funds and companies. The **getGeneralDetails API** retrieves detailed information about various companies', which are part of funds the user can access.\n\nThis API fetches essential information such as the company's name, industry, headquarters location, and other general details. It ensures that users have quick and easy "
+        },
+        {
+          "info": {
+            "name": "Get Entity Qualitative Analysis Data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-accord-eut-73strings.azure-api.net/qualitative-data/api/v1/ems/getEntityQualitativeAnalysisData",
+            "headers": [
+              {
+                "name": "subscription-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The 73 Monitor allows users to add qualitative comments or insights about the company. The **get73MQualitativeAnalysis API** retrieves qualitative insights or commentary related to a specific company within a particular fund, the user can access to. The Qualitative Analysis section allows fund managers or analysts, to input their observations, insights, or detailed commentary about a company's performance, strategy, or other relevant factors. These inputs are typically structured as pairs of tit"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,2408 @@
+{
+  "item": [
+    {
+      "id": "5ae7018c-41d4-4b6e-8bdb-5dbf29d3cb07",
+      "name": "Transaction API",
+      "description": {
+        "content": "The <b>Transaction APIs</b> enable external enterprise customers to <b>ingest and retrieve transaction ledger records</b> within the <b>73 Strings platform</b>.<br><br>These APIs are intended for <b>client-side engineering teams</b> that manage their own data pipelines and require a <b>controlled, structured interface</b> to push transaction data into the platform or retrieve processed transaction information for downstream workflows.<br><br><b>Key capabilities</b><ul><li>Bulk creation and update of transaction ledger records</li><li>Platform-generated <b>Display IDs</b> for stable referencing across workflows</li><li>Retrieval of processed transaction data</li><li>Reference APIs for <b>transaction types</b> and <b>transaction versions</b> to ensure payload correctness</li><li>Partial success handling for bulk ingestion</li></ul><b>Authentication &amp; data scoping</b><ul><li>All APIs are authenticated using a <b>subscription key</b> associated with a <b>User ID</b></li><li><b>Organization ID</b> and <b>User ID</b> are mandatory in request payloads and determine data access</li><li>APIs are multi-tenant by design and return data scoped to the provided organization</li></ul><b>Processing model</b><ul><li>Transactions are pushed via external pipelines (real-time or batch)</li><li>The platform persists and processes the data as per supported transaction structures</li><li>The APIs do not orchestrate synchronization or enforce real-time guarantees</li></ul>",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f035e435-de84-4f46-9600-5f531d9d4dea",
+          "name": "Create or update transactions in bulk (V2)",
+          "request": {
+            "name": "Create or update transactions in bulk (V2)",
+            "description": {
+              "content": "Use this endpoint to submit one or more transaction records to the 73 Strings platform in a single JSON request. Each object in <b>TransactionData</b> is validated and processed independently, so a failure for one object does not automatically prevent other valid objects in the same request from being saved.<br><br><b>How create and update are resolved</b><ul><li>The platform uses <b>multilayeredTransactionMetadata.externalTransactionSourceReferenceId</b> together with the transaction-level <b>asOfDate</b> to decide how each object is processed.</li><li>If <b>externalTransactionSourceReferenceId</b> is new or not provided, the platform creates a new transaction and generates an internal <b>displayId</b>.</li><li>If the same <b>externalTransactionSourceReferenceId</b> and the same <b>asOfDate</b> already exist, the existing as-of-date record is fully replaced by the submitted object. This is a full overwrite, not a merge or patch.</li><li>If the same <b>externalTransactionSourceReferenceId</b> exists with a different <b>asOfDate</b>, the platform creates a new time-series instance under the same logical transaction.</li><li>Do not send <b>displayId</b> in the request. It is generated and managed by the platform. Use a stable <b>externalTransactionSourceReferenceId</b> for transactions that may need to be updated later.</li></ul><b>Request limits and validation</b><ul><li>A request can include up to <b>2,000</b> transaction objects and must not exceed <b>5 MB</b>.</li><li><b>orgId</b> and <b>userId</b> must be authorized for the supplied subscription key.</li><li><b>TransactionData</b> is required and must contain at least one object.</li><li>Dates must use <b>YYYY-MM-DD</b> format. Currency codes must use ISO 4217 three-letter codes, and currency-unit values are case-sensitive.</li><li>Conditional field groups must be sent completely or omitted completely. For example, local amount fields, reporting amount fields, post-money valuation fields, and security fields should not be partially populated.</li><li>The same <b>externalTransactionSourceReferenceId</b> plus the same <b>asOfDate</b> must not appear more than once in a single request because the platform cannot determine which object should take precedence.</li></ul><b>Response behavior</b><ul><li><b>200 OK</b> means all submitted transaction objects were processed successfully.</li><li><b>207 Multi-Status</b> means at least one object succeeded and at least one object failed validation. Successfully processed objects are saved and are not rolled back; correct and resubmit only the failed objects.</li><li>If every submitted object fails validation, the response indicates validation failure and no object from that request is saved.</li><li>If a timeout response is received, verify transaction state before retrying. The server may have processed some or all records before the timeout was returned.</li></ul>",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "unifiedTransaction"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) Subscription key used to authenticate the request. The key must be valid for the orgId and userId supplied in the request body.",
+                "key": "subscription-key",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"<uuid>\",\n  \"orgId\": \"<uuid>\",\n  \"TransactionData\": [\n    {\n      \"transactionTypeId\": \"<uuid>\",\n      \"versionId\": \"<uuid>\",\n      \"transactionDate\": \"<date>\",\n      \"baseCurrency\": \"<string>\",\n      \"baseCurrencyUnit\": \"<string>\",\n      \"amount\": \"<decimal>\",\n      \"multilayeredTransactionMetadata\": {\n        \"remarks\": \"<string>\",\n        \"securityId\": \"<uuid>\",\n        \"securityType\": \"<string>\",\n        \"externalTransactionSourceReferenceId\": \"<string>\",\n        \"pps\": \"<number>\",\n        \"postMoneyValuation\": \"<decimal>\",\n        \"postMoneyValuationCurrency\": \"<string>\",\n        \"postMoneyValuationCurrencyUnit\": \"<string>\",\n        \"ownershipPercentage\": \"<decimal>\",\n        \"externalInvestmentEntityId\": \"<string>\",\n        \"externalSecurityId\": \"<string>\",\n        \"shareCount\": \"<number>\",\n        \"vehicleName\": \"<string>\",\n        \"externalOwnerEntityId\": \"<string>\"\n      },\n      \"ownerEntityMappings\": [\n        {\n          \"ownerEntityId\": \"<uuid>\"\n        }\n      ],\n      \"investmentEntityId\": \"<uuid>\",\n      \"asOfDate\": \"<string>\",\n      \"localCurrency\": \"<string>\",\n      \"localCurrencyUnit\": \"<string>\",\n      \"localAmount\": \"<decimal>\",\n      \"reportingAmount\": \"<decimal>\",\n      \"reportingCurrency\": \"<string>\",\n      \"reportingCurrencyUnit\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "208398eb-9d3d-426a-ac5f-996b318fbe03",
+              "name": "All submitted transaction objects were validated and processed successfully. The response includes the total number of submitted objects, the number of invalid objects, and a validity flag.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "unifiedTransaction"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Subscription key used to authenticate the request. The key must be valid for the orgId and userId supplied in the request body.",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Required request content type. Send <b>application/json</b>.",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"xxxxe74-bbd3-4fd4-9e2a-0a73173xxxx\",\n  \"orgId\": \"xxxxxbd1-22d2-4e70-9e66-64215axxxxx\",\n  \"TransactionData\": [\n    {\n      \"transactionTypeId\": \"xxxxxxx-3856-4f85-b7f0-0dccfxxxxxxx\",\n      \"transactionDate\": \"2025-11-22\",\n      \"versionId\": \"xxxxxxx49-8caf-4394-b39c-a3671fxxxxxx\",\n      \"baseCurrency\": \"INR\",\n      \"baseCurrencyUnit\": \"Lakhs\",\n      \"amount\": 1001,\n      \"asOfDate\": \"2025-12-31\",\n      \"localCurrency\": \"USD\",\n      \"localCurrencyUnit\": \"Actual\",\n      \"localAmount\": 3000,\n      \"multilayeredTransactionMetadata\": {\n        \"remarks\": \"API pushed transaction\",\n        \"securityType\": \"CREDIT\",\n        \"securityId\": \"xxxxxx48-452c-4767-97e2-1bf7c16xxxx\",\n        \"externalTransactionSourceReferenceId\": \"ref_2\",\n        \"pps\": 10.04,\n        \"postMoneyValuation\": \"29404.429\",\n        \"postMoneyValuationCurrency\": \"USD\",\n        \"postMoneyValuationCurrencyUnit\": \"Millions\",\n        \"ownershipPercentage\": 90.2242,\n        \"externalInvestmentEntityId\": \"CEN02570\",\n        \"externalSecurityId\": \"CEN003100\",\n        \"shareCount\": 10,\n        \"vehicleName\": \"SPV-1\",\n        \"externalOwnerEntityId\": \"samplePS\"\n      },\n      \"ownerEntityMappings\": [\n        {\n          \"ownerEntityId\": \"xxxxxb8b-7907-42c5-b95d-8fb728axxxxx\"\n        }\n      ],\n      \"investmentEntityId\": \"xxxxx7ed-8015-4837-8f55-d96d82xxxxx\",\n      \"reportingAmount\": 2500,\n      \"reportingCurrency\": \"USD\",\n      \"reportingCurrencyUnit\": \"Actual\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": {\n    \"totalRecordsCount\": 2,\n    \"invalidEntriesCount\": 0,\n    \"valid\": true\n  },\n  \"success\": true,\n  \"message\": \"All transactions processed successfully.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "07afe88d-9f3a-411e-b8ae-2468871b4942",
+              "name": "Partial success. At least one transaction object was processed successfully and at least one object failed validation. Successful objects are persisted; inspect failedTransactions, correct those objects, and resubmit only the failed records.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "unifiedTransaction"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Subscription key used to authenticate the request. The key must be valid for the orgId and userId supplied in the request body.",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Required request content type. Send <b>application/json</b>.",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"xxxxe74-bbd3-4fd4-9e2a-0a73173xxxx\",\n  \"orgId\": \"xxxxxbd1-22d2-4e70-9e66-64215axxxxx\",\n  \"TransactionData\": [\n    {\n      \"transactionTypeId\": \"xxxxxxx-3856-4f85-b7f0-0dccfxxxxxxx\",\n      \"transactionDate\": \"2025-11-22\",\n      \"versionId\": \"xxxxxxx49-8caf-4394-b39c-a3671fxxxxxx\",\n      \"baseCurrency\": \"INR\",\n      \"baseCurrencyUnit\": \"Lakhs\",\n      \"amount\": 1001,\n      \"asOfDate\": \"2025-12-31\",\n      \"localCurrency\": \"USD\",\n      \"localCurrencyUnit\": \"Actual\",\n      \"localAmount\": 3000,\n      \"multilayeredTransactionMetadata\": {\n        \"remarks\": \"API pushed transaction\",\n        \"securityType\": \"CREDIT\",\n        \"securityId\": \"xxxxxx48-452c-4767-97e2-1bf7c16xxxx\",\n        \"externalTransactionSourceReferenceId\": \"ref_2\",\n        \"pps\": 10.04,\n        \"postMoneyValuation\": \"29404.429\",\n        \"postMoneyValuationCurrency\": \"USD\",\n        \"postMoneyValuationCurrencyUnit\": \"Millions\",\n        \"ownershipPercentage\": 90.2242,\n        \"externalInvestmentEntityId\": \"CEN02570\",\n        \"externalSecurityId\": \"CEN003100\",\n        \"shareCount\": 10,\n        \"vehicleName\": \"SPV-1\",\n        \"externalOwnerEntityId\": \"samplePS\"\n      },\n      \"ownerEntityMappings\": [\n        {\n          \"ownerEntityId\": \"xxxxxb8b-7907-42c5-b95d-8fb728axxxxx\"\n        }\n      ],\n      \"investmentEntityId\": \"xxxxx7ed-8015-4837-8f55-d96d82xxxxx\",\n      \"reportingAmount\": 2500,\n      \"reportingCurrency\": \"USD\",\n      \"reportingCurrencyUnit\": \"Actual\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Multi-Status (WebDAV) (RFC 4918)",
+              "code": 207,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": {\n    \"failedTransactions\": [\n      {\n        \"transactionDate\": \"2025-11-21\",\n        \"transactionTypeId\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n        \"versionId\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n        \"baseCurrency\": \"USD\",\n        \"amount\": 500,\n        \"investmentEntityId\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n        \"asOfDate\": \"2025-11-13\",\n        \"multilayeredTransactionMetadata\": {\n          \"externalTransactionSourceReferenceId\": \"XX - transactions 1\",\n          \"securityId\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\"\n        },\n        \"errors\": [\n          {\n            \"field\": \"BaseCurrencyUnit\",\n            \"error\": \"Please add a valid base currency unit\"\n          }\n        ],\n        \"ownerEntityCount\": 3,\n        \"ownerEntityPathwayRepresentation\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n        \"ownerEntityNamePathwayRepresentation\": \"null / null / null\"\n      }\n    ],\n    \"totalRecordsCount\": 2,\n    \"invalidEntriesCount\": 1,\n    \"valid\": false\n  },\n  \"success\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5aef3ae7-3d5b-4c1d-a6a4-34b7011df0aa",
+              "name": "Bad request. The request body is malformed, required top-level fields are missing, TransactionData is empty, or the payload does not conform to the expected JSON structure. No transaction objects are processed for malformed request-level failures.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "unifiedTransaction"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Subscription key used to authenticate the request. The key must be valid for the orgId and userId supplied in the request body.",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Required request content type. Send <b>application/json</b>.",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"xxxxe74-bbd3-4fd4-9e2a-0a73173xxxx\",\n  \"orgId\": \"xxxxxbd1-22d2-4e70-9e66-64215axxxxx\",\n  \"TransactionData\": [\n    {\n      \"transactionTypeId\": \"xxxxxxx-3856-4f85-b7f0-0dccfxxxxxxx\",\n      \"transactionDate\": \"2025-11-22\",\n      \"versionId\": \"xxxxxxx49-8caf-4394-b39c-a3671fxxxxxx\",\n      \"baseCurrency\": \"INR\",\n      \"baseCurrencyUnit\": \"Lakhs\",\n      \"amount\": 1001,\n      \"asOfDate\": \"2025-12-31\",\n      \"localCurrency\": \"USD\",\n      \"localCurrencyUnit\": \"Actual\",\n      \"localAmount\": 3000,\n      \"multilayeredTransactionMetadata\": {\n        \"remarks\": \"API pushed transaction\",\n        \"securityType\": \"CREDIT\",\n        \"securityId\": \"xxxxxx48-452c-4767-97e2-1bf7c16xxxx\",\n        \"externalTransactionSourceReferenceId\": \"ref_2\",\n        \"pps\": 10.04,\n        \"postMoneyValuation\": \"29404.429\",\n        \"postMoneyValuationCurrency\": \"USD\",\n        \"postMoneyValuationCurrencyUnit\": \"Millions\",\n        \"ownershipPercentage\": 90.2242,\n        \"externalInvestmentEntityId\": \"CEN02570\",\n        \"externalSecurityId\": \"CEN003100\",\n        \"shareCount\": 10,\n        \"vehicleName\": \"SPV-1\",\n        \"externalOwnerEntityId\": \"samplePS\"\n      },\n      \"ownerEntityMappings\": [\n        {\n          \"ownerEntityId\": \"xxxxxb8b-7907-42c5-b95d-8fb728axxxxx\"\n        }\n      ],\n      \"investmentEntityId\": \"xxxxx7ed-8015-4837-8f55-d96d82xxxxx\",\n      \"reportingAmount\": 2500,\n      \"reportingCurrency\": \"USD\",\n      \"reportingCurrencyUnit\": \"Actual\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": false,\n  \"message\": \"Invalid request parameters.\",\n  \"errorCode\": \"EXCE00028\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f622cada-7c0a-49cd-a969-6b5bcbd4b9d0",
+              "name": "Unauthorized request. The subscription key is missing, invalid, expired, or not authorized for the orgId and userId supplied in the request body.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "unifiedTransaction"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Subscription key used to authenticate the request. The key must be valid for the orgId and userId supplied in the request body.",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Required request content type. Send <b>application/json</b>.",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"xxxxe74-bbd3-4fd4-9e2a-0a73173xxxx\",\n  \"orgId\": \"xxxxxbd1-22d2-4e70-9e66-64215axxxxx\",\n  \"TransactionData\": [\n    {\n      \"transactionTypeId\": \"xxxxxxx-3856-4f85-b7f0-0dccfxxxxxxx\",\n      \"transactionDate\": \"2025-11-22\",\n      \"versionId\": \"xxxxxxx49-8caf-4394-b39c-a3671fxxxxxx\",\n      \"baseCurrency\": \"INR\",\n      \"baseCurrencyUnit\": \"Lakhs\",\n      \"amount\": 1001,\n      \"asOfDate\": \"2025-12-31\",\n      \"localCurrency\": \"USD\",\n      \"localCurrencyUnit\": \"Actual\",\n      \"localAmount\": 3000,\n      \"multilayeredTransactionMetadata\": {\n        \"remarks\": \"API pushed transaction\",\n        \"securityType\": \"CREDIT\",\n        \"securityId\": \"xxxxxx48-452c-4767-97e2-1bf7c16xxxx\",\n        \"externalTransactionSourceReferenceId\": \"ref_2\",\n        \"pps\": 10.04,\n        \"postMoneyValuation\": \"29404.429\",\n        \"postMoneyValuationCurrency\": \"USD\",\n        \"postMoneyValuationCurrencyUnit\": \"Millions\",\n        \"ownershipPercentage\": 90.2242,\n        \"externalInvestmentEntityId\": \"CEN02570\",\n        \"externalSecurityId\": \"CEN003100\",\n        \"shareCount\": 10,\n        \"vehicleName\": \"SPV-1\",\n        \"externalOwnerEntityId\": \"samplePS\"\n      },\n      \"ownerEntityMappings\": [\n        {\n          \"ownerEntityId\": \"xxxxxb8b-7907-42c5-b95d-8fb728axxxxx\"\n        }\n      ],\n      \"investmentEntityId\": \"xxxxx7ed-8015-4837-8f55-d96d82xxxxx\",\n      \"reportingAmount\": 2500,\n      \"reportingCurrency\": \"USD\",\n      \"reportingCurrencyUnit\": \"Actual\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"message\": \"Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6c5dc8ec-379b-4a7d-ab73-36d0c101b253",
+              "name": "Not found. The endpoint path is incorrect, the API version is unavailable, or a referenced resource cannot be found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "unifiedTransaction"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Subscription key used to authenticate the request. The key must be valid for the orgId and userId supplied in the request body.",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Required request content type. Send <b>application/json</b>.",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"xxxxe74-bbd3-4fd4-9e2a-0a73173xxxx\",\n  \"orgId\": \"xxxxxbd1-22d2-4e70-9e66-64215axxxxx\",\n  \"TransactionData\": [\n    {\n      \"transactionTypeId\": \"xxxxxxx-3856-4f85-b7f0-0dccfxxxxxxx\",\n      \"transactionDate\": \"2025-11-22\",\n      \"versionId\": \"xxxxxxx49-8caf-4394-b39c-a3671fxxxxxx\",\n      \"baseCurrency\": \"INR\",\n      \"baseCurrencyUnit\": \"Lakhs\",\n      \"amount\": 1001,\n      \"asOfDate\": \"2025-12-31\",\n      \"localCurrency\": \"USD\",\n      \"localCurrencyUnit\": \"Actual\",\n      \"localAmount\": 3000,\n      \"multilayeredTransactionMetadata\": {\n        \"remarks\": \"API pushed transaction\",\n        \"securityType\": \"CREDIT\",\n        \"securityId\": \"xxxxxx48-452c-4767-97e2-1bf7c16xxxx\",\n        \"externalTransactionSourceReferenceId\": \"ref_2\",\n        \"pps\": 10.04,\n        \"postMoneyValuation\": \"29404.429\",\n        \"postMoneyValuationCurrency\": \"USD\",\n        \"postMoneyValuationCurrencyUnit\": \"Millions\",\n        \"ownershipPercentage\": 90.2242,\n        \"externalInvestmentEntityId\": \"CEN02570\",\n        \"externalSecurityId\": \"CEN003100\",\n        \"shareCount\": 10,\n        \"vehicleName\": \"SPV-1\",\n        \"externalOwnerEntityId\": \"samplePS\"\n      },\n      \"ownerEntityMappings\": [\n        {\n          \"ownerEntityId\": \"xxxxxb8b-7907-42c5-b95d-8fb728axxxxx\"\n        }\n      ],\n      \"investmentEntityId\": \"xxxxx7ed-8015-4837-8f55-d96d82xxxxx\",\n      \"reportingAmount\": 2500,\n      \"reportingCurrency\": \"USD\",\n      \"reportingCurrencyUnit\": \"Actual\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"message\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fb79edf2-0fa9-4c12-94a6-179ab00bfcf8",
+              "name": "Validation failure for the submitted transaction objects. The response identifies the failed objects and field-level errors. Correct the reported issues before resubmitting.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "unifiedTransaction"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Subscription key used to authenticate the request. The key must be valid for the orgId and userId supplied in the request body.",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Required request content type. Send <b>application/json</b>.",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"xxxxe74-bbd3-4fd4-9e2a-0a73173xxxx\",\n  \"orgId\": \"xxxxxbd1-22d2-4e70-9e66-64215axxxxx\",\n  \"TransactionData\": [\n    {\n      \"transactionTypeId\": \"xxxxxxx-3856-4f85-b7f0-0dccfxxxxxxx\",\n      \"transactionDate\": \"2025-11-22\",\n      \"versionId\": \"xxxxxxx49-8caf-4394-b39c-a3671fxxxxxx\",\n      \"baseCurrency\": \"INR\",\n      \"baseCurrencyUnit\": \"Lakhs\",\n      \"amount\": 1001,\n      \"asOfDate\": \"2025-12-31\",\n      \"localCurrency\": \"USD\",\n      \"localCurrencyUnit\": \"Actual\",\n      \"localAmount\": 3000,\n      \"multilayeredTransactionMetadata\": {\n        \"remarks\": \"API pushed transaction\",\n        \"securityType\": \"CREDIT\",\n        \"securityId\": \"xxxxxx48-452c-4767-97e2-1bf7c16xxxx\",\n        \"externalTransactionSourceReferenceId\": \"ref_2\",\n        \"pps\": 10.04,\n        \"postMoneyValuation\": \"29404.429\",\n        \"postMoneyValuationCurrency\": \"USD\",\n        \"postMoneyValuationCurrencyUnit\": \"Millions\",\n        \"ownershipPercentage\": 90.2242,\n        \"externalInvestmentEntityId\": \"CEN02570\",\n        \"externalSecurityId\": \"CEN003100\",\n        \"shareCount\": 10,\n        \"vehicleName\": \"SPV-1\",\n        \"externalOwnerEntityId\": \"samplePS\"\n      },\n      \"ownerEntityMappings\": [\n        {\n          \"ownerEntityId\": \"xxxxxb8b-7907-42c5-b95d-8fb728axxxxx\"\n        }\n      ],\n      \"investmentEntityId\": \"xxxxx7ed-8015-4837-8f55-d96d82xxxxx\",\n      \"reportingAmount\": 2500,\n      \"reportingCurrency\": \"USD\",\n      \"reportingCurrencyUnit\": \"Actual\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": {\n    \"failedTransactions\": [\n      {\n        \"transactionDate\": \"2025-11-16\",\n        \"transactionTypeId\": \"c0292085-1818-460f-94d3-f92079326358\",\n        \"versionId\": \"9c78a3b4-0f37-4de0-a289-d52bc04f3615\",\n        \"baseCurrencyUnit\": \"Lakhs\",\n        \"amount\": 50,\n        \"investmentEntityId\": \"64f1db13-91cc-46be-85f1-a963cec04899\",\n        \"asOfDate\": \"2025-11-10\",\n        \"multilayeredTransactionMetadata\": {\n          \"externalTransactionSourceReferenceId\": \"EY - transactions 1\",\n          \"securityId\": \"2601e54d-b5ea-4178-9b19-3b5551f1de7e\",\n          \"securityType\": \"CREDIT\"\n        },\n        \"errors\": [\n          {\n            \"field\": \"BaseCurrency\",\n            \"error\": \"Please select a valid base currency\"\n          }\n        ]\n      }\n    ],\n    \"totalRecordsCount\": 1,\n    \"invalidEntriesCount\": 1,\n    \"valid\": false\n  },\n  \"success\": false,\n  \"errorCode\": \"VALIDATION_ERROR\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bd0cf96c-f1bd-495e-aae5-720d69611662",
+              "name": "Too many requests. The organization has exceeded the allowed request concurrency or rate limit. Retry after the indicated interval, if provided.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "unifiedTransaction"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Subscription key used to authenticate the request. The key must be valid for the orgId and userId supplied in the request body.",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Required request content type. Send <b>application/json</b>.",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"xxxxe74-bbd3-4fd4-9e2a-0a73173xxxx\",\n  \"orgId\": \"xxxxxbd1-22d2-4e70-9e66-64215axxxxx\",\n  \"TransactionData\": [\n    {\n      \"transactionTypeId\": \"xxxxxxx-3856-4f85-b7f0-0dccfxxxxxxx\",\n      \"transactionDate\": \"2025-11-22\",\n      \"versionId\": \"xxxxxxx49-8caf-4394-b39c-a3671fxxxxxx\",\n      \"baseCurrency\": \"INR\",\n      \"baseCurrencyUnit\": \"Lakhs\",\n      \"amount\": 1001,\n      \"asOfDate\": \"2025-12-31\",\n      \"localCurrency\": \"USD\",\n      \"localCurrencyUnit\": \"Actual\",\n      \"localAmount\": 3000,\n      \"multilayeredTransactionMetadata\": {\n        \"remarks\": \"API pushed transaction\",\n        \"securityType\": \"CREDIT\",\n        \"securityId\": \"xxxxxx48-452c-4767-97e2-1bf7c16xxxx\",\n        \"externalTransactionSourceReferenceId\": \"ref_2\",\n        \"pps\": 10.04,\n        \"postMoneyValuation\": \"29404.429\",\n        \"postMoneyValuationCurrency\": \"USD\",\n        \"postMoneyValuationCurrencyUnit\": \"Millions\",\n        \"ownershipPercentage\": 90.2242,\n        \"externalInvestmentEntityId\": \"CEN02570\",\n        \"externalSecurityId\": \"CEN003100\",\n        \"shareCount\": 10,\n        \"vehicleName\": \"SPV-1\",\n        \"externalOwnerEntityId\": \"samplePS\"\n      },\n      \"ownerEntityMappings\": [\n        {\n          \"ownerEntityId\": \"xxxxxb8b-7907-42c5-b95d-8fb728axxxxx\"\n        }\n      ],\n      \"investmentEntityId\": \"xxxxx7ed-8015-4837-8f55-d96d82xxxxx\",\n      \"reportingAmount\": 2500,\n      \"reportingCurrency\": \"USD\",\n      \"reportingCurrencyUnit\": \"Actual\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"message\": \"Too many requests. Please retry after the indicated interval.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "14a84b9b-5490-4985-93ae-444b3fd62c2a",
+              "name": "Internal server error. The request could not be completed because of an unexpected server-side failure. Retry later or contact support if the issue persists.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "unifiedTransaction"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Subscription key used to authenticate the request. The key must be valid for the orgId and userId supplied in the request body.",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Required request content type. Send <b>application/json</b>.",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"xxxxe74-bbd3-4fd4-9e2a-0a73173xxxx\",\n  \"orgId\": \"xxxxxbd1-22d2-4e70-9e66-64215axxxxx\",\n  \"TransactionData\": [\n    {\n      \"transactionTypeId\": \"xxxxxxx-3856-4f85-b7f0-0dccfxxxxxxx\",\n      \"transactionDate\": \"2025-11-22\",\n      \"versionId\": \"xxxxxxx49-8caf-4394-b39c-a3671fxxxxxx\",\n      \"baseCurrency\": \"INR\",\n      \"baseCurrencyUnit\": \"Lakhs\",\n      \"amount\": 1001,\n      \"asOfDate\": \"2025-12-31\",\n      \"localCurrency\": \"USD\",\n      \"localCurrencyUnit\": \"Actual\",\n      \"localAmount\": 3000,\n      \"multilayeredTransactionMetadata\": {\n        \"remarks\": \"API pushed transaction\",\n        \"securityType\": \"CREDIT\",\n        \"securityId\": \"xxxxxx48-452c-4767-97e2-1bf7c16xxxx\",\n        \"externalTransactionSourceReferenceId\": \"ref_2\",\n        \"pps\": 10.04,\n        \"postMoneyValuation\": \"29404.429\",\n        \"postMoneyValuationCurrency\": \"USD\",\n        \"postMoneyValuationCurrencyUnit\": \"Millions\",\n        \"ownershipPercentage\": 90.2242,\n        \"externalInvestmentEntityId\": \"CEN02570\",\n        \"externalSecurityId\": \"CEN003100\",\n        \"shareCount\": 10,\n        \"vehicleName\": \"SPV-1\",\n        \"externalOwnerEntityId\": \"samplePS\"\n      },\n      \"ownerEntityMappings\": [\n        {\n          \"ownerEntityId\": \"xxxxxb8b-7907-42c5-b95d-8fb728axxxxx\"\n        }\n      ],\n      \"investmentEntityId\": \"xxxxx7ed-8015-4837-8f55-d96d82xxxxx\",\n      \"reportingAmount\": 2500,\n      \"reportingCurrency\": \"USD\",\n      \"reportingCurrencyUnit\": \"Actual\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 500,\n  \"message\": \"Internal server error. Please try again later or contact support.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "715f8b87-fa26-4505-8112-5cbe1324dc8e",
+              "name": "Gateway timeout. Processing state is indeterminate; some, all, or none of the submitted objects may have been processed. Verify transaction state before resubmitting to avoid duplicates.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "unifiedTransaction"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Subscription key used to authenticate the request. The key must be valid for the orgId and userId supplied in the request body.",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Required request content type. Send <b>application/json</b>.",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"xxxxe74-bbd3-4fd4-9e2a-0a73173xxxx\",\n  \"orgId\": \"xxxxxbd1-22d2-4e70-9e66-64215axxxxx\",\n  \"TransactionData\": [\n    {\n      \"transactionTypeId\": \"xxxxxxx-3856-4f85-b7f0-0dccfxxxxxxx\",\n      \"transactionDate\": \"2025-11-22\",\n      \"versionId\": \"xxxxxxx49-8caf-4394-b39c-a3671fxxxxxx\",\n      \"baseCurrency\": \"INR\",\n      \"baseCurrencyUnit\": \"Lakhs\",\n      \"amount\": 1001,\n      \"asOfDate\": \"2025-12-31\",\n      \"localCurrency\": \"USD\",\n      \"localCurrencyUnit\": \"Actual\",\n      \"localAmount\": 3000,\n      \"multilayeredTransactionMetadata\": {\n        \"remarks\": \"API pushed transaction\",\n        \"securityType\": \"CREDIT\",\n        \"securityId\": \"xxxxxx48-452c-4767-97e2-1bf7c16xxxx\",\n        \"externalTransactionSourceReferenceId\": \"ref_2\",\n        \"pps\": 10.04,\n        \"postMoneyValuation\": \"29404.429\",\n        \"postMoneyValuationCurrency\": \"USD\",\n        \"postMoneyValuationCurrencyUnit\": \"Millions\",\n        \"ownershipPercentage\": 90.2242,\n        \"externalInvestmentEntityId\": \"CEN02570\",\n        \"externalSecurityId\": \"CEN003100\",\n        \"shareCount\": 10,\n        \"vehicleName\": \"SPV-1\",\n        \"externalOwnerEntityId\": \"samplePS\"\n      },\n      \"ownerEntityMappings\": [\n        {\n          \"ownerEntityId\": \"xxxxxb8b-7907-42c5-b95d-8fb728axxxxx\"\n        }\n      ],\n      \"investmentEntityId\": \"xxxxx7ed-8015-4837-8f55-d96d82xxxxx\",\n      \"reportingAmount\": 2500,\n      \"reportingCurrency\": \"USD\",\n      \"reportingCurrencyUnit\": \"Actual\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Gateway Timeout",
+              "code": 504,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 504,\n  \"message\": \"Gateway timeout. Verify processing state before retrying.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9a3e325e-fee3-40b6-874f-44111cb9b3bc",
+          "name": "Create/Update Transaction",
+          "request": {
+            "name": "Create/Update Transaction",
+            "description": {
+              "content": "The <b>Create Multiple Transactions API</b> allows users to upload multiple transaction records within the <b>73Strings Transaction Product</b> in a single request.<br><br>It supports bulk creation of financial transaction entries such as <b>Investments</b>, <b>Realizations</b>, <b>Valuations</b>, and <b>Fees</b>, with each record tied to an entity, version, and transaction type.<br><br><b>Key capabilities</b><ul><li>Supports bulk creation of multiple financial transactions in a single API call</li><li>Validates transaction data at an individual record level</li><li>Ensures consistency in financial reporting and cross-system integrations</li></ul><b>Partial success handling</b><ul><li>Returns a <b>207 Multi-Status</b> response when some records are successfully processed</li><li>Provides detailed validation errors for records that fail processing</li></ul",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "unifiedTransaction"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) A unique key that allows you to access and use an API",
+                "key": "subscription-key",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"<string>\",\n  \"orgId\": \"<string>\",\n  \"TransactionData\": [\n    {\n      \"transactionTypeId\": \"<string>\",\n      \"versionId\": \"<string>\",\n      \"transactionDate\": \"<YYYY-MM-DD>\",\n      \"baseCurrency\": \"<string>\",\n      \"baseCurrencyUnit\": \"<string>\",\n      \"amount\": \"<number>\",\n      \"ownerEntityMappings\": [\n        {\n          \"ownerEntityId\": \"<string>\"\n        },\n        {\n          \"ownerEntityId\": \"<string>\"\n        }\n      ],\n      \"investmentEntityId\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"asOfDate\": \"<YYYY-MM-DD>\",\n      \"localCurrency\": \"<string>\",\n      \"localCurrencyUnit\": \"<string>\",\n      \"localAmount\": \"<number>\",\n      \"multilayeredTransactionMetadata\": {\n        \"remarks\": \"<string>\",\n        \"securityId\": \"<string>\",\n        \"securityType\": \"<string>\",\n        \"securityName\": \"<string>\",\n        \"externalTransactionSourceReferenceId\": \"<string>\",\n        \"pps\": \"<number>\",\n        \"postMoneyValuation\": \"<number>\",\n        \"postMoneyValuationCurrency\": \"<string>\",\n        \"postMoneyValuationCurrencyUnit\": \"<string>\",\n        \"ownershipPercentage\": \"<number>\",\n        \"externalInvestmentEntityId\": \"<string>\",\n        \"externalSecurityId\": \"<string>\",\n        \"shareCount\": \"<number>\",\n        \"vehicleName\": \"<string>\",\n        \"externalOwnerEntityId\": \"<string>\"\n      },\n      \"reportingAmount\": \"<number>\",\n      \"reportingCurrency\": \"<string>\",\n      \"reportingCurrencyUnit\": \"<string>\"\n    },\n    {\n      \"transactionTypeId\": \"<string>\",\n      \"versionId\": \"<string>\",\n      \"transactionDate\": \"<YYYY-MM-DD>\",\n      \"baseCurrency\": \"<string>\",\n      \"baseCurrencyUnit\": \"<string>\",\n      \"amount\": \"<number>\",\n      \"ownerEntityMappings\": [\n        {\n          \"ownerEntityId\": \"<string>\"\n        },\n        {\n          \"ownerEntityId\": \"<string>\"\n        }\n      ],\n      \"investmentEntityId\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"asOfDate\": \"<YYYY-MM-DD>\",\n      \"localCurrency\": \"<string>\",\n      \"localCurrencyUnit\": \"<string>\",\n      \"localAmount\": \"<number>\",\n      \"multilayeredTransactionMetadata\": {\n        \"remarks\": \"<string>\",\n        \"securityId\": \"<string>\",\n        \"securityType\": \"<string>\",\n        \"securityName\": \"<string>\",\n        \"externalTransactionSourceReferenceId\": \"<string>\",\n        \"pps\": \"<number>\",\n        \"postMoneyValuation\": \"<number>\",\n        \"postMoneyValuationCurrency\": \"<string>\",\n        \"postMoneyValuationCurrencyUnit\": \"<string>\",\n        \"ownershipPercentage\": \"<number>\",\n        \"externalInvestmentEntityId\": \"<string>\",\n        \"externalSecurityId\": \"<string>\",\n        \"shareCount\": \"<number>\",\n        \"vehicleName\": \"<string>\",\n        \"externalOwnerEntityId\": \"<string>\"\n      },\n      \"reportingAmount\": \"<number>\",\n      \"reportingCurrency\": \"<string>\",\n      \"reportingCurrencyUnit\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ddd543be-2a5d-4ea3-9a2f-387eca7dc45f",
+              "name": "Successful creation or update of transaction.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "unifiedTransaction"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) <b>Content-Type</b> is a required request header.<br><br><ul><li>Defines the data format being sent</li><li>The value must be <b>application/json</b></li></ul>",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"04156bbe-90c8-4bd2-9c6a-e783a70eda14\",\n  \"orgId\": \"7c72ed3a-c264-4f61-adee-c1bd4856a5cc\",\n  \"TransactionData\": [\n    {\n      \"transactionTypeId\": \"402079b7-93cf-435d-9080-151c4594920d\",\n      \"transactionDate\": \"2022-09-30\",\n      \"versionId\": \"d3d605b2-2705-469c-89c0-1930497ec856\",\n      \"baseCurrency\": \"GBP\",\n      \"baseCurrencyUnit\": \"Actual\",\n      \"amount\": 888.41,\n      \"asOfDate\": \"2022-09-30\",\n      \"localCurrency\": \"USD\",\n      \"localCurrencyUnit\": \"Millions\",\n      \"localAmount\": 234.24,\n      \"reportingAmount\": 93.234,\n      \"reportingCurrency\": \"USD\",\n      \"reportingCurrencyUnit\": \"Millions\",\n      \"ownerEntityMappings\": [\n        {\n          \"ownerEntityId\": \"da17e9ae-a0f8-47e0-a30e-8b8b67c2ca2f\"\n        }\n      ],\n      \"investmentEntityId\": \"b8a58ce2-50d3-4e01-9b4e-125c98068279\",\n      \"multilayeredTransactionMetadata\": {\n        \"remarks\": \"API pushed transaction\",\n        \"securityType\": \"EQUITY\",\n        \"securityId\": \"c5aa7714-9383-4f9f-86bd-a671d6ec69ca\",\n        \"externalTransactionSourceReferenceId\": \"External Fund A Transaction CEN0004\",\n        \"externalInvestmentEntityId\": \"Company 1 Ltd\",\n        \"vehicleName\": \"Vehicle 1\",\n        \"postMoneyValuation\": 234.24,\n        \"postMoneyValuationCurrency\": \"USD\",\n        \"postMoneyValuationCurrencyUnit\": \"Millions\",\n        \"externalSecurityId\": \"CEN089238\",\n        \"externalOwnerEntityId\": \"CEN0280\",\n        \"pps\": 24.24,\n        \"shareCount\": 145,\n        \"ownershipPercentage\": 234.24\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": {\n    \"totalRecordsCount\": 2,\n    \"invalidEntriesCount\": 0,\n    \"valid\": true\n  },\n  \"success\": true,\n  \"message\": \"All transactions processed successfully.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "544de8f4-2ed1-440b-8a1e-5c11a75da9ac",
+              "name": "Request accepted for processing, but not yet completed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "unifiedTransaction"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) <b>Content-Type</b> is a required request header.<br><br><ul><li>Defines the data format being sent</li><li>The value must be <b>application/json</b></li></ul>",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"04156bbe-90c8-4bd2-9c6a-e783a70eda14\",\n  \"orgId\": \"7c72ed3a-c264-4f61-adee-c1bd4856a5cc\",\n  \"TransactionData\": [\n    {\n      \"transactionTypeId\": \"402079b7-93cf-435d-9080-151c4594920d\",\n      \"transactionDate\": \"2022-09-30\",\n      \"versionId\": \"d3d605b2-2705-469c-89c0-1930497ec856\",\n      \"baseCurrency\": \"GBP\",\n      \"baseCurrencyUnit\": \"Actual\",\n      \"amount\": 888.41,\n      \"asOfDate\": \"2022-09-30\",\n      \"localCurrency\": \"USD\",\n      \"localCurrencyUnit\": \"Millions\",\n      \"localAmount\": 234.24,\n      \"reportingAmount\": 93.234,\n      \"reportingCurrency\": \"USD\",\n      \"reportingCurrencyUnit\": \"Millions\",\n      \"ownerEntityMappings\": [\n        {\n          \"ownerEntityId\": \"da17e9ae-a0f8-47e0-a30e-8b8b67c2ca2f\"\n        }\n      ],\n      \"investmentEntityId\": \"b8a58ce2-50d3-4e01-9b4e-125c98068279\",\n      \"multilayeredTransactionMetadata\": {\n        \"remarks\": \"API pushed transaction\",\n        \"securityType\": \"EQUITY\",\n        \"securityId\": \"c5aa7714-9383-4f9f-86bd-a671d6ec69ca\",\n        \"externalTransactionSourceReferenceId\": \"External Fund A Transaction CEN0004\",\n        \"externalInvestmentEntityId\": \"Company 1 Ltd\",\n        \"vehicleName\": \"Vehicle 1\",\n        \"postMoneyValuation\": 234.24,\n        \"postMoneyValuationCurrency\": \"USD\",\n        \"postMoneyValuationCurrencyUnit\": \"Millions\",\n        \"externalSecurityId\": \"CEN089238\",\n        \"externalOwnerEntityId\": \"CEN0280\",\n        \"pps\": 24.24,\n        \"shareCount\": 145,\n        \"ownershipPercentage\": 234.24\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": true,\n  \"message\": \"Request accepted and is being processed.\",\n  \"errorCode\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5b64c11b-28c5-4869-8c62-18be60946b4a",
+              "name": "Multi-Status - Partial success with some failed transactions",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "unifiedTransaction"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) <b>Content-Type</b> is a required request header.<br><br><ul><li>Defines the data format being sent</li><li>The value must be <b>application/json</b></li></ul>",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"04156bbe-90c8-4bd2-9c6a-e783a70eda14\",\n  \"orgId\": \"7c72ed3a-c264-4f61-adee-c1bd4856a5cc\",\n  \"TransactionData\": [\n    {\n      \"transactionTypeId\": \"402079b7-93cf-435d-9080-151c4594920d\",\n      \"transactionDate\": \"2022-09-30\",\n      \"versionId\": \"d3d605b2-2705-469c-89c0-1930497ec856\",\n      \"baseCurrency\": \"GBP\",\n      \"baseCurrencyUnit\": \"Actual\",\n      \"amount\": 888.41,\n      \"asOfDate\": \"2022-09-30\",\n      \"localCurrency\": \"USD\",\n      \"localCurrencyUnit\": \"Millions\",\n      \"localAmount\": 234.24,\n      \"reportingAmount\": 93.234,\n      \"reportingCurrency\": \"USD\",\n      \"reportingCurrencyUnit\": \"Millions\",\n      \"ownerEntityMappings\": [\n        {\n          \"ownerEntityId\": \"da17e9ae-a0f8-47e0-a30e-8b8b67c2ca2f\"\n        }\n      ],\n      \"investmentEntityId\": \"b8a58ce2-50d3-4e01-9b4e-125c98068279\",\n      \"multilayeredTransactionMetadata\": {\n        \"remarks\": \"API pushed transaction\",\n        \"securityType\": \"EQUITY\",\n        \"securityId\": \"c5aa7714-9383-4f9f-86bd-a671d6ec69ca\",\n        \"externalTransactionSourceReferenceId\": \"External Fund A Transaction CEN0004\",\n        \"externalInvestmentEntityId\": \"Company 1 Ltd\",\n        \"vehicleName\": \"Vehicle 1\",\n        \"postMoneyValuation\": 234.24,\n        \"postMoneyValuationCurrency\": \"USD\",\n        \"postMoneyValuationCurrencyUnit\": \"Millions\",\n        \"externalSecurityId\": \"CEN089238\",\n        \"externalOwnerEntityId\": \"CEN0280\",\n        \"pps\": 24.24,\n        \"shareCount\": 145,\n        \"ownershipPercentage\": 234.24\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Multi-Status (WebDAV) (RFC 4918)",
+              "code": 207,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": {\n    \"failedTransactions\": [\n      {\n        \"transactionDate\": \"2025-11-21\",\n        \"transactionTypeId\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n        \"versionId\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n        \"baseCurrency\": \"USD\",\n        \"amount\": 500,\n        \"investmentEntityId\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n        \"asOfDate\": \"2025-11-13\",\n        \"multilayeredTransactionMetadata\": {\n          \"externalTransactionSourceReferenceId\": \"XX - transactions 1\",\n          \"securityId\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\"\n        },\n        \"errors\": [\n          {\n            \"field\": \"BaseCurrencyUnit\",\n            \"error\": \"Please add a valid base currency unit\"\n          }\n        ],\n        \"ownerEntityCount\": 3,\n        \"ownerEntityPathwayRepresentation\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\n        \"ownerEntityNamePathwayRepresentation\": \"null / null / null\"\n      }\n    ],\n    \"totalRecordsCount\": 2,\n    \"invalidEntriesCount\": 1,\n    \"valid\": false\n  },\n  \"success\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "223bb855-9c2b-495b-b8a8-0f73a2c69a34",
+              "name": "Invalid input, missing parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "unifiedTransaction"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) <b>Content-Type</b> is a required request header.<br><br><ul><li>Defines the data format being sent</li><li>The value must be <b>application/json</b></li></ul>",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"04156bbe-90c8-4bd2-9c6a-e783a70eda14\",\n  \"orgId\": \"7c72ed3a-c264-4f61-adee-c1bd4856a5cc\",\n  \"TransactionData\": [\n    {\n      \"transactionTypeId\": \"402079b7-93cf-435d-9080-151c4594920d\",\n      \"transactionDate\": \"2022-09-30\",\n      \"versionId\": \"d3d605b2-2705-469c-89c0-1930497ec856\",\n      \"baseCurrency\": \"GBP\",\n      \"baseCurrencyUnit\": \"Actual\",\n      \"amount\": 888.41,\n      \"asOfDate\": \"2022-09-30\",\n      \"localCurrency\": \"USD\",\n      \"localCurrencyUnit\": \"Millions\",\n      \"localAmount\": 234.24,\n      \"reportingAmount\": 93.234,\n      \"reportingCurrency\": \"USD\",\n      \"reportingCurrencyUnit\": \"Millions\",\n      \"ownerEntityMappings\": [\n        {\n          \"ownerEntityId\": \"da17e9ae-a0f8-47e0-a30e-8b8b67c2ca2f\"\n        }\n      ],\n      \"investmentEntityId\": \"b8a58ce2-50d3-4e01-9b4e-125c98068279\",\n      \"multilayeredTransactionMetadata\": {\n        \"remarks\": \"API pushed transaction\",\n        \"securityType\": \"EQUITY\",\n        \"securityId\": \"c5aa7714-9383-4f9f-86bd-a671d6ec69ca\",\n        \"externalTransactionSourceReferenceId\": \"External Fund A Transaction CEN0004\",\n        \"externalInvestmentEntityId\": \"Company 1 Ltd\",\n        \"vehicleName\": \"Vehicle 1\",\n        \"postMoneyValuation\": 234.24,\n        \"postMoneyValuationCurrency\": \"USD\",\n        \"postMoneyValuationCurrencyUnit\": \"Millions\",\n        \"externalSecurityId\": \"CEN089238\",\n        \"externalOwnerEntityId\": \"CEN0280\",\n        \"pps\": 24.24,\n        \"shareCount\": 145,\n        \"ownershipPercentage\": 234.24\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": false,\n  \"message\": \"Invalid request parameters.\",\n  \"errorCode\": \"EXCE00028\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0b3cd360-d33d-44c7-9ae8-7a3307a4d556",
+              "name": "Invalid or missing Subscription key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "unifiedTransaction"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) <b>Content-Type</b> is a required request header.<br><br><ul><li>Defines the data format being sent</li><li>The value must be <b>application/json</b></li></ul>",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"04156bbe-90c8-4bd2-9c6a-e783a70eda14\",\n  \"orgId\": \"7c72ed3a-c264-4f61-adee-c1bd4856a5cc\",\n  \"TransactionData\": [\n    {\n      \"transactionTypeId\": \"402079b7-93cf-435d-9080-151c4594920d\",\n      \"transactionDate\": \"2022-09-30\",\n      \"versionId\": \"d3d605b2-2705-469c-89c0-1930497ec856\",\n      \"baseCurrency\": \"GBP\",\n      \"baseCurrencyUnit\": \"Actual\",\n      \"amount\": 888.41,\n      \"asOfDate\": \"2022-09-30\",\n      \"localCurrency\": \"USD\",\n      \"localCurrencyUnit\": \"Millions\",\n      \"localAmount\": 234.24,\n      \"reportingAmount\": 93.234,\n      \"reportingCurrency\": \"USD\",\n      \"reportingCurrencyUnit\": \"Millions\",\n      \"ownerEntityMappings\": [\n        {\n          \"ownerEntityId\": \"da17e9ae-a0f8-47e0-a30e-8b8b67c2ca2f\"\n        }\n      ],\n      \"investmentEntityId\": \"b8a58ce2-50d3-4e01-9b4e-125c98068279\",\n      \"multilayeredTransactionMetadata\": {\n        \"remarks\": \"API pushed transaction\",\n        \"securityType\": \"EQUITY\",\n        \"securityId\": \"c5aa7714-9383-4f9f-86bd-a671d6ec69ca\",\n        \"externalTransactionSourceReferenceId\": \"External Fund A Transaction CEN0004\",\n        \"externalInvestmentEntityId\": \"Company 1 Ltd\",\n        \"vehicleName\": \"Vehicle 1\",\n        \"postMoneyValuation\": 234.24,\n        \"postMoneyValuationCurrency\": \"USD\",\n        \"postMoneyValuationCurrencyUnit\": \"Millions\",\n        \"externalSecurityId\": \"CEN089238\",\n        \"externalOwnerEntityId\": \"CEN0280\",\n        \"pps\": 24.24,\n        \"shareCount\": 145,\n        \"ownershipPercentage\": 234.24\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"message\": \"Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ab116f45-3917-4191-9603-295207ab65ca",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "unifiedTransaction"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) <b>Content-Type</b> is a required request header.<br><br><ul><li>Defines the data format being sent</li><li>The value must be <b>application/json</b></li></ul>",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"04156bbe-90c8-4bd2-9c6a-e783a70eda14\",\n  \"orgId\": \"7c72ed3a-c264-4f61-adee-c1bd4856a5cc\",\n  \"TransactionData\": [\n    {\n      \"transactionTypeId\": \"402079b7-93cf-435d-9080-151c4594920d\",\n      \"transactionDate\": \"2022-09-30\",\n      \"versionId\": \"d3d605b2-2705-469c-89c0-1930497ec856\",\n      \"baseCurrency\": \"GBP\",\n      \"baseCurrencyUnit\": \"Actual\",\n      \"amount\": 888.41,\n      \"asOfDate\": \"2022-09-30\",\n      \"localCurrency\": \"USD\",\n      \"localCurrencyUnit\": \"Millions\",\n      \"localAmount\": 234.24,\n      \"reportingAmount\": 93.234,\n      \"reportingCurrency\": \"USD\",\n      \"reportingCurrencyUnit\": \"Millions\",\n      \"ownerEntityMappings\": [\n        {\n          \"ownerEntityId\": \"da17e9ae-a0f8-47e0-a30e-8b8b67c2ca2f\"\n        }\n      ],\n      \"investmentEntityId\": \"b8a58ce2-50d3-4e01-9b4e-125c98068279\",\n      \"multilayeredTransactionMetadata\": {\n        \"remarks\": \"API pushed transaction\",\n        \"securityType\": \"EQUITY\",\n        \"securityId\": \"c5aa7714-9383-4f9f-86bd-a671d6ec69ca\",\n        \"externalTransactionSourceReferenceId\": \"External Fund A Transaction CEN0004\",\n        \"externalInvestmentEntityId\": \"Company 1 Ltd\",\n        \"vehicleName\": \"Vehicle 1\",\n        \"postMoneyValuation\": 234.24,\n        \"postMoneyValuationCurrency\": \"USD\",\n        \"postMoneyValuationCurrencyUnit\": \"Millions\",\n        \"externalSecurityId\": \"CEN089238\",\n        \"externalOwnerEntityId\": \"CEN0280\",\n        \"pps\": 24.24,\n        \"shareCount\": 145,\n        \"ownershipPercentage\": 234.24\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"message\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "06df979d-b1d1-4a94-88de-2fc2954a46ea",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "unifiedTransaction"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) <b>Content-Type</b> is a required request header.<br><br><ul><li>Defines the data format being sent</li><li>The value must be <b>application/json</b></li></ul>",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"04156bbe-90c8-4bd2-9c6a-e783a70eda14\",\n  \"orgId\": \"7c72ed3a-c264-4f61-adee-c1bd4856a5cc\",\n  \"TransactionData\": [\n    {\n      \"transactionTypeId\": \"402079b7-93cf-435d-9080-151c4594920d\",\n      \"transactionDate\": \"2022-09-30\",\n      \"versionId\": \"d3d605b2-2705-469c-89c0-1930497ec856\",\n      \"baseCurrency\": \"GBP\",\n      \"baseCurrencyUnit\": \"Actual\",\n      \"amount\": 888.41,\n      \"asOfDate\": \"2022-09-30\",\n      \"localCurrency\": \"USD\",\n      \"localCurrencyUnit\": \"Millions\",\n      \"localAmount\": 234.24,\n      \"reportingAmount\": 93.234,\n      \"reportingCurrency\": \"USD\",\n      \"reportingCurrencyUnit\": \"Millions\",\n      \"ownerEntityMappings\": [\n        {\n          \"ownerEntityId\": \"da17e9ae-a0f8-47e0-a30e-8b8b67c2ca2f\"\n        }\n      ],\n      \"investmentEntityId\": \"b8a58ce2-50d3-4e01-9b4e-125c98068279\",\n      \"multilayeredTransactionMetadata\": {\n        \"remarks\": \"API pushed transaction\",\n        \"securityType\": \"EQUITY\",\n        \"securityId\": \"c5aa7714-9383-4f9f-86bd-a671d6ec69ca\",\n        \"externalTransactionSourceReferenceId\": \"External Fund A Transaction CEN0004\",\n        \"externalInvestmentEntityId\": \"Company 1 Ltd\",\n        \"vehicleName\": \"Vehicle 1\",\n        \"postMoneyValuation\": 234.24,\n        \"postMoneyValuationCurrency\": \"USD\",\n        \"postMoneyValuationCurrencyUnit\": \"Millions\",\n        \"externalSecurityId\": \"CEN089238\",\n        \"externalOwnerEntityId\": \"CEN0280\",\n        \"pps\": 24.24,\n        \"shareCount\": 145,\n        \"ownershipPercentage\": 234.24\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 500,\n  \"message\": \"Internal server error. Please try again later or contact support.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7a1839e4-0f34-4acc-8540-90fe10f98f53",
+          "name": "Get Transaction Data",
+          "request": {
+            "name": "Get Transaction Data",
+            "description": {
+              "content": "Retrieves transaction data with pagination support. Supports filtering, sorting, and as-of-date settings for comprehensive transaction data retrieval.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "transactionData"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "pageNo",
+                  "value": "<integer>",
+                  "description": "Page number for pagination (zero-based)"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "<integer>",
+                  "description": "Number of records per page"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) A unique key that allows you to access and use an API",
+                "key": "subscription-key",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"<string>\",\n  \"orgId\": \"<string>\",\n  \"filters\": [\n    {\n      \"field\": \"<string>\",\n      \"operation\": \"<string>\",\n      \"valueSet\": [\n        \"<string>\"\n      ]\n    },\n    {\n      \"field\": \"<string>\",\n      \"operation\": \"<string>\",\n      \"valueSet\": [\n        \"<string>\"\n      ]\n    }\n  ],\n  \"sortList\": [\n    {\n      \"field\": \"<string>\",\n      \"direction\": \"<string>\"\n    },\n    {\n      \"field\": \"<string>\",\n      \"direction\": \"<string>\"\n    }\n  ],\n  \"asOfDateSettings\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "47ab22c5-a630-41b2-9883-15d744415bc4",
+              "name": "Successful retrieval of transaction data.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transactionData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageNo",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"0ea63bb5-47c6-4590-9fc2-52fc180d6e8f\",\n  \"orgId\": \"214fa428-0f39-4c06-9343-d0c51c9b4e34\",\n  \"filters\": [],\n  \"sortList\": [\n    {\n      \"field\": \"lastModifiedDate\",\n      \"direction\": \"desc\"\n    }\n  ],\n  \"asOfDateSettings\": \"LATEST\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": {\n    \"content\": [\n      {\n        \"id\": \"0ed17793-17d6-4867-af3c-ebca183cb22d\",\n        \"displayId\": 7789999,\n        \"transactionDate\": \"2025-09-08\",\n        \"transactionTypeId\": \"389c4d13-d974-4764-89cb-6bd8013303d3\",\n        \"versionId\": \"0454b6bb-ea69-4dc0-9c45-a4e34849e71d\",\n        \"baseCurrency\": \"GBP\",\n        \"baseCurrencyUnit\": \"Millions\",\n        \"amount\": 25,\n        \"amountTotal\": 25000000,\n        \"ownerEntityMappings\": [\n          {\n            \"ownerEntityId\": \"987dd768-8b80-4d5b-b9a8-af6eb3321102\",\n            \"ownerEntityName\": \"ADCF 123\"\n          }\n        ],\n        \"investmentEntityId\": \"ae43ae8f-5fa8-46fa-b8b1-7482e45ff1d7\",\n        \"asOfDate\": \"2025-09-08\",\n        \"localAmount\": 0,\n        \"localAmountTotal\": 0,\n        \"localCurrency\": \"SAR\",\n        \"localCurrencyUnit\": \"Actual\",\n        \"multilayeredTransactionMetadata\": {\n          \"externalTransactionSourceReferenceId\": \"qwerty1234567\",\n          \"securityId\": null,\n          \"securityType\": null,\n          \"externalSecurityId\": null,\n          \"externalInvestmentEntityId\": null,\n          \"ownershipPercentage\": null,\n          \"shareCount\": null,\n          \"pps\": null,\n          \"postMoneyValuation\": null,\n          \"postMoneyValuationCurrency\": null,\n          \"postMoneyValuationCurrencyUnit\": null,\n          \"remarks\": null,\n          \"source\": null,\n          \"vehicleName\": null,\n          \"externalOwnerEntityId\": null,\n          \"securityName\": null\n        },\n        \"createdBy\": \"Dev API Integration\",\n        \"createdDate\": \"2025-09-09T04:59:07Z\",\n        \"lastModifiedBy\": \"Dev API Integration\",\n        \"lastModifiedDate\": \"2025-09-09T05:00:07Z\",\n        \"transactionTypeName\": \"Additional Investment\",\n        \"versionName\": \"Actuals\",\n        \"investmentEntityName\": \"ADCF_Rollover_Testing\",\n        \"valueCarryover\": null,\n        \"orgId\": null,\n        \"ownerEntityPath\": null,\n        \"reportingCurrency\": null,\n        \"reportingCurrencyUnit\": \"Actual\",\n        \"reportingAmount\": null,\n        \"preferredCurrency\": \"BASE\",\n        \"fxRateDate\": null,\n        \"errors\": [],\n        \"ownerEntityPathwayRepresentation\": \"987dd768-8b80-4d5b-b9a8-af6eb3321102\",\n        \"ownerEntityCount\": 1,\n        \"ownerEntityNamePathwayRepresentation\": \"ADCF 123\"\n      }\n    ],\n    \"pageNo\": 0,\n    \"pageSize\": 21,\n    \"totalElements\": 13,\n    \"totalPages\": 0\n  },\n  \"success\": true,\n  \"message\": \"Success\",\n  \"errorCode\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1693a1eb-d434-4bba-8cf7-2b2dd4ebb260",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transactionData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageNo",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"0ea63bb5-47c6-4590-9fc2-52fc180d6e8f\",\n  \"orgId\": \"214fa428-0f39-4c06-9343-d0c51c9b4e34\",\n  \"filters\": [],\n  \"sortList\": [\n    {\n      \"field\": \"lastModifiedDate\",\n      \"direction\": \"desc\"\n    }\n  ],\n  \"asOfDateSettings\": \"LATEST\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"message\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "56867a4b-e3de-4ca6-8df7-58a8c2f64a9f",
+          "name": "Get Transaction Types",
+          "request": {
+            "name": "Get Transaction Types",
+            "description": {
+              "content": "This API retrieves a list of transaction types configured in the Transaction Product of the 73Strings platform.<br><br>It allows clients to fetch transaction type metadata such as ID, name, category, description, and configuration details.<br><br><b>Key details</b><ul><li>The response supports filtering, sorting, and pagination to optimize data retrieval for different organizational setups.</li><li>This API is primarily used when clients need to populate dropdowns, map transaction categories, or validate transaction type references before creating transaction data.</li></ul>",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "transactionType"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "pageNo",
+                  "value": "<integer>",
+                  "description": "Page number to retrieve (0-indexed). Controls which batch of results is fetched."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "<integer>",
+                  "description": "Number of records to return per page. Optimizes data retrieval for large lists."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) A unique key that allows you to access and use an API",
+                "key": "subscription-key",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"<string>\",\n  \"orgId\": \"<string>\",\n  \"filters\": [\n    {\n      \"field\": \"<string>\",\n      \"operation\": \"<string>\",\n      \"valueSet\": [\n        \"<string>\"\n      ]\n    },\n    {\n      \"field\": \"<string>\",\n      \"operation\": \"<string>\",\n      \"valueSet\": [\n        \"<string>\"\n      ]\n    }\n  ],\n  \"sortList\": [\n    {\n      \"field\": \"<string>\",\n      \"direction\": \"<string>\"\n    },\n    {\n      \"field\": \"<string>\",\n      \"direction\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "365d6903-88c7-4210-b532-1fc8596bf401",
+              "name": "Successful retrieval of transaction types.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transactionType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageNo",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) <b>Content-Type</b> is a required request header.<br><br><ul><li>Defines the data format being sent</li><li>The value must be <b>application/json</b></li></ul>",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"0ea63bb5-47c6-4590-9fc2-52fc180d6e8f\",\n  \"orgId\": \"214fa428-0f39-4c06-9343-d0c51c9b4e34\",\n  \"filters\": [\n    {\n      \"field\": \"transactionTypeClassification\",\n      \"operation\": \"IN\",\n      \"valueSet\": [\n        \"CASH_FLOW\",\n        \"VALUATION\"\n      ]\n    }\n  ],\n  \"sortList\": [\n    {\n      \"field\": \"lastModifiedDate\",\n      \"direction\": \"desc\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": {\n    \"content\": [\n      {\n        \"id\": \"b446af46-c8f2-4975-98ee-7da33a0d8c0f\",\n        \"createdBy\": \"Dev API Integration\",\n        \"createdDate\": \"2025-09-08T05:31:16Z\",\n        \"lastModifiedBy\": \"Dev API Integration\",\n        \"lastModifiedDate\": \"2025-09-08T05:31:16Z\",\n        \"name\": \"Unrecycled Fees\",\n        \"dataItem\": \"Unrecycled Fees-CF\",\n        \"description\": \"Charges or expenses that are incurred only once within a specific context or transaction and are not recycled or repeated\",\n        \"transactionCategoryId\": \"db695563-e8ab-416b-b6ee-e76711c6cb04\",\n        \"transactionCategoryName\": \"Others\",\n        \"valueType\": \"POSITIVE\",\n        \"deletable\": true\n      }\n    ],\n    \"pageNo\": 0,\n    \"pageSize\": 21,\n    \"totalElements\": 17,\n    \"totalPages\": 0\n  },\n  \"success\": true,\n  \"message\": \"Success\",\n  \"errorCode\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e863dcbe-8f0f-41fc-82e6-b47ea6964354",
+              "name": "Request accepted for processing, but not yet completed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transactionType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageNo",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) <b>Content-Type</b> is a required request header.<br><br><ul><li>Defines the data format being sent</li><li>The value must be <b>application/json</b></li></ul>",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"0ea63bb5-47c6-4590-9fc2-52fc180d6e8f\",\n  \"orgId\": \"214fa428-0f39-4c06-9343-d0c51c9b4e34\",\n  \"filters\": [\n    {\n      \"field\": \"transactionTypeClassification\",\n      \"operation\": \"IN\",\n      \"valueSet\": [\n        \"CASH_FLOW\",\n        \"VALUATION\"\n      ]\n    }\n  ],\n  \"sortList\": [\n    {\n      \"field\": \"lastModifiedDate\",\n      \"direction\": \"desc\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": true,\n  \"message\": \"Request accepted and is being processed.\",\n  \"errorCode\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b6645b98-cba4-42ec-bd5a-fd47029de29d",
+              "name": "Invalid input, missing parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transactionType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageNo",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) <b>Content-Type</b> is a required request header.<br><br><ul><li>Defines the data format being sent</li><li>The value must be <b>application/json</b></li></ul>",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"0ea63bb5-47c6-4590-9fc2-52fc180d6e8f\",\n  \"orgId\": \"214fa428-0f39-4c06-9343-d0c51c9b4e34\",\n  \"filters\": [\n    {\n      \"field\": \"transactionTypeClassification\",\n      \"operation\": \"IN\",\n      \"valueSet\": [\n        \"CASH_FLOW\",\n        \"VALUATION\"\n      ]\n    }\n  ],\n  \"sortList\": [\n    {\n      \"field\": \"lastModifiedDate\",\n      \"direction\": \"desc\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": false,\n  \"message\": \"Invalid request parameters.\",\n  \"errorCode\": \"EXCE00028\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "51fb995b-7db3-406e-8523-363ac57e15ad",
+              "name": "Invalid or missing Subscription key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transactionType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageNo",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) <b>Content-Type</b> is a required request header.<br><br><ul><li>Defines the data format being sent</li><li>The value must be <b>application/json</b></li></ul>",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"0ea63bb5-47c6-4590-9fc2-52fc180d6e8f\",\n  \"orgId\": \"214fa428-0f39-4c06-9343-d0c51c9b4e34\",\n  \"filters\": [\n    {\n      \"field\": \"transactionTypeClassification\",\n      \"operation\": \"IN\",\n      \"valueSet\": [\n        \"CASH_FLOW\",\n        \"VALUATION\"\n      ]\n    }\n  ],\n  \"sortList\": [\n    {\n      \"field\": \"lastModifiedDate\",\n      \"direction\": \"desc\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"message\": \"Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d26bfd20-3515-40f2-b3f1-fe77d8a220e6",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transactionType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageNo",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) <b>Content-Type</b> is a required request header.<br><br><ul><li>Defines the data format being sent</li><li>The value must be <b>application/json</b></li></ul>",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"0ea63bb5-47c6-4590-9fc2-52fc180d6e8f\",\n  \"orgId\": \"214fa428-0f39-4c06-9343-d0c51c9b4e34\",\n  \"filters\": [\n    {\n      \"field\": \"transactionTypeClassification\",\n      \"operation\": \"IN\",\n      \"valueSet\": [\n        \"CASH_FLOW\",\n        \"VALUATION\"\n      ]\n    }\n  ],\n  \"sortList\": [\n    {\n      \"field\": \"lastModifiedDate\",\n      \"direction\": \"desc\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"message\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "57f73a2d-5f66-4fe8-9db0-9ba61fd1f13f",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transactionType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageNo",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) <b>Content-Type</b> is a required request header.<br><br><ul><li>Defines the data format being sent</li><li>The value must be <b>application/json</b></li></ul>",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"0ea63bb5-47c6-4590-9fc2-52fc180d6e8f\",\n  \"orgId\": \"214fa428-0f39-4c06-9343-d0c51c9b4e34\",\n  \"filters\": [\n    {\n      \"field\": \"transactionTypeClassification\",\n      \"operation\": \"IN\",\n      \"valueSet\": [\n        \"CASH_FLOW\",\n        \"VALUATION\"\n      ]\n    }\n  ],\n  \"sortList\": [\n    {\n      \"field\": \"lastModifiedDate\",\n      \"direction\": \"desc\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 500,\n  \"message\": \"Internal server error. Please try again later or contact support.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bd86de47-2885-40a8-b103-6f48404551fc",
+          "name": "Get Transaction Versions",
+          "request": {
+            "name": "Get Transaction Versions",
+            "description": {
+              "content": "<p>\nThe <strong>Get Version List API</strong> retrieves all available reporting or transaction versions configured within an organization on the <strong>73Strings Transaction Product</strong>.\n</p>\n\n<p>\nEach version represents a defined data layer (for example, <em>Actuals</em>, <em>Forecast</em>, or <em>Scenario-based</em> data) that is used across financial or transactional modules for reporting and analytics.\n</p>\n\n<p>\nThis API enables clients to:\n</p>\n\n<ul>\n  <li>Fetch all available versions within the organization</li>\n  <li>Identify whether a version is active, fixed, or deletable</li>\n  <li>Integrate version selection into workflows such as creating, editing, or retrieving transactions</li>\n</ul>",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "transactionVersion"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "showHidden",
+                  "value": "<boolean>",
+                  "description": "Whether to include hidden versions in the response"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) A unique key that allows you to access and use an API",
+                "key": "subscription-key",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"<string>\",\n  \"orgId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a8365cc4-0d91-4368-b734-0a1e0658d391",
+              "name": "Successful retrieval of transaction versions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transactionVersion"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "showHidden",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) <b>Content-Type</b> is a required request header.<br><br><ul><li>Defines the data format being sent</li><li>The value must be <b>application/json</b></li></ul>",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"0ea63bb5-47c6-4590-9fc2-52fc180d6e8f\",\n  \"orgId\": \"214fa428-0f39-4c06-9343-d0c51c9b4e34\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": {\n    \"data\": [\n      {\n        \"id\": \"0454b6bb-ea69-4dc0-9c45-a4e34849e71d\",\n        \"name\": \"Actuals\",\n        \"description\": \"Actuals version\",\n        \"sortOrder\": 0,\n        \"isEnabled\": true,\n        \"isFixed\": true,\n        \"isDeletable\": false\n      },\n      {\n        \"id\": \"edb1136e-c177-445f-a52a-151ebdd9379e\",\n        \"name\": \"Forecast\",\n        \"description\": \"Forecast version\",\n        \"sortOrder\": 0,\n        \"isEnabled\": true,\n        \"isFixed\": true,\n        \"isDeletable\": false\n      },\n      {\n        \"id\": \"7c4afcd9-8049-4e59-8d81-4e31bb034a4e\",\n        \"name\": \"dummy version\",\n        \"description\": null,\n        \"sortOrder\": 0,\n        \"isEnabled\": false,\n        \"isFixed\": null,\n        \"isDeletable\": true\n      }\n    ]\n  },\n  \"success\": true,\n  \"message\": \"Success\",\n  \"errorCode\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d09adcf3-551f-48ff-8caf-7169af805bfc",
+              "name": "Request accepted for processing, but not yet completed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transactionVersion"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "showHidden",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) <b>Content-Type</b> is a required request header.<br><br><ul><li>Defines the data format being sent</li><li>The value must be <b>application/json</b></li></ul>",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"0ea63bb5-47c6-4590-9fc2-52fc180d6e8f\",\n  \"orgId\": \"214fa428-0f39-4c06-9343-d0c51c9b4e34\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": true,\n  \"message\": \"Request accepted and is being processed.\",\n  \"errorCode\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "30dde8bf-f804-419a-ba25-a5389575feea",
+              "name": "Invalid input, missing parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transactionVersion"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "showHidden",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) <b>Content-Type</b> is a required request header.<br><br><ul><li>Defines the data format being sent</li><li>The value must be <b>application/json</b></li></ul>",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"0ea63bb5-47c6-4590-9fc2-52fc180d6e8f\",\n  \"orgId\": \"214fa428-0f39-4c06-9343-d0c51c9b4e34\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": false,\n  \"message\": \"Invalid request parameters.\",\n  \"errorCode\": \"EXCE00028\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "68603714-4623-4f16-9c07-ec2e99c3ad5d",
+              "name": "Invalid or missing Subscription key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transactionVersion"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "showHidden",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) <b>Content-Type</b> is a required request header.<br><br><ul><li>Defines the data format being sent</li><li>The value must be <b>application/json</b></li></ul>",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"0ea63bb5-47c6-4590-9fc2-52fc180d6e8f\",\n  \"orgId\": \"214fa428-0f39-4c06-9343-d0c51c9b4e34\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"message\": \"Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a9ed6db6-cd51-4679-9138-0b663f5471c6",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transactionVersion"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "showHidden",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) <b>Content-Type</b> is a required request header.<br><br><ul><li>Defines the data format being sent</li><li>The value must be <b>application/json</b></li></ul>",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"0ea63bb5-47c6-4590-9fc2-52fc180d6e8f\",\n  \"orgId\": \"214fa428-0f39-4c06-9343-d0c51c9b4e34\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"message\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "658475fd-cf91-45ff-b05a-ff1d64ee4e22",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "transactionVersion"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "showHidden",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) <b>Content-Type</b> is a required request header.<br><br><ul><li>Defines the data format being sent</li><li>The value must be <b>application/json</b></li></ul>",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"0ea63bb5-47c6-4590-9fc2-52fc180d6e8f\",\n  \"orgId\": \"214fa428-0f39-4c06-9343-d0c51c9b4e34\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 500,\n  \"message\": \"Internal server error. Please try again later or contact support.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "babb9b7a-e5bc-40c4-88d3-0487a8e662b6",
+          "name": "GTN Fund Transactions API",
+          "request": {
+            "name": "GTN Fund Transactions API",
+            "description": {
+              "content": "Process fund-level transactions for Gross to Net (GTN) calculations and reporting.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "putfundTransactions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) A unique key that allows you to access and use an API",
+                "key": "subscription-key",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"funds\": [\n    {\n      \"fundId\": \"<string>\",\n      \"fundName\": \"<string>\",\n      \"transactions\": [\n        {\n          \"amount\": \"<string>\",\n          \"currency\": \"<string>\",\n          \"date\": \"<string>\",\n          \"type\": \"<string>\",\n          \"details\": \"<string>\"\n        },\n        {\n          \"amount\": \"<string>\",\n          \"currency\": \"<string>\",\n          \"date\": \"<string>\",\n          \"type\": \"<string>\",\n          \"details\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"fundId\": \"<string>\",\n      \"fundName\": \"<string>\",\n      \"transactions\": [\n        {\n          \"amount\": \"<string>\",\n          \"currency\": \"<string>\",\n          \"date\": \"<string>\",\n          \"type\": \"<string>\",\n          \"details\": \"<string>\"\n        },\n        {\n          \"amount\": \"<string>\",\n          \"currency\": \"<string>\",\n          \"date\": \"<string>\",\n          \"type\": \"<string>\",\n          \"details\": \"<string>\"\n        }\n      ]\n    }\n  ],\n  \"inputDate\": \"<dateTime>\",\n  \"orgId\": \"<string>\",\n  \"userId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "084344a5-f86a-4fd7-950c-b9d4b04f375d",
+              "name": "Successful update of transaction data.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "putfundTransactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"orgId\": \"hu4eb330-4839fbd20-8534gf3bzzxxxx-0958htf3d924fg8bvuc\",\n  \"inputDate\": \"2021-12-31\",\n  \"userId\": \"3ig5fh2-98430hdbn2083f-3853245gfhdnzq0n3v\",\n  \"funds\": [\n    {\n      \"fundId\": \"ievb32f-4983g3f2hd-83ubifdn248300538ghfbdcxn\",\n      \"fundName\": \"Fund 1\",\n      \"transactions\": [\n        {\n          \"date\": \"2021-05-30\",\n          \"amount\": \"100\",\n          \"currency\": \"USD\",\n          \"type\": \"Distributed\",\n          \"details\": \"Others\"\n        }\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Successfully saved the transaction data\",\n  \"responseCode\": \"OK\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f7aa2b65-6a1f-45e2-a49b-20656b748c91",
+              "name": "Invalid input, missing parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "putfundTransactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"orgId\": \"hu4eb330-4839fbd20-8534gf3bzzxxxx-0958htf3d924fg8bvuc\",\n  \"inputDate\": \"2021-12-31\",\n  \"userId\": \"3ig5fh2-98430hdbn2083f-3853245gfhdnzq0n3v\",\n  \"funds\": [\n    {\n      \"fundId\": \"ievb32f-4983g3f2hd-83ubifdn248300538ghfbdcxn\",\n      \"fundName\": \"Fund 1\",\n      \"transactions\": [\n        {\n          \"date\": \"2021-05-30\",\n          \"amount\": \"100\",\n          \"currency\": \"USD\",\n          \"type\": \"Distributed\",\n          \"details\": \"Others\"\n        }\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": false,\n  \"message\": \"Invalid request parameters.\",\n  \"errorCode\": \"EXCE00028\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b501b0c6-6e4e-458b-98b5-108d226f9756",
+              "name": "Invalid or missing Subscription key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "putfundTransactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"orgId\": \"hu4eb330-4839fbd20-8534gf3bzzxxxx-0958htf3d924fg8bvuc\",\n  \"inputDate\": \"2021-12-31\",\n  \"userId\": \"3ig5fh2-98430hdbn2083f-3853245gfhdnzq0n3v\",\n  \"funds\": [\n    {\n      \"fundId\": \"ievb32f-4983g3f2hd-83ubifdn248300538ghfbdcxn\",\n      \"fundName\": \"Fund 1\",\n      \"transactions\": [\n        {\n          \"date\": \"2021-05-30\",\n          \"amount\": \"100\",\n          \"currency\": \"USD\",\n          \"type\": \"Distributed\",\n          \"details\": \"Others\"\n        }\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"message\": \"Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "aa5eccc9-21dc-4bf8-b18c-f36443d44748",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "putfundTransactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"orgId\": \"hu4eb330-4839fbd20-8534gf3bzzxxxx-0958htf3d924fg8bvuc\",\n  \"inputDate\": \"2021-12-31\",\n  \"userId\": \"3ig5fh2-98430hdbn2083f-3853245gfhdnzq0n3v\",\n  \"funds\": [\n    {\n      \"fundId\": \"ievb32f-4983g3f2hd-83ubifdn248300538ghfbdcxn\",\n      \"fundName\": \"Fund 1\",\n      \"transactions\": [\n        {\n          \"date\": \"2021-05-30\",\n          \"amount\": \"100\",\n          \"currency\": \"USD\",\n          \"type\": \"Distributed\",\n          \"details\": \"Others\"\n        }\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 500,\n  \"message\": \"Internal server error. Please try again later or contact support.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-accord-eut-73strings.azure-api.net/transactions",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "noauth"
+  },
+  "info": {
+    "_postman_id": "2e2b81bf-7376-4388-858c-581b59dc866c",
+    "name": "Transaction Transaction API API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The <b>Transaction APIs</b> enable external enterprise customers to <b>ingest and retrieve transaction ledger records</b> within the <b>73 Strings platform</b>.<br><br>These APIs are intended for <b>client-side engineering teams</b> that manage their own data pipelines and require a <b>controlled, structured interface</b> to push transaction data into the platform or retrieve processed transaction information for downstream workflows.<br><br><b>Key capabilities</b><ul><li>Bulk creation and update of transaction ledger records</li><li>Platform-generated <b>Display IDs</b> for stable referencing across workflows</li><li>Retrieval of processed transaction data</li><li>Reference APIs for <b>transaction types</b> and <b>transaction versions</b> to ensure payload correctness</li><li>Partial success handling for bulk ingestion</li></ul><b>Authentication &amp; data scoping</b><ul><li>All APIs are authenticated using a <b>subscription key</b> associated with a <b>User ID</b></li><li><b>Organization ID</b> and <b>User ID</b> are mandatory in request payloads and determine data access</li><li>APIs are multi-tenant by design and return data scoped to the provided organization</li></ul><b>Processing model</b><ul><li>Transactions are pushed via external pipelines (real-time or batch)</li><li>The platform persists and processes the data as per supported transaction structures</li><li>The APIs do not orchestrate synchronization or enforce real-time guarantees</li></ul>\n\nContact Support:\n Email: support@73strings.com",
+      "type": "text/plain"
+    }
+  }
+}

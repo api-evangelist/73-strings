@@ -1,0 +1,452 @@
+openapi: 3.2.0
+info:
+  title: Documents API
+  description: The **Documents APIs**, a RESTful service on 73 Strings, provides a comprehensive information of the uploaded documents affiliated with the company in the funds across an organization in the 73 Strings platform. The API also, allows users to download documents from the platform.
+  contact:
+    name: ''
+    email: support@73strings.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: '1.0'
+servers:
+- url: https://api-accord-eut-73strings.azure-api.net/documents
+security:
+- {}
+- apiKeyHeader: []
+- apiKeyQuery: []
+tags:
+- name: Documents
+  description: The **Documents APIs**, a RESTful service on 73 Strings, provides a comprehensive information of the uploaded documents affiliated with the company in the funds across an organization in the 73 Strings platform. The API also, allows users to download documents from the platform.
+paths:
+  /api/v1/ems/getEntityDocumentDownloadFIle:
+    post:
+      operationId: getDocumentDetailsByDocumentIDAndCompanyID
+      summary: Get Entity Document Download FIle
+      tags:
+      - Documents
+      description: 'The **Entity Document Download File API**  retrieves the content of documents that have been uploaded by users in the 73 Strings platform.
+
+
+        This API allows users to access crucial information contained within these documents, which can be essential for various tasks such as:
+
+        - Extracting key financial and operational data.
+
+        - Automating the organization and categorization of company information.
+
+        - Facilitating compliance checks and due diligence processes.
+
+        - Enhancing data accuracy and consistency for further analysis and valuation.
+
+
+        The features to extract information from the documents uploaded on 73 Extract and Monitor platform, helps users convert unstructured data to structured data'
+      parameters:
+      - name: subscription-key
+        in: header
+        required: true
+        description: A unique key that allows you to access and use an API
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentDetailsReqDTO'
+            examples:
+              default:
+                value:
+                  userId: nejxxx-xxxxx-xxxxxc3ik
+                  companyId: n3ixxx-xxxxx-xxxxxod10
+                  documentId: dkjxxx-xxxxx-xxxxx9hf9
+        description: Request body containing UserId, CompanyId, and DocumentId for fetching document details.
+      responses:
+        '200':
+          description: Retrieval of document file.
+          content:
+            application/json:
+              examples:
+                Successful retrieval of documentFile Example:
+                  description: Successful retrieval of documentFile Example
+                  value: '%PDF-1.7
+
+                    %����
+
+                    1 0 obj
+
+                    <</Type/Catalog/Pages 2 0 R/Lang(en-IN) /StructTreeRoot 14 0 R/MarkInfo<</Marked true>>/Metadata 305 0 R/ViewerPreferences 306 0 R>>
+
+                    endobj
+
+                    2 0 obj
+
+                    <</Type/Pages/Count 1/Kids[ 4 0 R] >>
+
+                    endobj
+
+                    3 0 obj
+
+                    <</Author(Sambeet Parija) /CreationDate(D:20221205174702+05''30'') /ModDate(D:20221205174702+05''30'') /Producer(��'
+                No Data Example:
+                  description: No Data Example
+                  value:
+                    response: []
+                    success: false
+                    message: Data not found.
+                    errorCode: EXCE00021
+        '202':
+          description: Request accepted for processing, but not yet completed.
+          content:
+            application/json:
+              examples:
+                Accepted Example:
+                  description: Accepted Example
+                  value:
+                    response: []
+                    success: true
+                    message: Request accepted and is being processed.
+                    errorCode: null
+        '400':
+          description: Invalid input, missing parameters.
+          content:
+            application/json:
+              examples:
+                Bad Request Example:
+                  description: Bad Request Example
+                  value:
+                    response: []
+                    success: false
+                    message: Invalid request parameters.
+                    errorCode: EXCE00028
+                Required Fields Can't Be Null Or Empty Example:
+                  description: Required Fields Can't Be Null Or Empty Example
+                  value:
+                    response: []
+                    success: false
+                    message: Fields cannot be null or empty..
+                    errorCode: EXCE00020
+        '401':
+          description: Invalid or missing Subscription key.
+          content:
+            application/json:
+              examples:
+                Invalid Subscription key Example:
+                  description: Invalid Subscription key Example
+                  value:
+                    statusCode: 401
+                    message: Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.
+        '405':
+          description: 'Request with incorrect HTTPS method. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                Method not allowed Example:
+                  description: Method not allowed Example
+                  value:
+                    statusCode: 405
+                    message: Method Not Allowed. Please use the correct HTTP method.
+        '429':
+          description: Too many requests sent in a short period. The client is being rate limited.
+          content:
+            application/json:
+              examples:
+                Too Many Request Example.:
+                  description: Too Many Request Example.
+                  value:
+                    statusCode: 429
+                    message: Too Many Requests. Please slow down and try again later.
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    statusCode: 500
+                    message: Internal server error. Please try again later or contact support.
+  /api/v1/ems/getEntityDocumentList:
+    post:
+      operationId: getDocumentIdForCompanyID
+      summary: Get Entity Document List
+      tags:
+      - Documents
+      description: 'The 73 Strings products offer advanced tools for extracting and analyzing company information within private equity funds. The **Entity Documents List API** is designed to retrieve a comprehensive list of all documents uploaded in a entity by the users.
+
+
+        This API provides users with essential details about each document, ensuring they have quick access to important metadata information.
+
+
+        By leveraging the capabilities of the 73Extract and Monitor platform, fund managers, analysts, and investors can streamline their document management processes, enhancing their ability to manage and analyze their investments effectively.'
+      parameters:
+      - name: subscription-key
+        in: header
+        required: true
+        description: A unique key that allows you to access and use an API
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntityDocumentReqDTO'
+            examples:
+              default:
+                value:
+                  userId: 4d3xxx-xxxxx-xxxxx2a41
+                  entityId: b92xxx-xxxxx-xxxxx70e7
+        description: Request body containing UserId, CompanyId, fetching document list.
+      responses:
+        '200':
+          description: Retrieval of document list.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityDocumentListResDTO'
+              examples:
+                Successful retrieval of document list Example:
+                  description: Successful retrieval of document list Example
+                  value:
+                    response:
+                      entityId: b92xxx-xxxxx-xxxxx70e7
+                      document:
+                      - documentId: baexxx-xxxxx-xxxxx9aa1
+                        documentName: FILE NAME (1).pdf
+                        originalDocUrl: baexxx-xxxxx-xxxxx7959aa1_original.pdf
+                        selectedDocUrl: baexxx-xxxxx-xxxxx7309_selected.pdf
+                        docType: PDF
+                        status: PROCESSING
+                        processedOn: '2025-05-21T06:20:55Z'
+                        uploadedBy: Mohit Garg
+                      - documentId: e51xxx-xxxxx-xxxxxc76c
+                        documentName: SureWerx Q1 25 Exhibit A Financials_test.pdf
+                        originalDocUrl: e51xxx-xxxxx-xxxxxc76c_original.pdf
+                        selectedDocUrl: e51xxx-xxxxx-xxxxx0854_selected.pdf
+                        docType: PDF
+                        status: PROCESSING
+                        processedOn: '2025-05-26T08:29:45Z'
+                        uploadedBy: chandrasekhar kalthireddy
+                    success: true
+                    message: Success
+                    errorCode: null
+                No Data Example:
+                  description: No Data Example
+                  value:
+                    response: []
+                    success: false
+                    message: Data not found.
+                    errorCode: EXCE00021
+        '202':
+          description: Request accepted for processing, but not yet completed.
+          content:
+            application/json:
+              examples:
+                Accepted Example:
+                  description: Accepted Example
+                  value:
+                    response: []
+                    success: true
+                    message: Request accepted and is being processed.
+                    errorCode: null
+        '400':
+          description: Invalid input, missing parameters.
+          content:
+            application/json:
+              examples:
+                Bad Request Example:
+                  description: Bad Request Example
+                  value:
+                    response: []
+                    success: false
+                    message: Invalid request parameters.
+                    errorCode: EXCE00028
+                Required Fields Can't Be Null Or Empty Example:
+                  description: Required Fields Can't Be Null Or Empty Example
+                  value:
+                    response: []
+                    success: false
+                    message: Fields cannot be null or empty..
+                    errorCode: EXCE00020
+        '401':
+          description: Invalid or missing Subscription key.
+          content:
+            application/json:
+              examples:
+                Invalid Subscription key Example:
+                  description: Invalid Subscription key Example
+                  value:
+                    statusCode: 401
+                    message: Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.
+        '405':
+          description: 'Request with incorrect HTTPS method. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                Method not allowed Example:
+                  description: Method not allowed Example
+                  value:
+                    statusCode: 405
+                    message: Method Not Allowed. Please use the correct HTTP method.
+        '429':
+          description: Too many requests sent in a short period. The client is being rate limited.
+          content:
+            application/json:
+              examples:
+                Too Many Request Example.:
+                  description: Too Many Request Example.
+                  value:
+                    statusCode: 429
+                    message: Too Many Requests. Please slow down and try again later.
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    statusCode: 500
+                    message: Internal server error. Please try again later or contact support.
+components:
+  schemas:
+    EntityDocumentListResDTO:
+      type: object
+      properties:
+        entityId:
+          type: string
+          description: Unique identifier of the entity, whose documents list is retrieved.
+          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
+        document:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentDto'
+          description: List of the document ID which are uploaded in the entity.
+      description: Response parameters when Entity's documents list is requested.
+    EntityDocumentReqDTO:
+      required:
+      - entityId
+      - userId
+      type: object
+      properties:
+        userId:
+          type: string
+          description: Unique identifier of the user, who sends request.
+          example: 4d32666b-5fa9-489f-93b1-1f5036bd2a41
+        entityId:
+          type: string
+          description: Unique identifier of the entity, whose documents list is requested.
+          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
+      description: Request parameters that is passed to retrieve documents list uploaded in the entity.
+    ApiResponse:
+      required:
+      - response
+      - success
+      - message
+      - errorCode
+      type: object
+      properties:
+        response:
+          type: array
+          items:
+            type: object
+            description: Contains the data retrieved by API in response for the request made.
+            example:
+            - id: '123'
+              name: Sample Data
+          description: Contains the data retrieved by API in response for the request made.
+          example:
+          - id: '123'
+            name: Sample Data
+        success:
+          type: boolean
+          description: Indicates the status of the request, specifying whether it was processed successfully.
+          example: true
+        message:
+          type: string
+          description: Explanation of the API response
+          example: Success
+        errorCode:
+          type: string
+          description: 'Error response on hitting API request.
+
+
+            null: No errors were encountered.
+
+
+            Error Code: A descriptive error code if request fails.'
+          example: EXCE00018
+      description: Generic API response wrapper containing parameters as follows; response data, success status, message, and error code.
+      xml:
+        name: ApiResponse
+    DocumentDetailsReqDTO:
+      required:
+      - companyId
+      - documentId
+      - userId
+      type: object
+      properties:
+        userId:
+          type: string
+          description: Unique identifier of the user, who sends request.
+          example: nejc493-dnixxx-43j34j9n-jdnxx9nio494nnc3ik
+        companyId:
+          type: string
+          description: Unique identifier of the entity, where the document is uploaded.
+          example: n3i-9jf3o94fj9-4949xxj9j-jdonm390d9jod0
+        documentId:
+          type: string
+          description: Unique identifier of the document.
+          example: dkjomn049-4jn3i30j-xxnmiw-zxniv49hf9
+      description: Request parameters that is passed to retrieve the document
+      xml:
+        name: documentDetailsReqDTO
+    DocumentDto:
+      type: object
+      properties:
+        documentId:
+          type: string
+          description: Unique identifier of the document.
+          example: bae84097-cac4-4270-a16d-61f1a7959aa1
+        documentName:
+          type: string
+          description: Name of the document.
+          example: FILE NAME (1).pdf
+        originalDocUrl:
+          type: string
+          description: Original document URL
+          example: bae84097-cac4-4270-a16d-61f1a7959aa1_original.pdf
+        selectedDocUrl:
+          type: string
+          description: Selected document URL
+          example: bae84097-cac4-4270-a16d-61f1a7959aa11747808507309_selected.pdf
+        docType:
+          type: string
+          description: Type of the document.
+          example: PDF
+        status:
+          type: string
+          description: Processing status of the document.
+          example: PROCESSING
+        processedOn:
+          type: string
+          description: Date and time details when docuements processing was completd.
+          example: '2025-05-21T06:20:55Z'
+        uploadedBy:
+          type: string
+          description: Name of the user who uploaded the document in the entity.
+          example: Mohit Garg
+      description: Details related to a particular document.
+  securitySchemes:
+    apiKeyHeader:
+      type: apiKey
+      name: subscription-key
+      in: header
+    apiKeyQuery:
+      type: apiKey
+      name: subscription-key
+      in: query

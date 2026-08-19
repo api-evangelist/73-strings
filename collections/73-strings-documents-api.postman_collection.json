@@ -1,0 +1,877 @@
+{
+  "item": [
+    {
+      "id": "e1c720e5-4ec2-47ae-8b3b-5f17416cfa2c",
+      "name": "Documents",
+      "description": {
+        "content": "The **Documents APIs**, a RESTful service on 73 Strings, provides a comprehensive information of the uploaded documents affiliated with the company in the funds across an organization in the 73 Strings platform. The API also, allows users to download documents from the platform.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4cc78d13-1036-4b43-9d63-363c7568c644",
+          "name": "Get Entity Document Download FIle",
+          "request": {
+            "name": "Get Entity Document Download FIle",
+            "description": {
+              "content": "The **Entity Document Download File API**  retrieves the content of documents that have been uploaded by users in the 73 Strings platform.\n\nThis API allows users to access crucial information contained within these documents, which can be essential for various tasks such as:\n- Extracting key financial and operational data.\n- Automating the organization and categorization of company information.\n- Facilitating compliance checks and due diligence processes.\n- Enhancing data accuracy and consistency for further analysis and valuation.\n\nThe features to extract information from the documents uploaded on 73 Extract and Monitor platform, helps users convert unstructured data to structured data",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "ems",
+                "getEntityDocumentDownloadFIle"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) A unique key that allows you to access and use an API",
+                "key": "subscription-key",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"companyId\": \"<string>\",\n  \"documentId\": \"<string>\",\n  \"userId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e8161958-ecf1-4c52-8cea-025d62012d03",
+              "name": "Retrieval of document file.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityDocumentDownloadFIle"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"nejxxx-xxxxx-xxxxxc3ik\",\n  \"companyId\": \"n3ixxx-xxxxx-xxxxxod10\",\n  \"documentId\": \"dkjxxx-xxxxx-xxxxx9hf9\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"%PDF-1.7\\n%����\\n1 0 obj\\n<</Type/Catalog/Pages 2 0 R/Lang(en-IN) /StructTreeRoot 14 0 R/MarkInfo<</Marked true>>/Metadata 305 0 R/ViewerPreferences 306 0 R>>\\nendobj\\n2 0 obj\\n<</Type/Pages/Count 1/Kids[ 4 0 R] >>\\nendobj\\n3 0 obj\\n<</Author(Sambeet Parija) /CreationDate(D:20221205174702+05'30') /ModDate(D:20221205174702+05'30') /Producer(��\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9e468bfe-5bb5-4915-bf77-55966063113f",
+              "name": "Request accepted for processing, but not yet completed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityDocumentDownloadFIle"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"nejxxx-xxxxx-xxxxxc3ik\",\n  \"companyId\": \"n3ixxx-xxxxx-xxxxxod10\",\n  \"documentId\": \"dkjxxx-xxxxx-xxxxx9hf9\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": true,\n  \"message\": \"Request accepted and is being processed.\",\n  \"errorCode\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4dc7865b-b953-445b-a7a0-8ebbce41b1b2",
+              "name": "Invalid input, missing parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityDocumentDownloadFIle"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"nejxxx-xxxxx-xxxxxc3ik\",\n  \"companyId\": \"n3ixxx-xxxxx-xxxxxod10\",\n  \"documentId\": \"dkjxxx-xxxxx-xxxxx9hf9\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": false,\n  \"message\": \"Invalid request parameters.\",\n  \"errorCode\": \"EXCE00028\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0ac1fb2c-9cd7-4ba4-ab95-b280ee83e385",
+              "name": "Invalid or missing Subscription key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityDocumentDownloadFIle"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"nejxxx-xxxxx-xxxxxc3ik\",\n  \"companyId\": \"n3ixxx-xxxxx-xxxxxod10\",\n  \"documentId\": \"dkjxxx-xxxxx-xxxxx9hf9\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"message\": \"Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5b731a2d-7206-446b-bceb-ce48598658e4",
+              "name": "Request with incorrect HTTPS method. ",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityDocumentDownloadFIle"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"nejxxx-xxxxx-xxxxxc3ik\",\n  \"companyId\": \"n3ixxx-xxxxx-xxxxxod10\",\n  \"documentId\": \"dkjxxx-xxxxx-xxxxx9hf9\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Method Not Allowed",
+              "code": 405,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 405,\n  \"message\": \"Method Not Allowed. Please use the correct HTTP method.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d90e1363-c10d-4f29-8b94-5e7c3609a484",
+              "name": "Too many requests sent in a short period. The client is being rate limited.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityDocumentDownloadFIle"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"nejxxx-xxxxx-xxxxxc3ik\",\n  \"companyId\": \"n3ixxx-xxxxx-xxxxxod10\",\n  \"documentId\": \"dkjxxx-xxxxx-xxxxx9hf9\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"message\": \"Too Many Requests. Please slow down and try again later.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "75818492-7e9b-4f22-831d-f1b57ab6283d",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityDocumentDownloadFIle"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"nejxxx-xxxxx-xxxxxc3ik\",\n  \"companyId\": \"n3ixxx-xxxxx-xxxxxod10\",\n  \"documentId\": \"dkjxxx-xxxxx-xxxxx9hf9\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 500,\n  \"message\": \"Internal server error. Please try again later or contact support.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ae9026e1-0c36-4564-b45c-ec80f8324479",
+          "name": "Get Entity Document List",
+          "request": {
+            "name": "Get Entity Document List",
+            "description": {
+              "content": "The 73 Strings products offer advanced tools for extracting and analyzing company information within private equity funds. The **Entity Documents List API** is designed to retrieve a comprehensive list of all documents uploaded in a entity by the users.\n\nThis API provides users with essential details about each document, ensuring they have quick access to important metadata information.\n\nBy leveraging the capabilities of the 73Extract and Monitor platform, fund managers, analysts, and investors can streamline their document management processes, enhancing their ability to manage and analyze their investments effectively.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "ems",
+                "getEntityDocumentList"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) A unique key that allows you to access and use an API",
+                "key": "subscription-key",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"entityId\": \"<string>\",\n  \"userId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3852cbae-045c-4640-a1a3-90b49e41b835",
+              "name": "Retrieval of document list.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityDocumentList"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"4d3xxx-xxxxx-xxxxx2a41\",\n  \"entityId\": \"b92xxx-xxxxx-xxxxx70e7\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": {\n    \"entityId\": \"b92xxx-xxxxx-xxxxx70e7\",\n    \"document\": [\n      {\n        \"documentId\": \"baexxx-xxxxx-xxxxx9aa1\",\n        \"documentName\": \"FILE NAME (1).pdf\",\n        \"originalDocUrl\": \"baexxx-xxxxx-xxxxx7959aa1_original.pdf\",\n        \"selectedDocUrl\": \"baexxx-xxxxx-xxxxx7309_selected.pdf\",\n        \"docType\": \"PDF\",\n        \"status\": \"PROCESSING\",\n        \"processedOn\": \"2025-05-21T06:20:55Z\",\n        \"uploadedBy\": \"Mohit Garg\"\n      },\n      {\n        \"documentId\": \"e51xxx-xxxxx-xxxxxc76c\",\n        \"documentName\": \"SureWerx Q1 25 Exhibit A Financials_test.pdf\",\n        \"originalDocUrl\": \"e51xxx-xxxxx-xxxxxc76c_original.pdf\",\n        \"selectedDocUrl\": \"e51xxx-xxxxx-xxxxx0854_selected.pdf\",\n        \"docType\": \"PDF\",\n        \"status\": \"PROCESSING\",\n        \"processedOn\": \"2025-05-26T08:29:45Z\",\n        \"uploadedBy\": \"chandrasekhar kalthireddy\"\n      }\n    ]\n  },\n  \"success\": true,\n  \"message\": \"Success\",\n  \"errorCode\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "af143352-238e-4f39-97aa-c886aacf7517",
+              "name": "Request accepted for processing, but not yet completed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityDocumentList"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"4d3xxx-xxxxx-xxxxx2a41\",\n  \"entityId\": \"b92xxx-xxxxx-xxxxx70e7\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": true,\n  \"message\": \"Request accepted and is being processed.\",\n  \"errorCode\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cea1ed06-d785-4279-b28a-b0937897e329",
+              "name": "Invalid input, missing parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityDocumentList"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"4d3xxx-xxxxx-xxxxx2a41\",\n  \"entityId\": \"b92xxx-xxxxx-xxxxx70e7\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": false,\n  \"message\": \"Invalid request parameters.\",\n  \"errorCode\": \"EXCE00028\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f6cb14b4-d894-415c-8ea5-1d0bc3ea8423",
+              "name": "Invalid or missing Subscription key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityDocumentList"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"4d3xxx-xxxxx-xxxxx2a41\",\n  \"entityId\": \"b92xxx-xxxxx-xxxxx70e7\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"message\": \"Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eb29ad06-1931-4294-9bae-c2f0530be974",
+              "name": "Request with incorrect HTTPS method. ",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityDocumentList"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"4d3xxx-xxxxx-xxxxx2a41\",\n  \"entityId\": \"b92xxx-xxxxx-xxxxx70e7\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Method Not Allowed",
+              "code": 405,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 405,\n  \"message\": \"Method Not Allowed. Please use the correct HTTP method.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "364f87d5-cb1f-4f5e-98ca-8b90a83b0646",
+              "name": "Too many requests sent in a short period. The client is being rate limited.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityDocumentList"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"4d3xxx-xxxxx-xxxxx2a41\",\n  \"entityId\": \"b92xxx-xxxxx-xxxxx70e7\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"message\": \"Too Many Requests. Please slow down and try again later.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b6116ec2-de3b-4750-b7b2-d4a6bd2eef7e",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityDocumentList"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"4d3xxx-xxxxx-xxxxx2a41\",\n  \"entityId\": \"b92xxx-xxxxx-xxxxx70e7\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 500,\n  \"message\": \"Internal server error. Please try again later or contact support.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-accord-eut-73strings.azure-api.net/documents",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "noauth"
+  },
+  "info": {
+    "_postman_id": "f315e514-2ee4-458e-9408-1f73f1687077",
+    "name": "Documents API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The **Documents APIs**, a RESTful service on 73 Strings, provides a comprehensive information of the uploaded documents affiliated with the company in the funds across an organization in the 73 Strings platform. The API also, allows users to download documents from the platform.\n\nContact Support:\n Email: support@73strings.com",
+      "type": "text/plain"
+    }
+  }
+}

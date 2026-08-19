@@ -1,0 +1,1029 @@
+openapi: 3.2.0
+info:
+  title: Asset Info API
+  description: The **Asset Info APIs**, a RESTful service on 73 Strings, provides detailed company insights, enabling efficient portfolio management, investment analysis, and seamless data retrieval across an organization in the 73 Strings platform.
+  contact:
+    name: ''
+    email: support@73strings.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: '1.0'
+servers:
+- url: https://api-accord-eut-73strings.azure-api.net/assetinfo
+security:
+- {}
+- apiKeyHeader: []
+- apiKeyQuery: []
+tags:
+- name: Asset Info
+  description: The **Asset Info APIs**, a RESTful service on 73 Strings, provides detailed company insights, enabling efficient portfolio management, investment analysis, and seamless data retrieval across an organization in the 73 Strings platform.
+paths:
+  /api/v1/ems/getEntityAttributeIds:
+    post:
+      operationId: getAttributeIDs
+      summary: Get Attributes List
+      tags:
+      - Asset Info
+      description: 'This endpoint fetches attribute IDs,Name,Categorical tag based on the provided request data.
+
+        The API requires a subscription key which must be passed as a header for authentication.
+
+        The request body contains necessary parameters/body like OrgId , and the response returns a list of attribute ID mappings.'
+      parameters:
+      - name: subscription-key
+        in: header
+        required: true
+        description: A unique key that allows you to access and use an API
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttributeIdsDataDTO'
+            examples:
+              default:
+                value:
+                  userId: 4d32666b-5fa9-xxx9-93b1-1f5036bd2a41
+                  orgId: 2746c10b-70cb-4xxx-b320-23d2768614e
+        description: Request payload containing org id.
+      responses:
+        '200':
+          description: Successfully retrieved aggregateIds data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityAttributeResDTO'
+              examples:
+                Success Example:
+                  description: Success Example
+                  value:
+                    response:
+                      data:
+                      - attributeName: (EBITDA-CAPEX) / Interest Exp.
+                        attributeId: 70fxxx-xxxxx-xxxxx9778
+                        tag: Ratio Analysis
+                        attributeType: NUMERICAL
+                        displayProperty: ABSOLUTE_NUMBER
+                    success: true
+                    message: Success
+                    errorCode: null
+                No Data Example:
+                  description: No Data Example
+                  value:
+                    response: []
+                    success: false
+                    message: Data not found.
+                    errorCode: EXCE00021
+        '202':
+          description: Request accepted for processing, but not yet completed.
+          content:
+            application/json:
+              examples:
+                Accepted Example:
+                  description: Accepted Example
+                  value:
+                    response: []
+                    success: true
+                    message: Request accepted and is being processed.
+                    errorCode: null
+        '400':
+          description: Invalid input, missing parameters.
+          content:
+            application/json:
+              examples:
+                Bad Request Example:
+                  description: Bad Request Example
+                  value:
+                    response: []
+                    success: false
+                    message: Invalid request parameters.
+                    errorCode: EXCE00028
+                Required Fields Can't Be Null Or Empty Example:
+                  description: Required Fields Can't Be Null Or Empty Example
+                  value:
+                    response: []
+                    success: false
+                    message: Fields cannot be null or empty..
+                    errorCode: EXCE00020
+        '401':
+          description: Invalid or missing Subscription key.
+          content:
+            application/json:
+              examples:
+                Invalid Subscription key Example:
+                  description: Invalid Subscription key Example
+                  value:
+                    statusCode: 401
+                    message: Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.
+        '405':
+          description: 'Request with incorrect HTTPS method. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                Method not allowed Example:
+                  description: Method not allowed Example
+                  value:
+                    statusCode: 405
+                    message: Method Not Allowed. Please use the correct HTTP method.
+        '429':
+          description: Too many requests sent in a short period. The client is being rate limited.
+          content:
+            application/json:
+              examples:
+                Too Many Request Example.:
+                  description: Too Many Request Example.
+                  value:
+                    statusCode: 429
+                    message: Too Many Requests. Please slow down and try again later.
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    statusCode: 500
+                    message: Internal server error. Please try again later or contact support.
+  /api/v1/ems/getEntityBusinessUnits:
+    post:
+      operationId: getEntityBusinessUnits
+      summary: Get Business Units
+      tags:
+      - Asset Info
+      description: This API ingests the organization ID, user ID, and company ID, and returns a list of all business unit names and IDs linked to the specified company. If the company ID is null, the API returns a list of all businesses present in the organization.
+      parameters:
+      - name: subscription-key
+        in: header
+        required: true
+        description: A unique key that allows you to access and use an API
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BusinessUnitReqDTO'
+            examples:
+              default:
+                value:
+                  userId: effexxx-xxxxx-xxxxx6a1892
+                  orgId: e5dxxxx-xxxxxx-xxxxx7d7
+                  companyId: 0c7xxxx-3cfa-xxxxxx-b506-d3axxxxb1
+        description: Request payload containing userId, orgId, and companyId for retrieving entity business units.
+      responses:
+        '200':
+          description: Successful response containing the list of business units.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrgBusinessUnitsRespDTO'
+              examples:
+                Success Example:
+                  description: Success Example
+                  value:
+                    response:
+                    - organizationId: e5dxxx-xxxxx-xxxxx17d7
+                      companyId: 0c7xxx-xxxxx-xxxxx09b1
+                      companyName: Dubai Arena
+                      businessUnits:
+                      - businessUnitId: f1axxx-xxxxx-xxxxx04fb
+                        businessUnitName: testBU
+                        archive: false
+                    success: true
+                    message: Success
+                    errorCode: null
+                No Data Example:
+                  description: No Data Example
+                  value:
+                    response: []
+                    success: false
+                    message: Data not found.
+                    errorCode: EXCE00021
+        '202':
+          description: Request accepted for processing, but not yet completed.
+          content:
+            application/json:
+              examples:
+                Accepted Example:
+                  description: Accepted Example
+                  value:
+                    response: []
+                    success: true
+                    message: Request accepted and is being processed.
+                    errorCode: null
+        '400':
+          description: Invalid input, missing parameters.
+          content:
+            application/json:
+              examples:
+                Bad Request Example:
+                  description: Bad Request Example
+                  value:
+                    response: []
+                    success: false
+                    message: Invalid request parameters.
+                    errorCode: EXCE00028
+                Required Fields Can't Be Null Or Empty Example:
+                  description: Required Fields Can't Be Null Or Empty Example
+                  value:
+                    response: []
+                    success: false
+                    message: Fields cannot be null or empty..
+                    errorCode: EXCE00020
+        '401':
+          description: Invalid or missing Subscription key.
+          content:
+            application/json:
+              examples:
+                Invalid Subscription key Example:
+                  description: Invalid Subscription key Example
+                  value:
+                    statusCode: 401
+                    message: Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.
+        '405':
+          description: 'Request with incorrect HTTPS method. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                Method not allowed Example:
+                  description: Method not allowed Example
+                  value:
+                    statusCode: 405
+                    message: Method Not Allowed. Please use the correct HTTP method.
+        '429':
+          description: Too many requests sent in a short period. The client is being rate limited.
+          content:
+            application/json:
+              examples:
+                Too Many Request Example.:
+                  description: Too Many Request Example.
+                  value:
+                    statusCode: 429
+                    message: Too Many Requests. Please slow down and try again later.
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    statusCode: 500
+                    message: Internal server error. Please try again later or contact support.
+  /api/v1/ems/getEntityList:
+    post:
+      operationId: getEntityList
+      summary: Get Entity List
+      tags:
+      - Asset Info
+      description: '73 Strings provide platforms to users for the valuation of funds, companies and securities of their investments. The getFundAndCompanyList API retrieves funds and companies list a specific user has access to. It enables tracking and management of user related entities.
+
+
+        This API can be particularly useful for admins handling user management and who to gather entities to which user has access. By leveraging the capabilities of this API, admins can easily enhance their ability to manage user access to multitude of fund entities.'
+      parameters:
+      - name: subscription-key
+        in: header
+        required: true
+        description: A unique key that allows you to access and use an API
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntityListReqDTO'
+            examples:
+              default:
+                value:
+                  userId: effexxx-xxxxx-xxxxx6a1892
+                  orgId: e5dxxxx-xxxxxx-xxxxx7d7
+        description: Request payload containing entity list userId,orgId for retrieving entity list.
+      responses:
+        '200':
+          description: Successful retrieval of entity.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityListResDTO'
+              examples:
+                Success Example:
+                  description: Success Example
+                  value: '{"response":{"data":{"orgId":"cfcxxx-xxxxx-xxxxx123c","userId":"d2daxxx-xxxxx-xxxxxf458","entities":[{"entityId":"395xxx-xxxxx-xxxxx4960","name":"abc","layer":"Portfolio Company","layerId":"62bxxx-xxxxx-xxxxx6831","type":"Portfolio Company","entityType":"INTERNAL","status":"ACTIVE"}],"totalRecords":1},"success":true,"message":"Success","errorCode":null}'
+                No Data Example:
+                  description: No Data Example
+                  value:
+                    response: []
+                    success: false
+                    message: Data not found.
+                    errorCode: EXCE00021
+        '202':
+          description: Request accepted for processing, but not yet completed.
+          content:
+            application/json:
+              examples:
+                Accepted Example:
+                  description: Accepted Example
+                  value:
+                    response: []
+                    success: true
+                    message: Request accepted and is being processed.
+                    errorCode: null
+        '400':
+          description: Invalid input, missing parameters.
+          content:
+            application/json:
+              examples:
+                Bad Request Example:
+                  description: Bad Request Example
+                  value:
+                    response: []
+                    success: false
+                    message: Invalid request parameters.
+                    errorCode: EXCE00028
+                Required Fields Can't Be Null Or Empty Example:
+                  description: Required Fields Can't Be Null Or Empty Example
+                  value:
+                    response: []
+                    success: false
+                    message: Fields cannot be null or empty..
+                    errorCode: EXCE00020
+        '401':
+          description: Invalid or missing Subscription key.
+          content:
+            application/json:
+              examples:
+                Invalid Subscription key Example:
+                  description: Invalid Subscription key Example
+                  value:
+                    statusCode: 401
+                    message: Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.
+        '405':
+          description: 'Request with incorrect HTTPS method. '
+          content:
+            application/json:
+              examples:
+                Method not allowed Example:
+                  description: Method not allowed Example
+                  value:
+                    statusCode: 405
+                    message: Method Not Allowed. Please use the correct HTTP method.
+        '429':
+          description: Too many requests sent in a short period. The client is being rate limited.
+          content:
+            application/json:
+              examples:
+                Too Many Request Example.:
+                  description: Too Many Request Example.
+                  value:
+                    statusCode: 429
+                    message: Too Many Requests. Please slow down and try again later.
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    statusCode: 500
+                    message: Internal server error. Please try again later or contact support.
+  /api/v1/ems/getEntitySecuritiesList:
+    post:
+      operationId: getEntitySecuritiesList
+      summary: Get Securities List
+      tags:
+      - Asset Info
+      description: '73 Strings provide platforms to users for the valuation of funds, companies and securities of their investments. The getFundAndCompanyList API retrieves funds and companies list a specific user has access to. It enables tracking and management of user related entities.
+
+
+        This API can be particularly useful for admins handling user management and who to gather entities to which user has access. By leveraging the capabilities of this API, admins can easily enhance their ability to manage user access to multitude of fund entities.'
+      parameters:
+      - name: subscription-key
+        in: header
+        required: true
+        description: A unique key that allows you to access and use an API
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntitySecurityListReqDTO'
+            examples:
+              default:
+                value:
+                  orgId: e5dxxxx-xxxxxx-xxxxx7d7
+                  userId: effexxx-xxxxx-xxxxx6a1892
+                  entityId: 0c7xxxx-3cfa-xxxxxx-b506-d3axxxxb1
+                  module: a1
+        description: Request payload containing orgId, userId, entityId and module for retrieving entity list.
+      responses:
+        '200':
+          description: Successful retrieval of entity.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntitySecurityListResDTO'
+              examples:
+                Success Example:
+                  description: Success Example
+                  value:
+                    response:
+                      data:
+                        orgId: b92xxx-xxxxx-xxxxx70e7
+                        userId: b92xxx-xxxxx-xxxxx4502
+                        entities:
+                        - entityId: baexxx-xxxxx-xxxxx9aa1
+                          name: 123new
+                          layer: GP1
+                          layerId: 8e5xxx-xxxxx-xxxxxca8d
+                          type: Portfolio Company
+                          entityType: INTERNAL
+                          status: ACTIVE
+                          securities:
+                          - id: 1b8xxx-xxxxx-xxxxx457d
+                            name: sec yp 1
+                            externalSecurityId: b7exxx-xxxxx-xxxxxf088
+                            issuerEntityId: 8e5xxx-xxxxx-xxxxxca8d
+                            type: Portfolio Company
+                            valid: false
+                        totalRecords: 1
+                    success: true
+                    message: Success
+                    errorCode: null
+                No Data Example:
+                  description: No Data Example
+                  value:
+                    response: []
+                    success: false
+                    message: Data not found.
+                    errorCode: EXCE00021
+        '202':
+          description: Request accepted for processing, but not yet completed.
+          content:
+            application/json:
+              examples:
+                Accepted Example:
+                  description: Accepted Example
+                  value:
+                    response: []
+                    success: true
+                    message: Request accepted and is being processed.
+                    errorCode: null
+        '400':
+          description: Invalid input, missing parameters.
+          content:
+            application/json:
+              examples:
+                Bad Request Example:
+                  description: Bad Request Example
+                  value:
+                    response: []
+                    success: false
+                    message: Invalid request parameters.
+                    errorCode: EXCE00028
+                Required Fields Can't Be Null Or Empty Example:
+                  description: Required Fields Can't Be Null Or Empty Example
+                  value:
+                    response: []
+                    success: false
+                    message: Fields cannot be null or empty..
+                    errorCode: EXCE00020
+        '401':
+          description: Invalid or missing Subscription key.
+          content:
+            application/json:
+              examples:
+                Invalid Subscription key Example:
+                  description: Invalid Subscription key Example
+                  value:
+                    statusCode: 401
+                    message: Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.
+        '405':
+          description: 'Request with incorrect HTTPS method. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                Method not allowed Example:
+                  description: Method not allowed Example
+                  value:
+                    statusCode: 405
+                    message: Method Not Allowed. Please use the correct HTTP method.
+        '429':
+          description: Too many requests sent in a short period. The client is being rate limited.
+          content:
+            application/json:
+              examples:
+                Too Many Request Example.:
+                  description: Too Many Request Example.
+                  value:
+                    statusCode: 429
+                    message: Too Many Requests. Please slow down and try again later.
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    statusCode: 500
+                    message: Internal server error. Please try again later or contact support.
+  /api/v1/version-list:
+    post:
+      operationId: getVersionList
+      summary: Get Version List
+      tags:
+      - Asset Info
+      description: '73 Strings provide platforms to users for the valuation of funds, companies and securities of their investments. The getVersionList API retrieves funds and companies list a specific user has access to. It enables tracking and management of user related entities.
+
+
+        This API can be particularly useful for admins handling user management and who to gather entities to which user has access. By leveraging the capabilities of this API, admins can easily enhance their ability to manage user access to multitude of fund entities.'
+      parameters:
+      - name: subscription-key
+        in: header
+        required: true
+        description: A unique key that allows you to access and use an API
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VersionListReqDTO'
+            examples:
+              default:
+                value:
+                  userId: e5dxxxx-xxxxxx-xxxxx7d7
+                  orgId: effexxx-xxxxx-xxxxx6a1892
+        description: Request payload containing userId and orgId for retrieving version-list.
+      responses:
+        '200':
+          description: Successful retrieval of entity.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionListResDTO'
+              examples:
+                Success Example:
+                  description: Success Example
+                  value:
+                    response:
+                      orgId: cfcxxx-xxxxx-xxxxx123c
+                      versionsData:
+                      - versionId: 793xxx-xxxxx-xxxxx5e59
+                        versionName: Actual
+                        active: true
+                    success: true
+                    message: Success
+                    errorCode: null
+                No Data Example:
+                  description: No Data Example
+                  value:
+                    response: []
+                    success: false
+                    message: Data not found.
+                    errorCode: EXCE00021
+        '202':
+          description: Request accepted for processing, but not yet completed.
+          content:
+            application/json:
+              examples:
+                Accepted Example:
+                  description: Accepted Example
+                  value:
+                    response: []
+                    success: true
+                    message: Request accepted and is being processed.
+                    errorCode: null
+        '400':
+          description: Invalid input, missing parameters.
+          content:
+            application/json:
+              examples:
+                Bad Request Example:
+                  description: Bad Request Example
+                  value:
+                    response: []
+                    success: false
+                    message: Invalid request parameters.
+                    errorCode: EXCE00028
+                Required Fields Can't Be Null Or Empty Example:
+                  description: Required Fields Can't Be Null Or Empty Example
+                  value:
+                    response: []
+                    success: false
+                    message: Fields cannot be null or empty..
+                    errorCode: EXCE00020
+        '401':
+          description: Invalid or missing Subscription key.
+          content:
+            application/json:
+              examples:
+                Invalid Subscription key Example:
+                  description: Invalid Subscription key Example
+                  value:
+                    statusCode: 401
+                    message: Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.
+        '405':
+          description: 'Request with incorrect HTTPS method. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                Method not allowed Example:
+                  description: Method not allowed Example
+                  value:
+                    statusCode: 405
+                    message: Method Not Allowed. Please use the correct HTTP method.
+        '429':
+          description: Too many requests sent in a short period. The client is being rate limited.
+          content:
+            application/json:
+              examples:
+                Too Many Request Example.:
+                  description: Too Many Request Example.
+                  value:
+                    statusCode: 429
+                    message: Too Many Requests. Please slow down and try again later.
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    statusCode: 500
+                    message: Internal server error. Please try again later or contact support.
+components:
+  schemas:
+    CompBusinessUnitsRespDTO:
+      type: object
+      properties:
+        companyId:
+          type: string
+          description: Unique identifier of a company
+        companyName:
+          type: string
+          description: Name of the company
+        businessUnits:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessUnitsRespDTO'
+          description: Contains the business unit details.
+      description: Details of the company and its business units.
+    Entities:
+      type: object
+      properties:
+        entityId:
+          type: string
+          description: Unique identifier of the entity.
+          example: bae84097-cac4-4270-a16d-61f1a7959aa1
+        name:
+          type: string
+          description: Name of the entity.
+          example: 123new
+        layer:
+          type: string
+          description: Layer to which entity belongs.
+          example: GP1
+        layerId:
+          type: string
+          description: Unique identifier of the layer.
+          example: 8e59599f-6065-41e7-ad03-85a45ea1ca8d
+        type:
+          type: string
+          description: Type of layer.
+          example: Portfolio Company
+        entityType:
+          type: string
+          description: Entity Type.
+          example: INTERNAL
+        status:
+          type: string
+          description: Status of the entity in the organization.
+          example: ACTIVE
+        securities:
+          type: array
+          items:
+            $ref: '#/components/schemas/securities'
+          description: Contains the list of securities in the entity.
+      description: Contains the list of entites in the organization.
+    BusinessUnitReqDTO:
+      required:
+      - orgId
+      - userId
+      type: object
+      properties:
+        userId:
+          type: string
+          description: Unique identifier of the user.
+          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
+        orgId:
+          type: string
+          description: Unique identifier of the organization.
+          example: a32ce0c7-63f6-6575-b59a-6c9fb54978r3
+        companyId:
+          type: string
+          description: 'Unique identifier of the entity. Can be fetched from the Entity List APi '
+          example: b12ce0c7-63f6-4177-b59a-6c9fb5497lo1
+      description: Request parameters that is passed to retrieve Business units list created for the entity.
+      xml:
+        name: Request body of Business Units Data
+    AttributeIdsDataDTO:
+      required:
+      - orgId
+      - userId
+      type: object
+      properties:
+        orgId:
+          type: string
+          description: Org Identifier on 73 Strings Platform; Shared by 73 Strings team.
+          example: 2ab25cdf-1426-xxxx-a412-yyyy9cd40df4
+        userId:
+          type: string
+          description: Unique Identifier For User.
+          example: 4cb25cdf-1426-xxxx-a412-yyyy9cd40rt3
+      description: Request parameters that is passed to retrieve Attribute lists that exists in the organization.
+      xml:
+        name: Request body of Business Units Data
+    EntityListReqDTO:
+      required:
+      - userId
+      type: object
+      properties:
+        userId:
+          type: string
+          description: Unique identifier of the user.
+          example: 4d32666b-5fa9-489f-93b1-1f5036bd2a41
+        orgId:
+          type: string
+          description: Unique identifier of the organization.
+          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
+      description: Request parameters that is passed to retrieve entity list of the organization.
+      xml:
+        name: Request body of Entity List
+    VersionListReqDTO:
+      required:
+      - orgId
+      - userId
+      type: object
+      properties:
+        userId:
+          type: string
+          description: Unique identifier of the user.
+          example: 61q2ce0c7-63f6-4177-b59a-6c9fb5497b21
+        orgId:
+          type: string
+          description: 'Unique identifier of the organization. '
+          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
+      description: Request parameters that is passed to retrieve list of versions that exist in the organization.
+      xml:
+        name: Request body of Version List
+    EntitySecurityListReqDTO:
+      required:
+      - orgId
+      - userId
+      type: object
+      properties:
+        orgId:
+          type: string
+          description: Unique identifier of the organization.
+          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
+        userId:
+          type: string
+          description: Unique identifier of the user.
+          example: a12ce0c7-5463-982-b59a-6c9fb549540e
+        entityId:
+          type: string
+          description: Unique identifier of the entity.
+          example: c32ce0c7-63f6-9817-b59a-6c9fb5497837
+        module:
+          type: string
+          description: 'Name of the module.
+
+            **EQUITY**,
+
+            **CREDIT**,
+
+            **MONITORING**'
+          example: a1
+      description: Request parameters that is passed to retrieve list of securities created in the entity.
+      xml:
+        name: Request body of Entity Security List
+    VersionsData:
+      type: object
+      properties:
+        versionId:
+          type: string
+          description: Unique identifier of the version.
+          example: bae84097-cac4-4270-a16d-61f1a7959aa1
+        versionName:
+          type: string
+          description: Name of the version.
+          example: ACT
+        active:
+          type: boolean
+          description: Indicates status of the version, whether it's active.
+          example: false
+      description: Contains the details of the version.
+    EntityListResDTO:
+      type: object
+      properties:
+        orgId:
+          type: string
+          description: Org ID
+          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
+        userId:
+          type: string
+          description: Unique identifier of the user.
+          example: b92ce0c7-63f6-4177-b59a-6c9fb5494502
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Entities'
+          description: Contains the list of entites in the organization.
+      description: Response parameters when entity list is requested.
+    OrgBusinessUnitsRespDTO:
+      type: object
+      properties:
+        organizationId:
+          type: string
+          description: Unique identifier associated with the organization.
+          example: 4839fbd20-8534gf3bzzxxxx-0958htf3d924fg8bvuc
+        companies:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompBusinessUnitsRespDTO'
+          description: Details of the company and its business units.
+      description: Response parameters when business units of the entities in the organization is requested.
+      xml:
+        name: Business Units Data
+    EntitySecurityListResDTO:
+      type: object
+      properties:
+        orgId:
+          type: string
+          description: Unique identifier of the organiation.
+          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
+        userId:
+          type: string
+          description: Unique identifier of the user.
+          example: b92ce0c7-63f6-4177-b59a-6c9fb5494502
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Entities'
+          description: Details of the entity requested.
+      description: Response parameters when security list of the entity is requested.
+    BusinessUnitsRespDTO:
+      type: object
+      properties:
+        businessUnitId:
+          type: string
+          description: Unique identifier of a business unit.
+        businessUnitName:
+          type: string
+          description: Name of the business unit.
+        archive:
+          type: boolean
+          description: Indicates the status of the business unit, whether it's archieve.
+      description: Contains the business unit details.
+    ApiResponse:
+      required:
+      - response
+      - success
+      - message
+      - errorCode
+      type: object
+      properties:
+        response:
+          type: array
+          items:
+            type: object
+            description: Contains the data retrieved by API in response for the request made.
+            example:
+            - id: '123'
+              name: Sample Data
+          description: Contains the data retrieved by API in response for the request made.
+          example:
+          - id: '123'
+            name: Sample Data
+        success:
+          type: boolean
+          description: Indicates the status of the request, specifying whether it was processed successfully.
+          example: true
+        message:
+          type: string
+          description: Explanation of the API response
+          example: Success
+        errorCode:
+          type: string
+          description: 'Error response on hitting API request.
+
+
+            null: No errors were encountered.
+
+
+            Error Code: A descriptive error code if request fails.'
+          example: EXCE00018
+      description: Generic API response wrapper containing parameters as follows; response data, success status, message, and error code.
+      xml:
+        name: ApiResponse
+    EntityAttributeResDTO:
+      type: object
+      properties:
+        attributeName:
+          type: string
+          description: Name of the attribute.
+          example: (EBITDA-CAPEX) / Interest Exp.
+        attributeId:
+          type: string
+          description: Unique identifier of the attribute.
+          example: 70f694a5-746e-11ec-a730-249684d39778
+        tag:
+          type: string
+          description: Financial tag to which the attribute belongs; such as Income Statement, Balance Sheet, Cash Flow etc.
+          example: Ratio Analysis
+        attributeType:
+          type: string
+          description: 'Category of the attribute.
+
+
+            **TEXT** or ** NUMERICAL**.'
+          example: NUMERICAL
+        displayProperty:
+          type: string
+          description: 'Display Property of the numerical attributes; such as Count, Absolute Number, Currency etc
+
+            '
+          example: ABSOLUTE_NUMBER
+      description: Response parameters when organization's attribute list is requested.
+      xml:
+        name: Entity Attribute ids
+    VersionListResDTO:
+      type: object
+      properties:
+        orgId:
+          type: string
+          description: Unique identifier of the organization.
+          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
+        versionsData:
+          type: array
+          items:
+            $ref: '#/components/schemas/VersionsData'
+          description: Contains the details of the version.
+      description: Response parameters when organization's version list is requested.
+    securities:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID
+          example: 1b84ef32-399c-47db-bb18-bc5428e5457d
+        name:
+          type: string
+          description: Name
+          example: sec yp 1
+        externalSecurityId:
+          type: string
+          description: External Security ID
+          example: b7eb2b8f-df3b-4b7a-9675-012ac2f3f088
+        issuerEntityId:
+          type: string
+          description: Issuer EntityId ID
+          example: 8e59599f-6065-41e7-ad03-85a45ea1ca8d
+        type:
+          type: string
+          description: Type
+          example: Portfolio Company
+        valid:
+          type: boolean
+          description: Valid
+          example: false
+      description: Response dto for Securities
+  securitySchemes:
+    apiKeyHeader:
+      type: apiKey
+      name: subscription-key
+      in: header
+    apiKeyQuery:
+      type: apiKey
+      name: subscription-key
+      in: query

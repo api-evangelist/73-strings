@@ -1,0 +1,681 @@
+openapi: 3.2.0
+info:
+  title: Captable API
+  description: The **Captable APIs**, a RESTful service on 73 Strings, provides comprehensive capital table data including securities, equity, cash positions, and key financial metrics for entities within an organization. The API enables users to retrieve detailed captable information with various aggregations and groupings.
+  contact:
+    name: ''
+    email: support@73strings.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: '1.0'
+servers:
+- url: https://api-accord-eut-73strings.azure-api.net/captable
+security:
+- {}
+- apiKeyHeader: []
+- apiKeyQuery: []
+tags:
+- name: Captable
+  description: The **Captable APIs**, a RESTful service on 73 Strings, provides comprehensive capital table data including securities, equity, cash positions, and key financial metrics for entities within an organization. The API enables users to retrieve detailed captable information with various aggregations and groupings.
+paths:
+  /api/v1/ems/captable/data:
+    post:
+      operationId: getCaptableData
+      summary: Get Captable Data
+      tags:
+      - Captable
+      description: 'The **Captable Data API** retrieves comprehensive capital table information for a specific entity, including security details, equity positions, cash balances, and key financial metrics. This API provides aggregated views of the capital structure across different reporting dates and security groups, enabling detailed analysis of ownership percentages, debt structures, and financial leverage ratios.
+
+
+        Key features include:
+
+        - Security grouping and aggregation by type (e.g., First Lien)
+
+        - Detailed key metrics for financial analysis
+
+        - Cash and equity position reporting
+
+        - Multi-dimensional reporting date aggregations
+
+        - Ownership percentage calculations'
+      parameters:
+      - name: subscription-key
+        in: header
+        required: true
+        description: A unique key that allows you to access and use an API
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CaptableDataReqDTO'
+            examples:
+              default:
+                value:
+                  userId: d2dae30f-7570-4f24-8cc5-e7ead4baf458
+                  orgId: cfcbb891-1838-48e7-98db-57142094123c
+                  entityId: 64f1db13-91cc-46be-85f1-a963cec04899
+                  version: Actual
+                  uploadDate: '2025-11-17'
+        description: Request body containing UserId, OrgId, EntityId, Version, and UploadDate for fetching captable data.
+      responses:
+        '200':
+          description: Successful retrieval of captable data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CaptableDataResDTO'
+              examples:
+                Successful retrieval of captable data Example:
+                  description: Successful retrieval of captable data Example
+                  value:
+                    response:
+                      captableHomePage:
+                        id: 9fd0de0b-0f9c-4872-bedb-f0b6e6b600a7
+                        valuationDate: null
+                        version: Actual
+                        uploadDate: '2025-11-17'
+                        currency: USD
+                        unit: Millions
+                        orgId: cfcbb891-1838-48e7-98db-57142094123c
+                        entityId: 64f1db13-91cc-46be-85f1-a963cec04899
+                      reportingDates:
+                      - id: 178c2e75-23bb-41d3-851f-3712c9cdb83c
+                        reportingDate: '2021-12-31'
+                        orgId: cfcbb891-1838-48e7-98db-57142094123c
+                        entityId: 64f1db13-91cc-46be-85f1-a963cec04899
+                        uploadDate: '2025-11-17'
+                        visibility: true
+                      homePageGroupedSecurityList:
+                      - groupedSecurityData:
+                          securityGroupName: First Lien
+                          aggregateList:
+                          - id: 178c2e75-23bb-41d3-851f-3712c9cdb83c
+                            totalAmountOutstanding: 20
+                            totalDisplayValue: 20
+                            totalOwnershipPercentage: 10
+                            reportingDate: '2021-12-31'
+                            keyMetricData:
+                              reportingDate: '2021-12-31'
+                              keyMetrics:
+                              - metricKey: paid_interest_rate
+                                metricValue: '-'
+                                displayName: Paid Interest Rate
+                            ownedStake: 2
+                      displayName: Total Debt
+                      cashDisplayName: Total Net Debt
+                      equityDisplayName: Total Capitalization
+                      totalEquityDisplayName: Total Equity
+                      captableId: 9fd0de0b-0f9c-4872-bedb-f0b6e6b600a7
+                      isAtleastOneCaptableExists: null
+                      financial_metric_enabled: false
+                      financialMetricData: null
+                      isRankValidationFailed: false
+                      rankValidationMessage: All ranks validated successfully.
+                      isEntityManagementApiEnabled: true
+                    success: true
+                    message: Success
+                    errorCode: null
+        '202':
+          description: Request accepted for processing, but not yet completed.
+          content:
+            application/json:
+              examples:
+                Accepted Example:
+                  description: Accepted Example
+                  value:
+                    response: []
+                    success: true
+                    message: Request accepted and is being processed.
+                    errorCode: null
+        '400':
+          description: Invalid input, missing parameters.
+          content:
+            application/json:
+              examples:
+                Bad Request Example:
+                  description: Bad Request Example
+                  value:
+                    response: []
+                    success: false
+                    message: Invalid request parameters.
+                    errorCode: EXCE00028
+                Required Fields Can't Be Null Or Empty Example:
+                  description: Required Fields Can't Be Null Or Empty Example
+                  value:
+                    response: []
+                    success: false
+                    message: Fields cannot be null or empty.
+                    errorCode: EXCE00020
+        '401':
+          description: Invalid or missing Subscription key.
+          content:
+            application/json:
+              examples:
+                Invalid Subscription key Example:
+                  description: Invalid Subscription key Example
+                  value:
+                    statusCode: 401
+                    message: Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.
+        '405':
+          description: Request with incorrect HTTPS method.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              examples:
+                Method not allowed Example:
+                  description: Method not allowed Example
+                  value:
+                    statusCode: 405
+                    message: Method Not Allowed. Please use the correct HTTP method.
+        '429':
+          description: Too many requests sent in a short period. The client is being rate limited.
+          content:
+            application/json:
+              examples:
+                Too Many Request Example.:
+                  description: Too Many Request Example.
+                  value:
+                    statusCode: 429
+                    message: Too Many Requests. Please slow down and try again later.
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    statusCode: 500
+                    message: Internal server error. Please try again later or contact support.
+components:
+  schemas:
+    CaptableDataResDTO:
+      type: object
+      properties:
+        response:
+          $ref: '#/components/schemas/CaptableResponse'
+        success:
+          type: boolean
+          description: Indicates the status of the request, specifying whether it was processed successfully.
+          example: true
+        message:
+          type: string
+          description: Explanation of the API response
+          example: Success
+        errorCode:
+          type: string
+          description: 'Error response on hitting API request.
+
+
+            null: No errors were encountered.
+
+
+            Error Code: A descriptive error code if request fails.'
+          example: EXCE00018
+      description: Response parameters when captable data is requested.
+    GroupedSecurityData:
+      type: object
+      properties:
+        securityGroupName:
+          type: string
+          description: Name of the security group
+          example: First Lien
+        aggregateList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportingDateAggregate'
+    CaptableDataReqDTO:
+      required:
+      - userId
+      - orgId
+      - entityId
+      - version
+      - uploadDate
+      type: object
+      properties:
+        userId:
+          type: string
+          description: Unique identifier of the user who sends request.
+          example: d2dae30f-7570-4f24-8cc5-e7ead4baf458
+        orgId:
+          type: string
+          description: Unique identifier of the organization.
+          example: cfcbb891-1838-48e7-98db-57142094123c
+        entityId:
+          type: string
+          description: Unique identifier of the entity for which captable data is requested.
+          example: 64f1db13-91cc-46be-85f1-a963cec04899
+        version:
+          type: string
+          description: Version of the captable data (e.g., Actual, Budget).
+          example: Actual
+        uploadDate:
+          type: string
+          description: The upload date of the captable data in YYYY-MM-DD format.
+          format: date
+          example: '2025-11-17'
+      description: Request parameters for retrieving captable data.
+    GroupedEquityEntityResponse:
+      type: object
+      properties:
+        equityCategoryName:
+          type: string
+          description: Name of the equity category
+          example: Equity 1
+        equityEntities:
+          type: array
+          items:
+            $ref: '#/components/schemas/EquityEntity'
+    KeyMetricData:
+      type: object
+      properties:
+        reportingDate:
+          type: string
+          description: Reporting date for the metrics
+          format: date
+        keyMetrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeyMetric'
+    SecurityData:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the security
+        linkedSecurityId:
+          type: string
+          description: Linked security identifier
+        orgId:
+          type: string
+          description: Unique identifier of the organization
+        entityId:
+          type: string
+          description: Unique identifier of the entity
+        securityType:
+          type: string
+          description: Type of security
+          example: external
+        securityName:
+          type: string
+          description: Name of the security
+          example: Loan 17-11
+        securityRank:
+          type: string
+          description: Rank of the security
+          example: '1'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SecurityDataDetail'
+        securityGroup:
+          type: string
+          description: Security group name
+          example: First Lien
+    ReportingDateAggregate:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier
+        totalAmountOutstanding:
+          type: number
+          description: Total amount outstanding
+          format: double
+          example: 20
+        totalDisplayValue:
+          type: number
+          description: Total display value
+          format: double
+          example: 20
+        totalOwnershipPercentage:
+          type: number
+          description: Total ownership percentage
+          format: double
+          example: 10
+        reportingDate:
+          type: string
+          description: Reporting date
+          format: date
+        keyMetricData:
+          $ref: '#/components/schemas/KeyMetricData'
+        ownedStake:
+          type: number
+          description: Owned stake amount
+          format: double
+          example: 2
+    EquityEntity:
+      type: object
+      properties:
+        captableId:
+          type: string
+          description: Unique identifier of the captable
+        equityId:
+          type: string
+          description: Unique identifier of the equity entity
+        amountOutstanding:
+          type: number
+          description: Amount outstanding
+          format: double
+          example: 100
+        reportingDateId:
+          type: string
+          description: Reporting date identifier
+        reportingDate:
+          type: string
+          description: Reporting date
+          format: date
+        keyMetricData:
+          $ref: '#/components/schemas/KeyMetricData'
+    CashEntity:
+      type: object
+      properties:
+        captableId:
+          type: string
+          description: Unique identifier of the captable
+        cashId:
+          type: string
+          description: Unique identifier of the cash entity
+        amountOutstanding:
+          type: number
+          description: Amount outstanding
+          format: double
+          example: 100
+        reportingDateId:
+          type: string
+          description: Reporting date identifier
+        reportingDate:
+          type: string
+          description: Reporting date
+          format: date
+        keyMetricData:
+          $ref: '#/components/schemas/KeyMetricData'
+    CaptableResponse:
+      type: object
+      properties:
+        captableHomePage:
+          $ref: '#/components/schemas/CaptableHomePage'
+        reportingDates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportingDate'
+        homePageGroupedSecurityList:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupedSecurityList'
+        displayName:
+          type: string
+          description: Display name for debt securities
+          example: Total Debt
+        cashDisplayName:
+          type: string
+          description: Display name for cash positions
+          example: Total Net Debt
+        equityDisplayName:
+          type: string
+          description: Display name for equity positions
+          example: Total Capitalization
+        totalEquityDisplayName:
+          type: string
+          description: Display name for total equity
+          example: Total Equity
+        reportingDateAggregates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportingDateAggregate'
+        cashReportingDateAggregates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportingDateAggregate'
+        equityReportingDateAggregates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportingDateAggregate'
+        totalEquityReportingDateAggregates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportingDateAggregate'
+        captableId:
+          type: string
+          description: Unique identifier of the captable
+          example: 9fd0de0b-0f9c-4872-bedb-f0b6e6b600a7
+        groupedCashEntityResponseHomePages:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupedCashEntityResponse'
+        groupedEquityEntityResponseHomePages:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupedEquityEntityResponse'
+        isAtleastOneCaptableExists:
+          type: boolean
+          description: Indicates if at least one captable exists for the entity
+        financial_metric_enabled:
+          type: boolean
+          description: Indicates if financial metrics are enabled
+          example: false
+        financialMetricData:
+          type: object
+          description: Financial metric data if enabled
+        isRankValidationFailed:
+          type: boolean
+          description: Indicates if rank validation failed
+          example: false
+        rankValidationMessage:
+          type: string
+          description: Message regarding rank validation status
+          example: All ranks validated successfully.
+        isEntityManagementApiEnabled:
+          type: boolean
+          description: Indicates if entity management API is enabled
+          example: true
+    CaptableHomePage:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the captable homepage
+        valuationDate:
+          type: string
+          description: Valuation date of the captable
+          format: date
+        version:
+          type: string
+          description: Version of the captable data
+          example: Actual
+        uploadDate:
+          type: string
+          description: Upload date of the captable data
+          format: date
+        currency:
+          type: string
+          description: Currency used in the captable
+          example: USD
+        unit:
+          type: string
+          description: Unit of measurement
+          example: Millions
+        orgId:
+          type: string
+          description: Unique identifier of the organization
+        entityId:
+          type: string
+          description: Unique identifier of the entity
+    GroupedSecurityList:
+      type: object
+      properties:
+        groupedSecurityData:
+          $ref: '#/components/schemas/GroupedSecurityData'
+        securityDataList:
+          type: array
+          items:
+            $ref: '#/components/schemas/SecurityData'
+    SecurityDataDetail:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier
+        reportingDateId:
+          type: string
+          description: Reporting date identifier
+        amountOutstanding:
+          type: number
+          description: Amount outstanding
+          format: double
+          example: 20
+        displayValue:
+          type: number
+          description: Display value
+          format: double
+          example: 20
+        ownershipPercentage:
+          type: number
+          description: Ownership percentage
+          format: double
+          example: 10
+        interestDetails:
+          type: number
+          description: Interest details
+          format: double
+          example: 8.8
+        commitmentAmount:
+          type: number
+          description: Commitment amount
+          format: double
+          example: 100
+        calculatedInterestDetails:
+          type: string
+          description: Calculated interest details
+          example: intDet11
+        reportingDate:
+          type: string
+          description: Reporting date
+          format: date
+        regimeDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegimeDetail'
+        ownedStake:
+          type: number
+          description: Owned stake amount
+          format: double
+          example: 2
+        keyMetricData:
+          $ref: '#/components/schemas/KeyMetricData'
+    ReportingDate:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the reporting date
+        reportingDate:
+          type: string
+          description: The reporting date
+          format: date
+        orgId:
+          type: string
+          description: Unique identifier of the organization
+        entityId:
+          type: string
+          description: Unique identifier of the entity
+        uploadDate:
+          type: string
+          description: Upload date of the data
+          format: date
+        visibility:
+          type: boolean
+          description: Visibility status of the reporting date
+    GroupedCashEntityResponse:
+      type: object
+      properties:
+        cashCategoryName:
+          type: string
+          description: Name of the cash category
+          example: Test
+        cashEntities:
+          type: array
+          items:
+            $ref: '#/components/schemas/CashEntity'
+    ApiResponse:
+      required:
+      - response
+      - success
+      - message
+      - errorCode
+      type: object
+      properties:
+        response:
+          type: object
+          description: Contains the data retrieved by API in response for the request made.
+        success:
+          type: boolean
+          description: Indicates the status of the request, specifying whether it was processed successfully.
+          example: true
+        message:
+          type: string
+          description: Explanation of the API response
+          example: Success
+        errorCode:
+          type: string
+          description: 'Error response on hitting API request.
+
+
+            null: No errors were encountered.
+
+
+            Error Code: A descriptive error code if request fails.'
+          example: EXCE00018
+      description: Generic API response wrapper containing parameters as follows; response data, success status, message, and error code.
+    KeyMetric:
+      type: object
+      properties:
+        metricKey:
+          type: string
+          description: Unique key identifying the metric
+          example: paid_interest_rate
+        metricValue:
+          type: string
+          description: Value of the metric
+          example: 5.0%
+        displayName:
+          type: string
+          description: Display name of the metric
+          example: Paid Interest Rate
+    RegimeDetail:
+      type: object
+      properties:
+        spreadRate:
+          type: number
+          description: Spread rate
+          format: double
+        interestDetailsCurve:
+          type: string
+          description: Interest details curve
+        interestPaidOrAccrued:
+          type: string
+          description: Interest paid or accrued status
+          example: Paid
+        interestType:
+          type: string
+          description: Type of interest
+          example: Fixed
+        fixedInterestRate:
+          type: number
+          description: Fixed interest rate
+          format: double
+          example: 5
+  securitySchemes:
+    apiKeyHeader:
+      type: apiKey
+      name: subscription-key
+      in: header
+    apiKeyQuery:
+      type: apiKey
+      name: subscription-key
+      in: query

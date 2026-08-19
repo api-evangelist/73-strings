@@ -1,0 +1,1246 @@
+{
+  "item": [
+    {
+      "id": "dd278c96-fd60-493a-ad7f-5bcedc6254a6",
+      "name": "Qualitative Data",
+      "description": {
+        "content": "The **Qualitative Data APIs**, a RESTful service on the 73 Strings platform, provide structured access to narrative-driven company insights, enabling retrieval of qualitative analysis data such as strategic commentary, business model descriptions, and expert assessments. These APIs are designed to support workflows across investment teams by offering consistent and versioned access to qualitative inputs captured at various reporting stages across multiple funds and organizations.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "dc9f7a29-deef-4a39-acba-52be26583e38",
+          "name": "Get Custom Attribute Data",
+          "request": {
+            "name": "Get Custom Attribute Data",
+            "description": {
+              "content": "This API is designed to retrieve custom attribute data for multiple entities requested by the company. When the request payload includes a list of entities, the API identifies each one and returns the custom attributes associated with it.\n\nCustom attributes are additionally created custom fields to capture specific details unique to an entity. Since these attributes can vary across different entities, the API ensures that the response provides the correct attribute values mapped to each entity individually.\n\nIn essence, this API acts as a reliable way to fetch all entity-specific custom attribute details in one call, helping business systems maintain consistency, accuracy, and efficiency when handling entity-level data.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "ems",
+                "customAttributeData"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) A unique key that grants secure access to an API, enabling authentication, usage tracking, and controlled permissions.",
+                "key": "subscription-key",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"<string>\",\n  \"orgId\": \"<string>\",\n  \"entityIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"attributeIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7fc13b84-eb3b-471c-a153-14412a34b751",
+              "name": "The request was successful and the requested data has been returned.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "customAttributeData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that grants secure access to an API, enabling authentication, usage tracking, and controlled permissions.",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"456fa8cd-xxxx-xxxx-xxxx-850b67f2efd4\",\n  \"orgId\": \"cfcbb891-xxxx-xxxx-xxxx-57142094123c\",\n  \"entityIds\": [\n    \"0caf8dc0-xxxx-xxxx-xxxx-b43a2621fcba\",\n    \"64f1db13-xxxx-xxxx-xxxx-a963cec04899\"\n  ],\n  \"attributeIds\": [\n    \"3286287b-xxxx-xxxx-xxxx-ab4409f445f5\",\n    \"b57a75f7-xxxx-xxxx-xxxx-407d49868e5a\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": {\n    \"orgId\": \"cfcbb891-xxxx-xxxx-xxxx-57142094123c\",\n    \"data\": [\n      {\n        \"entityId\": \"0caf8dc0-xxxx-xxxx-xxxx-b43a2621fcba\",\n        \"dataApiAttributesInfos\": [\n          {\n            \"attributeId\": \"b57a75f7-xxxx-xxxx-xxxx-407d49868e5a\",\n            \"attributeName\": \"Business Sponsor\",\n            \"tag\": \"Income Statement\",\n            \"attributeType\": \"TEXT\",\n            \"description\": null,\n            \"global\": \"false\",\n            \"value\": \"GHO-SI-ESG\"\n          }\n        ]\n      }\n    ]\n  },\n  \"success\": true,\n  \"message\": \"Success\",\n  \"errorCode\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "166925e5-9640-4a97-822a-5e9073584ca4",
+              "name": "The request was partially successful and valid request data has been returned",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "customAttributeData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that grants secure access to an API, enabling authentication, usage tracking, and controlled permissions.",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"456fa8cd-xxxx-xxxx-xxxx-850b67f2efd4\",\n  \"orgId\": \"cfcbb891-xxxx-xxxx-xxxx-57142094123c\",\n  \"entityIds\": [\n    \"0caf8dc0-xxxx-xxxx-xxxx-b43a2621fcba\",\n    \"64f1db13-xxxx-xxxx-xxxx-a963cec04899\"\n  ],\n  \"attributeIds\": [\n    \"3286287b-xxxx-xxxx-xxxx-ab4409f445f5\",\n    \"b57a75f7-xxxx-xxxx-xxxx-407d49868e5a\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Multi-Status (WebDAV) (RFC 4918)",
+              "code": 207,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": {\n    \"orgId\": \"cfcbb891-xxxx-xxxx-xxxx-57142094123c\",\n    \"data\": [\n      {\n        \"entityId\": \"0caf8dc0-xxxx-xxxx-xxxx-b43a2621fcba\",\n        \"dataApiAttributesInfos\": [\n          {\n            \"attributeId\": \"b57a75f7-xxxx-xxxx-xxxx-407d49868e5a\",\n            \"attributeName\": \"Business Sponsor\",\n            \"tag\": \"Income Statement\",\n            \"attributeType\": \"TEXT\",\n            \"description\": null,\n            \"global\": \"false\",\n            \"value\": \"GHO-SI-ESG\"\n          }\n        ]\n      }\n    ],\n    \"errors\": [\n      {\n        \"success\": false,\n        \"message\": \"Invalid entity ids: [64f1db13-xxxx-xxxx-xxxx-a963cec04899]\",\n        \"responseCode\": \"BAD_REQUEST\"\n      }\n    ]\n  },\n  \"success\": true,\n  \"message\": \"Success\",\n  \"errorCode\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "111dbffe-3a9a-45d7-8069-95eeff3cd522",
+              "name": "The request is malformed or missing required parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "customAttributeData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that grants secure access to an API, enabling authentication, usage tracking, and controlled permissions.",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"456fa8cd-xxxx-xxxx-xxxx-850b67f2efd4\",\n  \"orgId\": \"cfcbb891-xxxx-xxxx-xxxx-57142094123c\",\n  \"entityIds\": [\n    \"0caf8dc0-xxxx-xxxx-xxxx-b43a2621fcba\",\n    \"64f1db13-xxxx-xxxx-xxxx-a963cec04899\"\n  ],\n  \"attributeIds\": [\n    \"3286287b-xxxx-xxxx-xxxx-ab4409f445f5\",\n    \"b57a75f7-xxxx-xxxx-xxxx-407d49868e5a\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": false,\n  \"message\": \"Invalid input, please try again\",\n  \"errorCode\": \"EXCE00028\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ef8cd9a1-361c-4348-9398-d47a4c3dd5e3",
+              "name": "The subscription key is missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "customAttributeData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that grants secure access to an API, enabling authentication, usage tracking, and controlled permissions.",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"456fa8cd-xxxx-xxxx-xxxx-850b67f2efd4\",\n  \"orgId\": \"cfcbb891-xxxx-xxxx-xxxx-57142094123c\",\n  \"entityIds\": [\n    \"0caf8dc0-xxxx-xxxx-xxxx-b43a2621fcba\",\n    \"64f1db13-xxxx-xxxx-xxxx-a963cec04899\"\n  ],\n  \"attributeIds\": [\n    \"3286287b-xxxx-xxxx-xxxx-ab4409f445f5\",\n    \"b57a75f7-xxxx-xxxx-xxxx-407d49868e5a\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": false,\n  \"message\": \"Access denied due to invalid subscription key. Please provide a valid key with active subscription.\",\n  \"errorCode\": \"EXCE00028\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "82451bb1-8e8c-4826-a3d1-e1ae93a0bbc6",
+              "name": "An unexpected error occurred on the server (Internal Server Error).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "customAttributeData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that grants secure access to an API, enabling authentication, usage tracking, and controlled permissions.",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"456fa8cd-xxxx-xxxx-xxxx-850b67f2efd4\",\n  \"orgId\": \"cfcbb891-xxxx-xxxx-xxxx-57142094123c\",\n  \"entityIds\": [\n    \"0caf8dc0-xxxx-xxxx-xxxx-b43a2621fcba\",\n    \"64f1db13-xxxx-xxxx-xxxx-a963cec04899\"\n  ],\n  \"attributeIds\": [\n    \"3286287b-xxxx-xxxx-xxxx-ab4409f445f5\",\n    \"b57a75f7-xxxx-xxxx-xxxx-407d49868e5a\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": false,\n  \"message\": \"Internal server error. Please try again later or contact support.\",\n  \"errorCode\": \"EXCE00028\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b0e074d4-0734-4e05-80f8-ca74b7d81619",
+          "name": "Get Entity General Details",
+          "request": {
+            "name": "Get Entity General Details",
+            "description": {
+              "content": "The 73Value Equity offers robust tools for managing private equity funds, allowing users to create multiple funds and add companies across these funds for the valuation of both funds and companies. The **getGeneralDetails API** retrieves detailed information about various companies', which are part of funds the user can access.\n\nThis API fetches essential information such as the company's name, industry, headquarters location, and other general details. It ensures that users have quick and easy access to fundamental company information within the funds they manage or have access to.\n\nThis API is particularly useful for fund managers, analysts, and investors who need to gather basic company information efficiently. By leveraging the capabilities of the 73Value Equity product, users can streamline their access to important company details, enhancing their ability to manage and analyze their investments.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "ems",
+                "getEntityGeneralDetails"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) A unique key that allows you to access and use an API",
+                "key": "subscription-key",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"companyIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"userId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "cdf7edf9-a73a-4016-9bcc-52fe67003487",
+              "name": "Successfully retrieved general details.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityGeneralDetails"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"company_ids\": [\n    \"b92ce0c7-63f6-4177-b59a-6c9fb54970e7\",\n    \"3a13cbae-1513-49af-956d-150e0b4efe16\",\n    \"37eb09f6-52ca-434d-b2fd-42df54b1024d\"\n  ],\n  \"user_id\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": {\n    \"data\": [\n      {\n        \"id\": \"06305e61-fb17-4e05-xxx2-431414d986e0\",\n        \"orgId\": \"2746c10b-70cb-xxx5aa-b320-23d2768614e7\",\n        \"companyId\": \"b92ce0c7-63f6-xxx77-b59a-6c9fb54970e7\",\n        \"businessUnitId\": null,\n        \"accountId\": null,\n        \"description\": \"Hi i am mohit garg please test with me this and check horizantal \",\n        \"industry\": \"Interactive Media & Services, Interactive Media & Services, Media & Entertainment, Communication Services\",\n        \"geography\": \"\",\n        \"geographicalExposure\": null,\n        \"headCount\": 0,\n        \"strategyNotes\": null,\n        \"fiscalYearEnd\": \"MAY\",\n        \"currency\": \"USD\",\n        \"investmentRational\": null,\n        \"funds\": null,\n        \"gdMultiValueData\": null,\n        \"gdCompanyMultiValueData\": null,\n        \"spvs\": null,\n        \"investmentDate\": \"2025-05-21T12:00:00Z\",\n        \"units\": \"Millions\",\n        \"uniqueKey\": \"MohitGarg123456789\",\n        \"webSite\": \"\",\n        \"clientSector\": null,\n        \"companyType\": \"NA\",\n        \"investmentType\": \"NA\",\n        \"shortDescription\": \"\",\n        \"legalEntityName\": \"\",\n        \"restrictedList\": \"No\",\n        \"informationRights\": \"Yes\",\n        \"fundsList\": [],\n        \"spvsList\": [],\n        \"multiValueVerticalData\": [],\n        \"multiValueAgentData\": [],\n        \"multiValueSponsorData\": [],\n        \"multiValueESGRatingData\": [],\n        \"domainsList\": [],\n        \"productsList\": [],\n        \"addressList\": [],\n        \"acquisionsList\": [],\n        \"competitorsList\": [],\n        \"clientSectorList\": [],\n        \"securityList\": [],\n        \"segmentList\": []\n      },\n      {\n        \"id\": \"be078aa8-75e7-407c-xxxa-3a6585b26361\",\n        \"orgId\": \"2746c10b-70cb-xxx5aa-b320-23d2768614e7\",\n        \"companyId\": \"3a13cbae-1513-xxxaf-956d-150e0b4efe16\",\n        \"businessUnitId\": null,\n        \"accountId\": null,\n        \"description\": \"\",\n        \"industry\": \"\",\n        \"geography\": \"\",\n        \"geographicalExposure\": null,\n        \"headCount\": 0,\n        \"strategyNotes\": null,\n        \"fiscalYearEnd\": null,\n        \"currency\": \"\",\n        \"investmentRational\": null,\n        \"funds\": null,\n        \"gdMultiValueData\": null,\n        \"gdCompanyMultiValueData\": null,\n        \"spvs\": null,\n        \"investmentDate\": null,\n        \"units\": null,\n        \"uniqueKey\": null,\n        \"webSite\": \"\",\n        \"clientSector\": null,\n        \"companyType\": null,\n        \"investmentType\": null,\n        \"shortDescription\": null,\n        \"legalEntityName\": null,\n        \"restrictedList\": null,\n        \"informationRights\": null,\n        \"fundsList\": [],\n        \"spvsList\": [],\n        \"multiValueVerticalData\": [],\n        \"multiValueAgentData\": [],\n        \"multiValueSponsorData\": [],\n        \"multiValueESGRatingData\": [],\n        \"domainsList\": [],\n        \"productsList\": [],\n        \"addressList\": [],\n        \"acquisionsList\": [],\n        \"competitorsList\": [],\n        \"clientSectorList\": [],\n        \"securityList\": [],\n        \"segmentList\": []\n      },\n      {\n        \"id\": \"6c0a3ada-e71f-42c1-xxxd-e99baa0d3f18\",\n        \"orgId\": \"2746c10b-70cb-xxx5aa-b320-23d2768614e7\",\n        \"companyId\": \"37eb09f6-52ca-xxx4d-b2fd-42df54b1024d\",\n        \"businessUnitId\": null,\n        \"accountId\": null,\n        \"description\": \"\",\n        \"industry\": \"\",\n        \"geography\": \"\",\n        \"geographicalExposure\": null,\n        \"headCount\": 0,\n        \"strategyNotes\": null,\n        \"fiscalYearEnd\": null,\n        \"currency\": \"\",\n        \"investmentRational\": null,\n        \"funds\": null,\n        \"gdMultiValueData\": null,\n        \"gdCompanyMultiValueData\": null,\n        \"spvs\": null,\n        \"investmentDate\": null,\n        \"units\": null,\n        \"uniqueKey\": null,\n        \"webSite\": \"\",\n        \"clientSector\": null,\n        \"companyType\": null,\n        \"investmentType\": null,\n        \"shortDescription\": null,\n        \"legalEntityName\": null,\n        \"restrictedList\": null,\n        \"informationRights\": null,\n        \"fundsList\": [],\n        \"spvsList\": [],\n        \"multiValueVerticalData\": [],\n        \"multiValueAgentData\": [],\n        \"multiValueSponsorData\": [],\n        \"multiValueESGRatingData\": [],\n        \"domainsList\": [],\n        \"productsList\": [],\n        \"addressList\": [],\n        \"acquisionsList\": [],\n        \"competitorsList\": [],\n        \"clientSectorList\": [],\n        \"securityList\": [],\n        \"segmentList\": []\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4b878a57-aedf-4b73-8f66-6cb9bf1d782e",
+              "name": "Request accepted for processing, but not yet completed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityGeneralDetails"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"company_ids\": [\n    \"b92ce0c7-63f6-4177-b59a-6c9fb54970e7\",\n    \"3a13cbae-1513-49af-956d-150e0b4efe16\",\n    \"37eb09f6-52ca-434d-b2fd-42df54b1024d\"\n  ],\n  \"user_id\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": true,\n  \"message\": \"Request accepted and is being processed.\",\n  \"errorCode\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c74671c6-a583-43cb-8304-ba915b94a5ea",
+              "name": "Invalid input, missing parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityGeneralDetails"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"company_ids\": [\n    \"b92ce0c7-63f6-4177-b59a-6c9fb54970e7\",\n    \"3a13cbae-1513-49af-956d-150e0b4efe16\",\n    \"37eb09f6-52ca-434d-b2fd-42df54b1024d\"\n  ],\n  \"user_id\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": false,\n  \"message\": \"Invalid request parameters.\",\n  \"errorCode\": \"EXCE00028\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "93c9b312-1a9b-4607-8abf-bd63819edb0b",
+              "name": "Invalid or missing Subscription key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityGeneralDetails"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"company_ids\": [\n    \"b92ce0c7-63f6-4177-b59a-6c9fb54970e7\",\n    \"3a13cbae-1513-49af-956d-150e0b4efe16\",\n    \"37eb09f6-52ca-434d-b2fd-42df54b1024d\"\n  ],\n  \"user_id\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"message\": \"Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "421d83a1-3d12-47e8-8e92-42c33faa5820",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityGeneralDetails"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"company_ids\": [\n    \"b92ce0c7-63f6-4177-b59a-6c9fb54970e7\",\n    \"3a13cbae-1513-49af-956d-150e0b4efe16\",\n    \"37eb09f6-52ca-434d-b2fd-42df54b1024d\"\n  ],\n  \"user_id\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"message\": \"Resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d57d11e5-c5a2-4409-bdfb-85bd166d1aa9",
+              "name": "Request with incorrect HTTPS method. ",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityGeneralDetails"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"company_ids\": [\n    \"b92ce0c7-63f6-4177-b59a-6c9fb54970e7\",\n    \"3a13cbae-1513-49af-956d-150e0b4efe16\",\n    \"37eb09f6-52ca-434d-b2fd-42df54b1024d\"\n  ],\n  \"user_id\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Method Not Allowed",
+              "code": 405,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 405,\n  \"message\": \"Method Not Allowed. Please use the correct HTTP method.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6d65d67b-3d7d-4e09-92d2-1b85bed0b435",
+              "name": "Too many requests sent in a short period. The client is being rate limited.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityGeneralDetails"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"company_ids\": [\n    \"b92ce0c7-63f6-4177-b59a-6c9fb54970e7\",\n    \"3a13cbae-1513-49af-956d-150e0b4efe16\",\n    \"37eb09f6-52ca-434d-b2fd-42df54b1024d\"\n  ],\n  \"user_id\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"message\": \"Too Many Requests. Please slow down and try again later.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "02a7e2dc-1c46-468f-86ce-e105fdaa2db4",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityGeneralDetails"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"company_ids\": [\n    \"b92ce0c7-63f6-4177-b59a-6c9fb54970e7\",\n    \"3a13cbae-1513-49af-956d-150e0b4efe16\",\n    \"37eb09f6-52ca-434d-b2fd-42df54b1024d\"\n  ],\n  \"user_id\": \"4d32666b-5fa9-489f-93b1-1f5036bd2a41\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 500,\n  \"message\": \"Internal server error. Please try again later or contact support.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5dd580ee-9905-4c9d-9c2b-e328cb8b139d",
+          "name": "Get Entity Qualitative Analysis Data",
+          "request": {
+            "name": "Get Entity Qualitative Analysis Data",
+            "description": {
+              "content": "The 73 Monitor allows users to add qualitative comments or insights about the company. The **get73MQualitativeAnalysis API** retrieves qualitative insights or commentary related to a specific company within a particular fund, the user can access to. The Qualitative Analysis section allows fund managers or analysts, to input their observations, insights, or detailed commentary about a company's performance, strategy, or other relevant factors. These inputs are typically structured as pairs of titles and comments, providing a clear and organized way to document and review qualitative data.\n\n By leveraging the capabilities of the 73Value Equity product, users can streamline their access to important company details, enhancing their ability to manage and analyze their investments.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "ems",
+                "getEntityQualitativeAnalysisData"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) A unique key that allows you to access and use an API",
+                "key": "subscription-key",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"companyId\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"orgId\": \"<uuid>\",\n  \"userId\": \"<uuid>\",\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"startDate\": \"<string,null>\",\n  \"endDate\": \"<string,null>\",\n  \"asOfDate\": \"<string,null>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ee3834aa-7496-475a-aed0-9e7bdcbc8e9a",
+              "name": "Successfully retrieved qualitative analysis data.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityQualitativeAnalysisData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"4d32666b-5fa9-xxx89f-93b1-1f5036bd2a41\",\n  \"companyId\": [\n    \"189d620b-8551-xxx64-b595-b5eb50411d2a\"\n  ],\n  \"tags\": [\n    \"Employee Benefit5\"\n  ],\n  \"orgId\": \"2746c10b-70cb-xxx45aa-b320-23d2768614e7\",\n  \"startDate\": \"\",\n  \"endDate\": \"\",\n  \"asOfDate\": \"\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": {\n    \"data\": [\n      {\n        \"createdBy\": \"System\",\n        \"createdDate\": \"2025-04-14T12:05:40Z\",\n        \"lastModifiedBy\": \"System\",\n        \"lastModifiedDate\": \"2025-04-14T12:07:36Z\",\n        \"tenantOrgId\": \"2746c10b-70cb-xxx45aa-b320-23d2768614e7\",\n        \"createdByUserId\": \"c9676cc5-54ab-xxx79-984b-29b01b86ca0b\",\n        \"createdByUserName\": \"Rahul Vanga\",\n        \"lastUpdatedByUserId\": \"c9676cc5-54ab-xxx79-984b-29b01b86ca0b\",\n        \"lastUpdatedByUserName\": \"Rahul Vanga\",\n        \"createdBySelectedUserId\": \"4d32666b-5fa9-xxx9f-93b1-1f5036bd2a41\",\n        \"createdBySelectedUserName\": \"Admin\",\n        \"lastUpdatedBySelectedUserId\": \"4d32666b-5fa9-xxx9f-93b1-1f5036bd2a41\",\n        \"lastUpdatedBySelectedUserName\": \"Admin\",\n        \"auditSourceModule\": null,\n        \"id\": \"ruowNJYBP7vcBDXZ3yPQ\",\n        \"orgId\": \"2746c10b-70cb-xxx45aa-b320-23d2768614e7\",\n        \"companyId\": \"189d620b-8551-xxx64-b595-b5eb50411d2a\",\n        \"tag\": \"Employee Benefit5\",\n        \"title\": \"navi\",\n        \"articleDate\": \"2021-03-31T12:00:00Z\",\n        \"description\": \"navi\",\n        \"imageUrl\": [],\n        \"sourceUrl\": null,\n        \"displayUrl\": [],\n        \"uploadedImage\": false,\n        \"articleDateString\": \"2021-03-31\"\n      }\n    ]\n  },\n  \"success\": true,\n  \"message\": \"Success\",\n  \"errorCode\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2b18b345-1ab8-4f28-a090-d492fde719cb",
+              "name": "Request accepted for processing, but not yet completed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityQualitativeAnalysisData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"4d32666b-5fa9-xxx89f-93b1-1f5036bd2a41\",\n  \"companyId\": [\n    \"189d620b-8551-xxx64-b595-b5eb50411d2a\"\n  ],\n  \"tags\": [\n    \"Employee Benefit5\"\n  ],\n  \"orgId\": \"2746c10b-70cb-xxx45aa-b320-23d2768614e7\",\n  \"startDate\": \"\",\n  \"endDate\": \"\",\n  \"asOfDate\": \"\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": true,\n  \"message\": \"Request accepted and is being processed.\",\n  \"errorCode\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "305dee1e-c3a6-474f-ab79-debebcb6651d",
+              "name": "Invalid input, missing parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityQualitativeAnalysisData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"4d32666b-5fa9-xxx89f-93b1-1f5036bd2a41\",\n  \"companyId\": [\n    \"189d620b-8551-xxx64-b595-b5eb50411d2a\"\n  ],\n  \"tags\": [\n    \"Employee Benefit5\"\n  ],\n  \"orgId\": \"2746c10b-70cb-xxx45aa-b320-23d2768614e7\",\n  \"startDate\": \"\",\n  \"endDate\": \"\",\n  \"asOfDate\": \"\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"response\": [],\n  \"success\": false,\n  \"message\": \"Invalid request parameters.\",\n  \"errorCode\": \"EXCE00028\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "42cf41bf-99a7-42a6-8dde-c37a5c1c5b5f",
+              "name": "Invalid or missing Subscription key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityQualitativeAnalysisData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"4d32666b-5fa9-xxx89f-93b1-1f5036bd2a41\",\n  \"companyId\": [\n    \"189d620b-8551-xxx64-b595-b5eb50411d2a\"\n  ],\n  \"tags\": [\n    \"Employee Benefit5\"\n  ],\n  \"orgId\": \"2746c10b-70cb-xxx45aa-b320-23d2768614e7\",\n  \"startDate\": \"\",\n  \"endDate\": \"\",\n  \"asOfDate\": \"\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 401,\n  \"message\": \"Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "97e0c7a6-4da5-408f-8a92-015b6402ced1",
+              "name": "Request with incorrect HTTPS method. ",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityQualitativeAnalysisData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"4d32666b-5fa9-xxx89f-93b1-1f5036bd2a41\",\n  \"companyId\": [\n    \"189d620b-8551-xxx64-b595-b5eb50411d2a\"\n  ],\n  \"tags\": [\n    \"Employee Benefit5\"\n  ],\n  \"orgId\": \"2746c10b-70cb-xxx45aa-b320-23d2768614e7\",\n  \"startDate\": \"\",\n  \"endDate\": \"\",\n  \"asOfDate\": \"\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Method Not Allowed",
+              "code": 405,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 405,\n  \"message\": \"Method Not Allowed. Please use the correct HTTP method.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "595e36cf-e4c5-487e-b9fa-9bfcf77f3be5",
+              "name": "Too many requests sent in a short period. The client is being rate limited.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityQualitativeAnalysisData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"4d32666b-5fa9-xxx89f-93b1-1f5036bd2a41\",\n  \"companyId\": [\n    \"189d620b-8551-xxx64-b595-b5eb50411d2a\"\n  ],\n  \"tags\": [\n    \"Employee Benefit5\"\n  ],\n  \"orgId\": \"2746c10b-70cb-xxx45aa-b320-23d2768614e7\",\n  \"startDate\": \"\",\n  \"endDate\": \"\",\n  \"asOfDate\": \"\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 429,\n  \"message\": \"Too Many Requests. Please slow down and try again later.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ed255b97-624c-4352-a7de-b13b58c98a9b",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "ems",
+                    "getEntityQualitativeAnalysisData"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) A unique key that allows you to access and use an API",
+                    "key": "subscription-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"4d32666b-5fa9-xxx89f-93b1-1f5036bd2a41\",\n  \"companyId\": [\n    \"189d620b-8551-xxx64-b595-b5eb50411d2a\"\n  ],\n  \"tags\": [\n    \"Employee Benefit5\"\n  ],\n  \"orgId\": \"2746c10b-70cb-xxx45aa-b320-23d2768614e7\",\n  \"startDate\": \"\",\n  \"endDate\": \"\",\n  \"asOfDate\": \"\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 500,\n  \"message\": \"Internal server error. Please try again later or contact support.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-accord-eut-73strings.azure-api.net/qualitative-data",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "noauth"
+  },
+  "info": {
+    "_postman_id": "a72357e9-c34d-4b6f-8c06-6d579121f20e",
+    "name": "Qualitative Data API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The **Qualitative Data APIs**, a RESTful service on the 73 Strings platform, provide structured access to narrative-driven company insights, enabling retrieval of qualitative analysis data such as strategic commentary, business model descriptions, and expert assessments. These APIs are designed to support workflows across investment teams by offering consistent and versioned access to qualitative inputs captured at various reporting stages across multiple funds and organizations.\n\nContact Support:\n Email: support@73strings.com",
+      "type": "text/plain"
+    }
+  }
+}

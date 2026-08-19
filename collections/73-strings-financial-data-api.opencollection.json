@@ -1,0 +1,144 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Financial Data API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Financial Data",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get All Financial Texts",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-accord-eut-73strings.azure-api.net/financial-data/api/v1/data/getAllFinancialTexts",
+            "headers": [
+              {
+                "name": "subscription-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves textual values of financial attributes (e.g., statements, KPIs) for specified companies, segments, securities, and versions, across given cash flow dates or date ranges."
+        },
+        {
+          "info": {
+            "name": "Get BU Financial Data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-accord-eut-73strings.azure-api.net/financial-data/api/v1/ems/entityBuFinancialData",
+            "headers": [
+              {
+                "name": "subscription-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The BU Financial Data API retrieves the financial data for a specific business unit belonging to an entity of type \"company.\" This API returns all data points available in the Financial table for the requested business unit, for the numerical category attributes as entered by users for different reporting periods and cashflow dates.\n\n\nThe endpoint enables clients to access structured, period-based financial information, supporting detailed analysis using both aggregated value and its drill down "
+        },
+        {
+          "info": {
+            "name": "Get Entity Financial Data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-accord-eut-73strings.azure-api.net/financial-data/api/v1/ems/entityFinancialData",
+            "headers": [
+              {
+                "name": "subscription-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The 73 Monitor lets users add data of financial statements and other KPIs (Key Performance Indicators) of an entity, which are useful for valuating the entities and also keep a track of their growth especially for fund managers and analysts. The Entity Financial Data API retrieves aggregated financial data (numerical only) as well as its breakdown for specified attributes across multiple entities. Users can request data for a list of entities, and the API will return the aggregated and drilldown"
+        },
+        {
+          "info": {
+            "name": "Get Entity Financial Data V2",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-accord-eut-73strings.azure-api.net/financial-data/api/v2/ems/entityFinancialData",
+            "headers": [
+              {
+                "name": "subscription-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The Entity Financial Data API retrieves aggregated financial data (numerical only) as well as its breakdown for specified attributes across multiple entities. This endpoint uses Server-Sent Events (SSE) to stream financial data records in real-time, making it efficient for large datasets.\n\n## Streaming Response Format\n```\ndata: {\\\"orgId\\\": \\\"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\\\", \\\"companyName\\\": \\\"Tesla\\\", ...}\\n\\n\ndata: {\\\"orgId\\\": \\\"8b8fce2c-e9c9-486a-b3f9-d881f3cda3d4\\\", \\\"companyName\\\": \\\""
+        },
+        {
+          "info": {
+            "name": "Get Security Financial Data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-accord-eut-73strings.azure-api.net/financial-data/api/v1/ems/entitySecurityFinancialData",
+            "headers": [
+              {
+                "name": "subscription-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The Security Financial Data API retrieves the financial data for a specific securities belonging to an entity of type \"company.\" This API returns all data points available in the Financial table for the requested security, for the numerical category attributes as entered by users for different reporting periods and cashflow dates.\n\n\nThe endpoint enables clients to access structured, period-based financial information, supporting detailed analysis using both aggregated value and its drill down da"
+        },
+        {
+          "info": {
+            "name": "Save Entity Financial Data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-accord-eut-73strings.azure-api.net/financial-data/api/v1/ems/saveEntityFinancialData",
+            "headers": [
+              {
+                "name": "subscription-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The 73Value Equity product offers robust tools for the valuation of companies, utilizing various financial metrics to provide accurate and insightful assessments. The **putCompanyFinancialData API** is designed to facilitate the creation or updating of financial statement metrics and their data value for various companies.\n\nThis API handles both historical and projected financial data, allowing users to input financials for different cash flow dates and frequency periods. By integrating this dat"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

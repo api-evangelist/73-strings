@@ -1,0 +1,196 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Transaction Transaction API API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Transaction API",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create or update transactions in bulk (V2)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-accord-eut-73strings.azure-api.net/transactions/api/v2/unifiedTransaction",
+            "headers": [
+              {
+                "name": "subscription-key",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this endpoint to submit one or more transaction records to the 73 Strings platform in a single JSON request. Each object in <b>TransactionData</b> is validated and processed independently, so a failure for one object does not automatically prevent other valid objects in the same request from being saved.<br><br><b>How create and update are resolved</b><ul><li>The platform uses <b>multilayeredTransactionMetadata.externalTransactionSourceReferenceId</b> together with the transaction-level <b>a"
+        },
+        {
+          "info": {
+            "name": "Create/Update Transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-accord-eut-73strings.azure-api.net/transactions/api/v1/unifiedTransaction",
+            "headers": [
+              {
+                "name": "subscription-key",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The <b>Create Multiple Transactions API</b> allows users to upload multiple transaction records within the <b>73Strings Transaction Product</b> in a single request.<br><br>It supports bulk creation of financial transaction entries such as <b>Investments</b>, <b>Realizations</b>, <b>Valuations</b>, and <b>Fees</b>, with each record tied to an entity, version, and transaction type.<br><br><b>Key capabilities</b><ul><li>Supports bulk creation of multiple financial transactions in a single API call<"
+        },
+        {
+          "info": {
+            "name": "Get Transaction Data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-accord-eut-73strings.azure-api.net/transactions/api/v1/transactionData",
+            "headers": [
+              {
+                "name": "subscription-key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "pageNo",
+                "value": "",
+                "type": "query",
+                "description": "Page number for pagination (zero-based)"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of records per page"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves transaction data with pagination support. Supports filtering, sorting, and as-of-date settings for comprehensive transaction data retrieval."
+        },
+        {
+          "info": {
+            "name": "Get Transaction Types",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-accord-eut-73strings.azure-api.net/transactions/api/v1/transactionType",
+            "headers": [
+              {
+                "name": "subscription-key",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "pageNo",
+                "value": "",
+                "type": "query",
+                "description": "Page number to retrieve (0-indexed). Controls which batch of results is fetched."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to return per page. Optimizes data retrieval for large lists."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This API retrieves a list of transaction types configured in the Transaction Product of the 73Strings platform.<br><br>It allows clients to fetch transaction type metadata such as ID, name, category, description, and configuration details.<br><br><b>Key details</b><ul><li>The response supports filtering, sorting, and pagination to optimize data retrieval for different organizational setups.</li><li>This API is primarily used when clients need to populate dropdowns, map transaction categories, or"
+        },
+        {
+          "info": {
+            "name": "Get Transaction Versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-accord-eut-73strings.azure-api.net/transactions/api/v1/transactionVersion",
+            "headers": [
+              {
+                "name": "subscription-key",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "showHidden",
+                "value": "",
+                "type": "query",
+                "description": "Whether to include hidden versions in the response"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "<p>\nThe <strong>Get Version List API</strong> retrieves all available reporting or transaction versions configured within an organization on the <strong>73Strings Transaction Product</strong>.\n</p>\n\n<p>\nEach version represents a defined data layer (for example, <em>Actuals</em>, <em>Forecast</em>, or <em>Scenario-based</em> data) that is used across financial or transactional modules for reporting and analytics.\n</p>\n\n<p>\nThis API enables clients to:\n</p>\n\n<ul>\n  <li>Fetch all available versions"
+        },
+        {
+          "info": {
+            "name": "GTN Fund Transactions API",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-accord-eut-73strings.azure-api.net/transactions/api/v1/putfundTransactions",
+            "headers": [
+              {
+                "name": "subscription-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Process fund-level transactions for Gross to Net (GTN) calculations and reporting."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
