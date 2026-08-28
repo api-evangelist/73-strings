@@ -12,6 +12,18 @@ description: >-
   scoped by organization and user identifiers. The company is headquartered in Paris with offices in
   London, New York, San Francisco, Singapore, Riyadh, Abu Dhabi, Bengaluru and Hyderabad, and is
   backed by Blackstone, Goldman Sachs, Hamilton Lane, Golub Capital and Broadhaven.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://backend.73strings.com/wp-content/uploads/73-Intelligence_image-1.png
 url: https://raw.githubusercontent.com/api-evangelist/73-strings/refs/heads/main/apis.yml
 x-type: company
