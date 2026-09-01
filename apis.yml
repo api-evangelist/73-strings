@@ -45,18 +45,18 @@ x-enrichment:
     the same portal's /operations and /schemas endpoints. Two sibling APIM instances
     (api-usa-73strings, api-73strings) publish no catalogue anonymously.
 tags:
-- private-markets
-- valuation
-- portfolio-monitoring
-- private-equity
-- private-credit
-- venture-capital
-- alternative-assets
+- Private Markets
+- Valuation
+- Portfolio Monitoring
+- Private Equity
+- Private Credit
+- Venture Capital
+- Alternative Assets
 - Financial Data
-- data-extraction
+- Data Extraction
 - Fintech
-- asset-management
-- azure-api-management
+- Asset Management
+- Azure API Management
 tags_raw:
 - private-markets
 - valuation
@@ -108,7 +108,7 @@ apis:
   humanURL: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=asset-info
   baseURL: https://api-accord-eut-73strings.azure-api.net/assetinfo
   tags:
-  - Captable
+  - Cap Table
   tags_raw:
   - Captable
   properties:
