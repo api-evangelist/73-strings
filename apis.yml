@@ -85,9 +85,10 @@ tags_raw:
 apis:
 - aid: 73-strings:73-strings-asset-info-api
   name: 73 Strings Asset Info API
-  description: The **Asset Info APIs**, a RESTful service on 73 Strings, provides detailed company insights,
-    enabling efficient portfolio management, investment analysis, and seamless data retrieval across an
-    organization in the 73 Strings platform.
+  description: >-
+    The **Asset Info APIs**, a RESTful service on 73 Strings, provides detailed company insights, enabling
+    efficient portfolio management, investment analysis, and seamless data retrieval across an organization
+    in the 73 Strings platform.
   humanURL: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=asset-info
   baseURL: https://api-accord-eut-73strings.azure-api.net/assetinfo
   tags:
@@ -106,43 +107,16 @@ apis:
   - type: Documentation
     url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=financial-data
   - type: Documentation
-    url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=qualitative-data
-  - type: Documentation
-    url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=transaction-api
-- aid: 73-strings:73-strings-captable-api
-  name: 73 Strings Captable API
-  description: The **Captable APIs**, a RESTful service on 73 Strings, provides comprehensive capital
-    table data including securities, equity, cash positions, and key financial metrics for entities within
-    an organization. The API enables users to retrieve detailed captable information with various aggregations
-    and groupings.
-  humanURL: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=asset-info
-  baseURL: https://api-accord-eut-73strings.azure-api.net/assetinfo
-  tags:
-  - Cap Table
-  tags_raw:
-  - Captable
-  properties:
-  - type: OpenAPI
-    url: openapi/73-strings-captable-api-openapi.yml
-  - type: Documentation
-    url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=asset-info
-  - type: APIReference
-    url: https://api-accord-eut-73strings.developer.azure-api.net/apis
-  - type: Documentation
-    url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=captable
-  - type: Documentation
-    url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=documents
-  - type: Documentation
-    url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=financial-data
-  - type: Documentation
-    url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=qualitative-data
+    url: >-
+      https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=qualitative-data
   - type: Documentation
     url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=transaction-api
 - aid: 73-strings:73-strings-documents-api
   name: 73 Strings Documents API
-  description: The **Documents APIs**, a RESTful service on 73 Strings, provides a comprehensive information
-    of the uploaded documents affiliated with the company in the funds across an organization in the 73
-    Strings platform. The API also, allows users to download documents from the platform.
+  description: >-
+    The **Documents APIs**, a RESTful service on 73 Strings, provides a comprehensive information of the
+    uploaded documents affiliated with the company in the funds across an organization in the 73 Strings
+    platform. The API also, allows users to download documents from the platform.
   humanURL: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=asset-info
   baseURL: https://api-accord-eut-73strings.azure-api.net/assetinfo
   tags:
@@ -161,14 +135,16 @@ apis:
   - type: Documentation
     url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=financial-data
   - type: Documentation
-    url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=qualitative-data
+    url: >-
+      https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=qualitative-data
   - type: Documentation
     url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=transaction-api
 - aid: 73-strings:73-strings-financial-data-api
   name: 73 Strings Financial Data API
-  description: The **Financial Data APIs**, a RESTful service on 73 Strings, allows to retrieve comprehensive
-    information of attributes and their values on various cash flow dates in several tags of the Financials,
-    that belongs to a company in the funds across the organization in the 73 Strings platform.
+  description: >-
+    The **Financial Data APIs**, a RESTful service on 73 Strings, allows to retrieve comprehensive information
+    of attributes and their values on various cash flow dates in several tags of the Financials, that
+    belongs to a company in the funds across the organization in the 73 Strings platform.
   humanURL: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=asset-info
   baseURL: https://api-accord-eut-73strings.azure-api.net/assetinfo
   tags:
@@ -187,16 +163,18 @@ apis:
   - type: Documentation
     url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=financial-data
   - type: Documentation
-    url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=qualitative-data
+    url: >-
+      https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=qualitative-data
   - type: Documentation
     url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=transaction-api
 - aid: 73-strings:73-strings-qualitative-data-api
   name: 73 Strings Qualitative Data API
-  description: The **Qualitative Data APIs**, a RESTful service on the 73 Strings platform, provide structured
-    access to narrative-driven company insights, enabling retrieval of qualitative analysis data such
-    as strategic commentary, business model descriptions, and expert assessments. These APIs are designed
-    to support workflows across investment teams by offering consistent and versioned access to qualitative
-    inputs captured at various reporting stages across multiple funds and organizations.
+  description: >-
+    The **Qualitative Data APIs**, a RESTful service on the 73 Strings platform, provide structured access
+    to narrative-driven company insights, enabling retrieval of qualitative analysis data such as strategic
+    commentary, business model descriptions, and expert assessments. These APIs are designed to support
+    workflows across investment teams by offering consistent and versioned access to qualitative inputs
+    captured at various reporting stages across multiple funds and organizations.
   humanURL: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=asset-info
   baseURL: https://api-accord-eut-73strings.azure-api.net/assetinfo
   tags:
@@ -215,26 +193,27 @@ apis:
   - type: Documentation
     url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=financial-data
   - type: Documentation
-    url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=qualitative-data
+    url: >-
+      https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=qualitative-data
   - type: Documentation
     url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=transaction-api
 - aid: 73-strings:73-strings-transaction-api-api
   name: 73 Strings Transaction API
-  description: The <b>Transaction APIs</b> enable external enterprise customers to <b>ingest and retrieve
-    transaction ledger records</b> within the <b>73 Strings platform</b>.<br><br>These APIs are intended
-    for <b>client-side engineering teams</b> that manage their own data pipelines and require a <b>controlled,
-    structured interface</b> to push transaction data into the platform or retrieve processed transaction
-    information for downstream workflows.<br><br><b>Key capabilities</b><ul><li>Bulk creation and update
-    of transaction ledger records</li><li>Platform-generated <b>Display IDs</b> for stable referencing
-    across workflows</li><li>Retrieval of processed transaction data</li><li>Reference APIs for <b>transaction
-    types</b> and <b>transaction versions</b> to ensure payload correctness</li><li>Partial success handling
-    for bulk ingestion</li></ul><b>Authentication &amp; data scoping</b><ul><li>All APIs are authenticated
-    using a <b>subscription key</b> associated with a <b>User ID</b></li><li><b>Organization ID</b> and
-    <b>User ID</b> are mandatory in request payloads and determine data access</li><li>APIs are multi-tenant
-    by design and return data scoped to the provided organization</li></ul><b>Processing model</b><ul><li>Transactions
-    are pushed via external pipelines (real-time or batch)</li><li>The platform persists and processes
-    the data as per supported transaction structures</li><li>The APIs do not orchestrate synchronization
-    or enforce real-time guarantees</li></ul>
+  description: >-
+    The <b>Transaction APIs</b> enable external enterprise customers to <b>ingest and retrieve transaction
+    ledger records</b> within the <b>73 Strings platform</b>.<br><br>These APIs are intended for <b>client-side
+    engineering teams</b> that manage their own data pipelines and require a <b>controlled, structured
+    interface</b> to push transaction data into the platform or retrieve processed transaction information
+    for downstream workflows.<br><br><b>Key capabilities</b><ul><li>Bulk creation and update of transaction
+    ledger records</li><li>Platform-generated <b>Display IDs</b> for stable referencing across workflows</li><li>Retrieval
+    of processed transaction data</li><li>Reference APIs for <b>transaction types</b> and <b>transaction
+    versions</b> to ensure payload correctness</li><li>Partial success handling for bulk ingestion</li></ul><b>Authentication
+    &amp; data scoping</b><ul><li>All APIs are authenticated using a <b>subscription key</b> associated
+    with a <b>User ID</b></li><li><b>Organization ID</b> and <b>User ID</b> are mandatory in request payloads
+    and determine data access</li><li>APIs are multi-tenant by design and return data scoped to the provided
+    organization</li></ul><b>Processing model</b><ul><li>Transactions are pushed via external pipelines
+    (real-time or batch)</li><li>The platform persists and processes the data as per supported transaction
+    structures</li><li>The APIs do not orchestrate synchronization or enforce real-time guarantees</li></ul>
   humanURL: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=asset-info
   baseURL: https://api-accord-eut-73strings.azure-api.net/assetinfo
   tags:
@@ -253,7 +232,36 @@ apis:
   - type: Documentation
     url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=financial-data
   - type: Documentation
-    url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=qualitative-data
+    url: >-
+      https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=qualitative-data
+  - type: Documentation
+    url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=transaction-api
+- aid: 73-strings:73-strings-cap-table-api
+  name: 73 Strings cap table API
+  description: >-
+    The **Captable APIs**, a RESTful service on 73 Strings, provides comprehensive capital table data
+    including securities, equity, cash positions, and key financial metrics for entities within an organization.
+    The API enables users to retrieve detailed captable information with various aggregations and groupings.
+  humanURL: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=asset-info
+  baseURL: https://api-accord-eut-73strings.azure-api.net/assetinfo
+  tags:
+  - cap table
+  properties:
+  - type: OpenAPI
+    url: openapi/73-strings-cap-table-api-openapi.yml
+  - type: Documentation
+    url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=asset-info
+  - type: APIReference
+    url: https://api-accord-eut-73strings.developer.azure-api.net/apis
+  - type: Documentation
+    url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=captable
+  - type: Documentation
+    url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=documents
+  - type: Documentation
+    url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=financial-data
+  - type: Documentation
+    url: >-
+      https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=qualitative-data
   - type: Documentation
     url: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=transaction-api
 maintainers:
