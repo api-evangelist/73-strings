@@ -1,12 +1,12 @@
 {
   "provider": "73-strings",
   "sources": [
-    "73-strings-asset-info-api-openapi.yml",
-    "73-strings-captable-api-openapi.yml",
-    "73-strings-documents-api-openapi.yml",
-    "73-strings-financial-data-api-openapi.yml",
-    "73-strings-qualitative-data-api-openapi.yml",
-    "73-strings-transaction-api-api-openapi.yml"
+    "_original/73-strings-asset-info-openapi.yml",
+    "_original/73-strings-captable-openapi.yml",
+    "_original/73-strings-documents-openapi.yml",
+    "_original/73-strings-financial-data-openapi.yml",
+    "_original/73-strings-qualitative-data-openapi.yml",
+    "_original/73-strings-transaction-api-openapi.yml"
   ],
   "outputs": [
     "73-strings-asset-info-api-openapi.yml",
@@ -16,17 +16,28 @@
     "73-strings-qualitative-data-api-openapi.yml",
     "73-strings-transaction-api-api-openapi.yml"
   ],
-  "archived": [],
+  "archived": [
+    "deleted 1 superseded output(s) from the previous generation"
+  ],
   "errors": [],
   "warnings": [],
   "notes": [
-    "73-strings-asset-info-api-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
-    "73-strings-captable-api-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
-    "73-strings-documents-api-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
-    "73-strings-financial-data-api-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
-    "73-strings-qualitative-data-api-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
-    "73-strings-transaction-api-api-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
-    "apis.yml register: already-registered"
+    "sourced from openapi/_original/ (6 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "73-strings-asset-info-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "73-strings-captable-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "73-strings-documents-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "73-strings-financial-data-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "73-strings-qualitative-data-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "73-strings-transaction-api-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "superseded outputs removed: 73-strings-cap-table-api-openapi.yml",
+    "apis.yml register: written (+1 apis, 6 total)"
   ],
-  "skipped": []
+  "skipped": [
+    "73-strings-asset-info-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "73-strings-cap-table-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "73-strings-documents-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "73-strings-financial-data-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "73-strings-qualitative-data-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "73-strings-transaction-api-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

@@ -425,7 +425,10 @@ paths:
       summary: Get Entity Qualitative Analysis Data
       tags:
       - Qualitative Data
-      description: "The 73 Monitor allows users to add qualitative comments or insights about the company. The **get73MQualitativeAnalysis API** retrieves qualitative insights or commentary related to a specific company within a particular fund, the user can access to. The Qualitative Analysis section allows fund managers or analysts, to input their observations, insights, or detailed commentary about a company's performance, strategy, or other relevant factors. These inputs are typically structured as pairs of titles and comments, providing a clear and organized way to document and review qualitative data.\n\n By leveraging the capabilities of the 73Value Equity product, users can streamline their access to important company details, enhancing their ability to manage and analyze their investments."
+      description: 'The 73 Monitor allows users to add qualitative comments or insights about the company. The **get73MQualitativeAnalysis API** retrieves qualitative insights or commentary related to a specific company within a particular fund, the user can access to. The Qualitative Analysis section allows fund managers or analysts, to input their observations, insights, or detailed commentary about a company''s performance, strategy, or other relevant factors. These inputs are typically structured as pairs of titles and comments, providing a clear and organized way to document and review qualitative data.
+
+
+        By leveraging the capabilities of the 73Value Equity product, users can streamline their access to important company details, enhancing their ability to manage and analyze their investments.'
       parameters:
       - name: subscription-key
         in: header
@@ -576,55 +579,6 @@ paths:
                     message: Internal server error. Please try again later or contact support.
 components:
   schemas:
-    CompanyDataResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CompanyData'
-          description: Array/List containing details of each company.
-    CompanyIdsRequest:
-      required:
-      - companyIds
-      - userId
-      type: object
-      properties:
-        companyIds:
-          type: array
-          items:
-            type: string
-            description: 'array/list of company_id
-
-
-              company_id → unique identifier of a company'
-            example: '["n2n3jndi12-hxj2-h3un2j-mnxj823njw","nek3oec5njk3nk-nc34ni-nj49u48f- hcjcc904nf3","e4nikv4im4654n3k-nj959nrf4-nf4j44-nfjnrji93"]'
-          description: 'array/list of company_id
-
-
-            company_id → unique identifier of a company'
-          example:
-          - n2n3jndi12-hxj2-h3un2j-mnxj823njw
-          - nek3oec5njk3nk-nc34ni-nj49u48f- hcjcc904nf3
-          - e4nikv4im4654n3k-nj959nrf4-nf4j44-nfjnrji93
-        userId:
-          type: string
-          description: Unique Identifier of a user.
-          example: 420a8114-n32mxxxbe-948hn75-8d90-2c372e4230b3
-    QualitativeAnalysisDataResDTO:
-      type: object
-      properties:
-        response:
-          $ref: '#/components/schemas/Response'
-        success:
-          type: boolean
-          description: Indicates success or failure
-        message:
-          type: string
-          description: Response message
-        errorCode:
-          type: string
-          description: Error code if any
     EntityQualitativeAnalysisDataReqDTO:
       required:
       - companyId
@@ -679,6 +633,100 @@ components:
           description: As of date in ISO format (yyyy-MM-dd)
           example: '2023-06-30'
       description: Request DTO for filtering data by user, company, tags, organization and dates
+    Response:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataItem'
+          description: List of data items
+      description: Response payload
+    QualitativeAnalysisDataResDTO:
+      type: object
+      properties:
+        response:
+          $ref: '#/components/schemas/Response'
+        success:
+          type: boolean
+          description: Indicates success or failure
+        message:
+          type: string
+          description: Response message
+        errorCode:
+          type: string
+          description: Error code if any
+    API_Response_CustomAttributes:
+      required:
+      - success
+      - message
+      type: object
+      properties:
+        response:
+          required:
+          - orgId
+          - data
+          type: object
+          properties:
+            orgId:
+              type: string
+              description: Unique identifier of the organization.
+              example: cfcbb891-xxxx-xxxx-xxxx-57142094123c
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/EntityAttributeData'
+              description: Entity Id and details of the custom attributes associated with the corresponding entity.
+            Invalid_Requests:
+              type: array
+              items:
+                $ref: '#/components/schemas/InvalidRequests'
+              description: 'Provides the list of invalid requests, incase of partially successful requests. '
+        success:
+          type: boolean
+          description: Request’s success status.
+          example: true
+        message:
+          type: string
+          description: Output message depending on success status.
+          example: Success
+        errorCode:
+          type:
+          - string
+          - 'null'
+          description: 'Response on hitting API request.
+
+
+            null: No errors were encountered.
+
+            Error Code: A descriptive error message or code if an issue occurred.'
+          example: null
+      description: Response parameters when custom attributes and its details is requested.
+    InvalidRequests:
+      required:
+      - success
+      - message
+      - responseCode
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Request’s success status.
+          example: false
+        message:
+          type: string
+          description: Output message depending on success status.
+          example: 'Invalid entity ids: [64f1db13-xxxx-xxxx-xxxx-a963cec04899]'
+        responseCode:
+          type: string
+          description: 'Response on hitting API request.
+
+
+            null: No errors were encountered.
+
+            Error Code: A descriptive error message or code if an issue occurred.'
+          example: BAD_REQUEST
+      description: Provides the list of invalid requests, incase of partially successful requests.
     CompanyData:
       type: object
       properties:
@@ -772,216 +820,6 @@ components:
           description: Unique Ticker symbol of a company
           example: PUMA2023
       description: Company Data
-    Request_CustomAttributes:
-      required:
-      - userId
-      - orgId
-      - entityIds
-      type: object
-      properties:
-        userId:
-          type: string
-          description: "Unique identifier for the user. \nShared by 73 Strings team."
-          example: 456fa8cd-xxxx-xxxx-xxxx-850b67f2efd4
-        orgId:
-          type: string
-          description: "Organization identifier on 73 Strings Platform. \nShared by 73Strings team."
-          example: cfcbb891-xxxx-xxxx-xxxx-57142094123c
-        entityIds:
-          type: array
-          items:
-            type: string
-          description: List of unique identifier of the entities, can be retrieved from Entity List operation under Asset Info APIs.
-          example:
-          - 0caf8dc0-xxxx-xxxx-xxxx-b43a2621fcba
-          - 0cabd8dc0-xxxx-xxxx-xxxx-bu41fcba
-        attributeIds:
-          type: array
-          items:
-            type: string
-          description: 'List of unique identifier of the attributes, can be retrieved from Attribute List operation under Asset Info APIs.
-
-
-            **NOTE**: If the “attributeIds” is an empty array, then data for all custom attributes created will be displayed in the response.'
-          example:
-          - 3286287b-xxxx-xxxx-xxxx-ab4409f445f5
-      description: Key–value parameters sent to an API that specify what data should be retrieved from, or pushed to, the destination system.
-    Response:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/DataItem'
-          description: List of data items
-      description: Response payload
-    EntityAttributeData:
-      required:
-      - entityId
-      - Entity_CustomAttributes
-      type: object
-      properties:
-        entityId:
-          type: string
-          description: Unique identifier of the entity
-          example: 0caf8dc0-xxxx-xxxx-xxxx-b43a2621fcba
-        Entity_CustomAttributes:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomAttributeDetails'
-          description: List of all custom attributes and its details, associated to an entity.
-      description: Entity Id and details of the custom attributes associated with the corresponding entity.
-    CustomAttributeDetails:
-      required:
-      - attributeId
-      - attributeName
-      - tag
-      - attributeType
-      - global
-      - value
-      type: object
-      properties:
-        attributeId:
-          type: string
-          description: Unique identifier of the attribute.
-          example: b57a75f7-xxxx-xxxx-xxxx-407d49868e5a
-        attributeName:
-          type: string
-          description: Attribute names as seen on 73S Monitor, corresponding to the attribute Id.
-          example: Business Sponsor
-        tag:
-          type: string
-          description: The tag that an attribute is associated with, which determines where the attribute is used.
-          example: General Details
-        attributeType:
-          type: string
-          description: 'Category of the attribute.
-
-
-            **TEXT** or ** NUMERICAL**.'
-          example: TEXT
-        description:
-          type:
-          - string
-          - 'null'
-          description: Brief overview added about the attribute.
-          example: Strategic
-        global:
-          type: string
-          description: Indicates whether the attribute is a Global attribute.
-          example: 'false'
-        value:
-          type: string
-          description: The specific value an attribute holds for a given entity.
-          example: GHO-SI-ESG
-      description: List of all custom attributes and its details, associated to an entity.
-    API_Response_CustomAttributes:
-      required:
-      - success
-      - message
-      type: object
-      properties:
-        response:
-          required:
-          - orgId
-          - data
-          type: object
-          properties:
-            orgId:
-              type: string
-              description: Unique identifier of the organization.
-              example: cfcbb891-xxxx-xxxx-xxxx-57142094123c
-            data:
-              type: array
-              items:
-                $ref: '#/components/schemas/EntityAttributeData'
-              description: Entity Id and details of the custom attributes associated with the corresponding entity.
-            Invalid_Requests:
-              type: array
-              items:
-                $ref: '#/components/schemas/InvalidRequests'
-              description: 'Provides the list of invalid requests, incase of partially successful requests. '
-        success:
-          type: boolean
-          description: Request’s success status.
-          example: true
-        message:
-          type: string
-          description: Output message depending on success status.
-          example: Success
-        errorCode:
-          type:
-          - string
-          - 'null'
-          description: 'Response on hitting API request.
-
-
-            null: No errors were encountered.
-
-            Error Code: A descriptive error message or code if an issue occurred.'
-          example: null
-      description: Response parameters when custom attributes and its details is requested.
-    InvalidRequests:
-      required:
-      - success
-      - message
-      - responseCode
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: Request’s success status.
-          example: false
-        message:
-          type: string
-          description: Output message depending on success status.
-          example: 'Invalid entity ids: [64f1db13-xxxx-xxxx-xxxx-a963cec04899]'
-        responseCode:
-          type: string
-          description: 'Response on hitting API request.
-
-
-            null: No errors were encountered.
-
-            Error Code: A descriptive error message or code if an issue occurred.'
-          example: BAD_REQUEST
-      description: Provides the list of invalid requests, incase of partially successful requests.
-    ApiResponse:
-      type: object
-      properties:
-        response:
-          type: array
-          items:
-            type: object
-            description: List containing the response data.
-            example:
-            - id: '123'
-              name: Sample Data
-          description: List containing the response data.
-          example:
-          - id: '123'
-            name: Sample Data
-        success:
-          type: boolean
-          description: Request’s success status.
-          example: true
-        message:
-          type: string
-          description: Output message depending on success status.
-          example: Success
-        errorCode:
-          type: string
-          description: 'Error response on hitting API request.
-
-
-            null: No errors were encountered.
-
-
-            string: A descriptive error message or code if an issue occurred.'
-          example: EXCE00018
-      description: Generic API response wrapper containing the response data, success status, message, and error code.
-      xml:
-        name: ApiResponse
     DataItem:
       type: object
       properties:
@@ -1070,6 +908,171 @@ components:
           type: string
           description: Article date as string
       description: List of data items
+    ApiResponse:
+      type: object
+      properties:
+        response:
+          type: array
+          items:
+            type: object
+            description: List containing the response data.
+            example:
+            - id: '123'
+              name: Sample Data
+          description: List containing the response data.
+          example:
+          - id: '123'
+            name: Sample Data
+        success:
+          type: boolean
+          description: Request’s success status.
+          example: true
+        message:
+          type: string
+          description: Output message depending on success status.
+          example: Success
+        errorCode:
+          type: string
+          description: 'Error response on hitting API request.
+
+
+            null: No errors were encountered.
+
+
+            string: A descriptive error message or code if an issue occurred.'
+          example: EXCE00018
+      description: Generic API response wrapper containing the response data, success status, message, and error code.
+      xml:
+        name: ApiResponse
+    CompanyDataResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyData'
+          description: Array/List containing details of each company.
+    EntityAttributeData:
+      required:
+      - entityId
+      - Entity_CustomAttributes
+      type: object
+      properties:
+        entityId:
+          type: string
+          description: Unique identifier of the entity
+          example: 0caf8dc0-xxxx-xxxx-xxxx-b43a2621fcba
+        Entity_CustomAttributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomAttributeDetails'
+          description: List of all custom attributes and its details, associated to an entity.
+      description: Entity Id and details of the custom attributes associated with the corresponding entity.
+    CustomAttributeDetails:
+      required:
+      - attributeId
+      - attributeName
+      - tag
+      - attributeType
+      - global
+      - value
+      type: object
+      properties:
+        attributeId:
+          type: string
+          description: Unique identifier of the attribute.
+          example: b57a75f7-xxxx-xxxx-xxxx-407d49868e5a
+        attributeName:
+          type: string
+          description: Attribute names as seen on 73S Monitor, corresponding to the attribute Id.
+          example: Business Sponsor
+        tag:
+          type: string
+          description: The tag that an attribute is associated with, which determines where the attribute is used.
+          example: General Details
+        attributeType:
+          type: string
+          description: 'Category of the attribute.
+
+
+            **TEXT** or ** NUMERICAL**.'
+          example: TEXT
+        description:
+          type:
+          - string
+          - 'null'
+          description: Brief overview added about the attribute.
+          example: Strategic
+        global:
+          type: string
+          description: Indicates whether the attribute is a Global attribute.
+          example: 'false'
+        value:
+          type: string
+          description: The specific value an attribute holds for a given entity.
+          example: GHO-SI-ESG
+      description: List of all custom attributes and its details, associated to an entity.
+    CompanyIdsRequest:
+      required:
+      - companyIds
+      - userId
+      type: object
+      properties:
+        companyIds:
+          type: array
+          items:
+            type: string
+            description: 'array/list of company_id
+
+
+              company_id → unique identifier of a company'
+            example: '["n2n3jndi12-hxj2-h3un2j-mnxj823njw","nek3oec5njk3nk-nc34ni-nj49u48f- hcjcc904nf3","e4nikv4im4654n3k-nj959nrf4-nf4j44-nfjnrji93"]'
+          description: 'array/list of company_id
+
+
+            company_id → unique identifier of a company'
+          example:
+          - n2n3jndi12-hxj2-h3un2j-mnxj823njw
+          - nek3oec5njk3nk-nc34ni-nj49u48f- hcjcc904nf3
+          - e4nikv4im4654n3k-nj959nrf4-nf4j44-nfjnrji93
+        userId:
+          type: string
+          description: Unique Identifier of a user.
+          example: 420a8114-n32mxxxbe-948hn75-8d90-2c372e4230b3
+    Request_CustomAttributes:
+      required:
+      - userId
+      - orgId
+      - entityIds
+      type: object
+      properties:
+        userId:
+          type: string
+          description: "Unique identifier for the user. \nShared by 73 Strings team."
+          example: 456fa8cd-xxxx-xxxx-xxxx-850b67f2efd4
+        orgId:
+          type: string
+          description: "Organization identifier on 73 Strings Platform. \nShared by 73Strings team."
+          example: cfcbb891-xxxx-xxxx-xxxx-57142094123c
+        entityIds:
+          type: array
+          items:
+            type: string
+          description: List of unique identifier of the entities, can be retrieved from Entity List operation under Asset Info APIs.
+          example:
+          - 0caf8dc0-xxxx-xxxx-xxxx-b43a2621fcba
+          - 0cabd8dc0-xxxx-xxxx-xxxx-bu41fcba
+        attributeIds:
+          type: array
+          items:
+            type: string
+          description: 'List of unique identifier of the attributes, can be retrieved from Attribute List operation under Asset Info APIs.
+
+
+            **NOTE**: If the “attributeIds” is an empty array, then data for all custom attributes created will be displayed in the response.'
+          example:
+          - 3286287b-xxxx-xxxx-xxxx-ab4409f445f5
+      description: Key–value parameters sent to an API that specify what data should be retrieved from, or pushed to, the destination system.
   securitySchemes:
     apiKeyHeader:
       type: apiKey

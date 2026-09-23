@@ -118,8 +118,7 @@ paths:
       description: 'The BU Financial Data API retrieves the financial data for a specific business unit belonging to an entity of type "company." This API returns all data points available in the Financial table for the requested business unit, for the numerical category attributes as entered by users for different reporting periods and cashflow dates.
 
 
-
-        The endpoint enables clients to access structured, period-based financial information, supporting detailed analysis using both aggregated value and its drill down data for business units within a company. '
+        The endpoint enables clients to access structured, period-based financial information, supporting detailed analysis using both aggregated value and its drill down data for business units within a company.'
       parameters:
       - name: subscription-key
         in: header
@@ -493,7 +492,6 @@ paths:
         ⚠️ **Concurrency Limitation**
 
 
-
         This API does not support concurrent streaming sessions. Simultaneous requests from the same client will result in undefined behavior or connection failures. Ensure that your implementation processes one stream at a time before initiating a new request.'
       parameters:
       - name: subscription-key
@@ -636,8 +634,7 @@ paths:
       description: 'The Security Financial Data API retrieves the financial data for a specific securities belonging to an entity of type "company." This API returns all data points available in the Financial table for the requested security, for the numerical category attributes as entered by users for different reporting periods and cashflow dates.
 
 
-
-        The endpoint enables clients to access structured, period-based financial information, supporting detailed analysis using both aggregated value and its drill down data for securities within a company. '
+        The endpoint enables clients to access structured, period-based financial information, supporting detailed analysis using both aggregated value and its drill down data for securities within a company.'
       parameters:
       - name: subscription-key
         in: header
@@ -963,74 +960,6 @@ paths:
                     message: Internal server error. Please try again later or contact support.
 components:
   schemas:
-    EntityFinancialResDTO:
-      type: object
-      properties:
-        orgId:
-          type: string
-          description: Unique identifier of the organization.
-          example: 4839fbd20-8534gf3bzzxxxx-0958htf3d924fg8bvuc
-        companyId:
-          type: string
-          description: Unique identifier of the entity.
-          example: b7eb2b8f-df3b-4b7a-9675-012ac2f3f088
-        version:
-          type: string
-          description: Name of the version, as used in 73strings platform.
-          example: Actual
-        period:
-          type: string
-          description: Period type as mentioned on 73 Strings platform.
-          example: period
-        tag:
-          type: string
-          description: Tag of the attribute
-          example: Income Statement
-        units:
-          type: string
-          description: Units as mentioned in 73 Strings platform.
-          example: Millions
-        currency:
-          type: string
-          description: Currency Codes as per the ISO standard; ISO 4217
-          example: USD
-        attributeId:
-          type: string
-          description: Unique identifier of the attribute. Use Attribute List API to get the IDs of attribute.
-          example: 70f49a71-746e-11ec-a730-249684d39778
-        attributeName:
-          type: string
-          description: Name of the attribute.
-          example: Revenue
-        cashFlowDate:
-          type: string
-          description: 'The date on which financial attribute''s values impact the cash position of the entity. '
-          example: '2024-12-31 00:00:00.0'
-        asOfDate:
-          type: string
-          description: 'The upload date as of which financial date is retrieved.
-
-
-            Format: DD-MM-YYYY'
-          example: '2025-06-07 00:00:00.0'
-        companyName:
-          type: string
-          description: Name of the entity.
-          example: reliance
-        trueUpValue:
-          type: string
-          description: Aggregated value of the attribute in the financials.
-          example: '60.0'
-        drillDown:
-          type: string
-          description: Contains breakdown of the attribute’s true Up value on given cashflow date.
-      description: Retrieved financial data for the requested entities.
-      xml:
-        name: Entity Financial Data
-    ApiV2EmsEntityFinancialDataPost200TextEvent-streamResponse:
-      type: string
-      description: Server-Sent Events stream with each event containing a JSON object of financial data
-      x-apim-inline: true
     EntityBuFinancialDataResDTO:
       type: object
       properties:
@@ -1106,6 +1035,57 @@ components:
       description: Retrieved financial data for the requested Business unit.
       xml:
         name: Entity Bu Financial Data
+    FinancialTextReqData:
+      type: object
+      properties:
+        attributeId:
+          type: string
+          description: Unique identifier of the financial attribute.
+          example: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        companyId:
+          type: string
+          description: Unique identifier of the company.
+          example: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        segmentId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of the segment, if applicable.
+          example: null
+        securityId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of the security, if applicable.
+          example: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        versionId:
+          type: string
+          description: Unique identifier of the version (e.g., Actual, Budget).
+          example: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        periodType:
+          type: string
+          description: Financial period type.
+          example: Quarterly
+        cashFlowDate:
+          type: string
+          description: Cash flow date in DD-MM-YYYY format (optional).
+          example: 30-09-2023
+        startDate:
+          type: string
+          description: Start date for the reporting period (YYYY-MM-DD).
+          example: '2024-12-01'
+        endDate:
+          type: string
+          description: End date for the reporting period (YYYY-MM-DD).
+          example: '2025-12-31'
+        asOfDate:
+          type: string
+          description: As-of date in DD-MM-YYYY format.
+          example: '2025-07-08'
+    ApiV2EmsEntityFinancialDataPost200TextEvent-streamResponse:
+      type: string
+      description: Server-Sent Events stream with each event containing a JSON object of financial data
+      x-apim-inline: true
     GetAllFinancialTextsReq:
       required:
       - userId
@@ -1120,131 +1100,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FinancialTextReqData'
-    GetAllFinancialTextsResp:
-      type: object
-      properties:
-        response:
-          type: object
-          properties:
-            data:
-              type: array
-              items:
-                $ref: '#/components/schemas/FinancialTextRespData'
-        success:
-          type: boolean
-          example: true
-        message:
-          type: string
-          example: Success
-        errorCode:
-          type:
-          - string
-          - 'null'
-          example: null
-    CompanyData:
-      type: object
-      properties:
-        companyId:
-          type: string
-          description: Unique identifier of the entity
-          example: b7eb2b8f-df3b-4b7a-9675-012ac2f3f088
-        companyName:
-          type: string
-          description: Name of the entity
-          example: Tech Corp
-        currency:
-          type: string
-          description: Reporting currency used for the entity financials
-          example: USD
-        historicalFinancials:
-          type: array
-          items:
-            $ref: '#/components/schemas/FinancialRecord'
-          description: List containing various historical financial metrics and their value.
-        projectedFinancials:
-          type: array
-          items:
-            $ref: '#/components/schemas/FinancialRecord'
-          description: List containing various projected financial metrics and their value.
-      description: Details on the entity's financial data
-    EntityFinancialDataReqDTO:
-      type: object
-      properties:
-        userId:
-          type: string
-          description: Unique Identifier of the User
-          example: 4d32666b-5fa9-489f-93b1-1f5036bd2a41
-        companyData:
-          type: array
-          items:
-            $ref: '#/components/schemas/CompanyData'
-          description: List containing entity financial data
-      description: Request attributes to save entity financial data
-    EntitySecurityFinancialDataResDTO:
-      type: object
-      properties:
-        orgId:
-          type: string
-          description: Unique identifier associated with the organization.
-          example: 4839fbd20-8534gf3bzzxxxx-0958htf3d924fg8bvuc
-        companyId:
-          type: string
-          description: Unique identifier associated with the entity.
-          example: 0c71522c-3cfa-4b37-b506-d3a7477a09b1
-        version:
-          type: string
-          description: Name of the version as used in 73 Strings application.
-          example: Actual
-        period:
-          type: string
-          description: Period type as mentioned in the 73 strings application
-          example: LTM
-        tag:
-          type: string
-          description: Tag of attribute.
-          example: Income Statement
-        units:
-          type: string
-          description: Units as mentioned in the 73 Strings application.
-          example: Millions
-        currency:
-          type: string
-          description: Currency Codes as per the ISO standard; ISO 4217
-          example: USD
-        attributeId:
-          type: string
-          description: Unique identifier of the attribute.
-          example: 70f49a71-746e-11ec-a730-249684d39778
-        attributeName:
-          type: string
-          description: Name of the attribute.
-          example: Revenue
-        cashFlowDate:
-          type: string
-          description: The date on which financial attribute values impact the cash position of the security.
-          example: '2016-12-31 00:00:00.0'
-        asOfDate:
-          type: string
-          description: 'The upload date as of which financial date is retrieved. Format: DD-MM-YYYY'
-          example: '2025-06-04 00:00:00.0'
-        companyName:
-          type: string
-          description: Name of the entity.
-          example: Reliance
-        securityId:
-          type: string
-          description: List of Unique Identifiers securities of the given entity as stored in 73S system
-          example: 258df365-3ca8-4767-93ac-93cc1963148f
-        trueUpValue:
-          type: string
-          description: Aggregated value of the attribute on the mentioned cash flow date
-          example: '124.0'
-        drillDown:
-          type: string
-          description: Contains breakdown of the attribute’s true Up value on given cashflow date.
-      description: Retrieved financial data for the requested securities.
-      xml:
-        name: Entity Security Financial Data
     FinancialTextRespData:
       type: object
       properties:
@@ -1293,61 +1148,76 @@ components:
         errorCodes:
           type: array
           items: {}
-    FinancialTextReqData:
+    EntityFinancialDataReqDTO:
       type: object
       properties:
-        attributeId:
+        userId:
           type: string
-          description: Unique identifier of the financial attribute.
-          example: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+          description: Unique Identifier of the User
+          example: 4d32666b-5fa9-489f-93b1-1f5036bd2a41
+        companyData:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyData'
+          description: List containing entity financial data
+      description: Request attributes to save entity financial data
+    GetAllFinancialTextsResp:
+      type: object
+      properties:
+        response:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/FinancialTextRespData'
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Success
+        errorCode:
+          type:
+          - string
+          - 'null'
+          example: null
+    CompanyData:
+      type: object
+      properties:
         companyId:
           type: string
-          description: Unique identifier of the company.
-          example: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-        segmentId:
-          type:
-          - string
-          - 'null'
-          description: Unique identifier of the segment, if applicable.
-          example: null
-        securityId:
-          type:
-          - string
-          - 'null'
-          description: Unique identifier of the security, if applicable.
-          example: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-        versionId:
+          description: Unique identifier of the entity
+          example: b7eb2b8f-df3b-4b7a-9675-012ac2f3f088
+        companyName:
           type: string
-          description: Unique identifier of the version (e.g., Actual, Budget).
-          example: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-        periodType:
+          description: Name of the entity
+          example: Tech Corp
+        currency:
           type: string
-          description: Financial period type.
-          example: Quarterly
-        cashFlowDate:
-          type: string
-          description: Cash flow date in DD-MM-YYYY format (optional).
-          example: 30-09-2023
-        startDate:
-          type: string
-          description: Start date for the reporting period (YYYY-MM-DD).
-          example: '2024-12-01'
-        endDate:
-          type: string
-          description: End date for the reporting period (YYYY-MM-DD).
-          example: '2025-12-31'
-        asOfDate:
-          type: string
-          description: As-of date in DD-MM-YYYY format.
-          example: '2025-07-08'
-    EntityFinancialsReqDTO:
+          description: Reporting currency used for the entity financials
+          example: USD
+        historicalFinancials:
+          type: array
+          items:
+            $ref: '#/components/schemas/FinancialRecord'
+          description: List containing various historical financial metrics and their value.
+        projectedFinancials:
+          type: array
+          items:
+            $ref: '#/components/schemas/FinancialRecord'
+          description: List containing various projected financial metrics and their value.
+      description: Details on the entity's financial data
+    EntityBuFinancialDataReqDTO:
       required:
       - asOfDate
       - attributeNames
+      - businessUnitIds
       - companyName
       - currency
       - endDate
       - entityIds
+      - includeDrillDown
       - orgId
       - periodType
       - startDate
@@ -1361,19 +1231,17 @@ components:
           type: array
           items:
             type: string
-            description: attributeNames
-            example: '[''Revenue'']'
-          description: 'Attribute names as seen on 73S Monitor;
-
-            Note:This should be an exact match'
-          example: '[''Revenue'']'
+            description: Attribute names as seen on 73S Monitor; This should be an exact match
+            example: '[''EBITDA'']'
+          description: Attribute names as seen on 73S Monitor; This should be an exact match
+          example: '[''EBITDA'']'
         entityIds:
           type: array
           items:
             type: string
-            description: List of unique identifier of the entities.
+            description: Unique identifier of the entity. Use Entity List operation under Asset Info API
             example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
-          description: List of unique identifier of the entities.
+          description: Unique identifier of the entity. Use Entity List operation under Asset Info API
           example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
         companyName:
           type: string
@@ -1382,52 +1250,62 @@ components:
         asOfDate:
           type: string
           description: 'The upload date as of which financial date is retrieved. Format: DD-MM-YYYY'
-          example: '2025-06-07 00:00:00.0'
+          example: '2025-06-04 00:00:00.0'
         currency:
           type: string
           description: 'Currency Codes as per the ISO standard; ISO 4217 '
           example: USD
         units:
           type: string
-          description: Financial units used in 73 Strings application.
+          description: 'Units in which retrieved financial data is retrieved, as used in 73 Strings application. '
           example: Millions
         versionId:
           type: string
-          description: Unique identifier of the version.
-          example: c12ce0c7-63f6-4177-b59a-6c9fb5497v21
+          description: Unique Identifier of the version.
+          example: C21e0c7-63f6-4177-b59a-6c9fb54970C2
         versionName:
           type: string
-          description: Name of the versiob, as used in 73 Strings application.
-          example: Actual
+          description: Name of the version, as used in 73 Strings application.
+          example: Budget
         startDate:
           type: string
-          description: "Cashflow Date from which financial data is retrieved.\n\n Format: DD-MM-YYYY"
-          example: '2010-12-31'
+          description: 'Cashflow Date from which financial data is retrieved. Format: DD-MM-YYYY'
+          example: '2017-12-31'
         endDate:
           type: string
-          description: 'Cashflow date until which financial data is retrieved.
-
-
-            Format: DD-MM-YYYY'
-          example: '2025-01-01'
+          description: 'Cashflow date until which financial data is retrieved. Format: DD-MM-YYYY'
+          example: '2030-12-31'
         orgId:
           type: string
-          description: Unique identifier of the organization.
-          example: b14ce0c7-63f6-4177-b59a-6c9fb54970e3
+          description: Organization’s unique Identifier on 73 Strings Platform; Shared by 73 Strings team
+          example: C31ce0c7-63f6-4177-b59a-6c9fb5497081
         periodType:
           type: string
-          description: Period type as mentioned on 73S Monitor.
+          description: Period type as mentioned on 73S Monitor
           example: Annual
         userId:
           type: string
-          description: Unique Identifier of the user.
-          example: c52ce0c7-63f6-4177-b59a-6c9fb54970c4
+          description: User Id on 73 Strings Platform; Shared by 73 Strings team
+          example: n21ce0c7-63f6-4177-b59a-6c9fb54980r1
+        businessUnitIds:
+          type: array
+          items:
+            type: string
+            description: List of Unique Identifiers of Business Unit of the given entity as stored in 73S system
+            example: '[''321ce0c7-63f6-4177-b59a-6c9fb5497034'']'
+          description: List of Unique Identifiers of Business Unit of the given entity as stored in 73S system
+          example: '[''321ce0c7-63f6-4177-b59a-6c9fb5497034'']'
         includeDrillDown:
-          type: string
+          type: array
+          items:
+            type: string
+            description: Decision to include the drilldown data of listed attribute on a specific cashflow date.
+            example: 'true'
           description: Decision to include the drilldown data of listed attribute on a specific cashflow date.
-      description: Attributes to request to retrieve entity's financial Data.
+          example: 'true'
+      description: Attributes to request to retrieve entity's Business Units financial Data.
       xml:
-        name: Request body of Entity Financials Data
+        name: Request body of Entity Bu Financial Data
     EntitySecurityFinancialDataReqDTO:
       required:
       - asOfDate
@@ -1557,16 +1435,79 @@ components:
       description: Generic API response wrapper containing the response data, success status, message, and error code.
       xml:
         name: ApiResponse
-    EntityBuFinancialDataReqDTO:
+    EntitySecurityFinancialDataResDTO:
+      type: object
+      properties:
+        orgId:
+          type: string
+          description: Unique identifier associated with the organization.
+          example: 4839fbd20-8534gf3bzzxxxx-0958htf3d924fg8bvuc
+        companyId:
+          type: string
+          description: Unique identifier associated with the entity.
+          example: 0c71522c-3cfa-4b37-b506-d3a7477a09b1
+        version:
+          type: string
+          description: Name of the version as used in 73 Strings application.
+          example: Actual
+        period:
+          type: string
+          description: Period type as mentioned in the 73 strings application
+          example: LTM
+        tag:
+          type: string
+          description: Tag of attribute.
+          example: Income Statement
+        units:
+          type: string
+          description: Units as mentioned in the 73 Strings application.
+          example: Millions
+        currency:
+          type: string
+          description: Currency Codes as per the ISO standard; ISO 4217
+          example: USD
+        attributeId:
+          type: string
+          description: Unique identifier of the attribute.
+          example: 70f49a71-746e-11ec-a730-249684d39778
+        attributeName:
+          type: string
+          description: Name of the attribute.
+          example: Revenue
+        cashFlowDate:
+          type: string
+          description: The date on which financial attribute values impact the cash position of the security.
+          example: '2016-12-31 00:00:00.0'
+        asOfDate:
+          type: string
+          description: 'The upload date as of which financial date is retrieved. Format: DD-MM-YYYY'
+          example: '2025-06-04 00:00:00.0'
+        companyName:
+          type: string
+          description: Name of the entity.
+          example: Reliance
+        securityId:
+          type: string
+          description: List of Unique Identifiers securities of the given entity as stored in 73S system
+          example: 258df365-3ca8-4767-93ac-93cc1963148f
+        trueUpValue:
+          type: string
+          description: Aggregated value of the attribute on the mentioned cash flow date
+          example: '124.0'
+        drillDown:
+          type: string
+          description: Contains breakdown of the attribute’s true Up value on given cashflow date.
+      description: Retrieved financial data for the requested securities.
+      xml:
+        name: Entity Security Financial Data
+    EntityFinancialsReqDTO:
       required:
       - asOfDate
       - attributeNames
-      - businessUnitIds
       - companyName
       - currency
       - endDate
       - entityIds
-      - includeDrillDown
       - orgId
       - periodType
       - startDate
@@ -1580,17 +1521,19 @@ components:
           type: array
           items:
             type: string
-            description: Attribute names as seen on 73S Monitor; This should be an exact match
-            example: '[''EBITDA'']'
-          description: Attribute names as seen on 73S Monitor; This should be an exact match
-          example: '[''EBITDA'']'
+            description: attributeNames
+            example: '[''Revenue'']'
+          description: 'Attribute names as seen on 73S Monitor;
+
+            Note:This should be an exact match'
+          example: '[''Revenue'']'
         entityIds:
           type: array
           items:
             type: string
-            description: Unique identifier of the entity. Use Entity List operation under Asset Info API
+            description: List of unique identifier of the entities.
             example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
-          description: Unique identifier of the entity. Use Entity List operation under Asset Info API
+          description: List of unique identifier of the entities.
           example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
         companyName:
           type: string
@@ -1599,62 +1542,52 @@ components:
         asOfDate:
           type: string
           description: 'The upload date as of which financial date is retrieved. Format: DD-MM-YYYY'
-          example: '2025-06-04 00:00:00.0'
+          example: '2025-06-07 00:00:00.0'
         currency:
           type: string
           description: 'Currency Codes as per the ISO standard; ISO 4217 '
           example: USD
         units:
           type: string
-          description: 'Units in which retrieved financial data is retrieved, as used in 73 Strings application. '
+          description: Financial units used in 73 Strings application.
           example: Millions
         versionId:
           type: string
-          description: Unique Identifier of the version.
-          example: C21e0c7-63f6-4177-b59a-6c9fb54970C2
+          description: Unique identifier of the version.
+          example: c12ce0c7-63f6-4177-b59a-6c9fb5497v21
         versionName:
           type: string
-          description: Name of the version, as used in 73 Strings application.
-          example: Budget
+          description: Name of the versiob, as used in 73 Strings application.
+          example: Actual
         startDate:
           type: string
-          description: 'Cashflow Date from which financial data is retrieved. Format: DD-MM-YYYY'
-          example: '2017-12-31'
+          description: "Cashflow Date from which financial data is retrieved.\n\n Format: DD-MM-YYYY"
+          example: '2010-12-31'
         endDate:
           type: string
-          description: 'Cashflow date until which financial data is retrieved. Format: DD-MM-YYYY'
-          example: '2030-12-31'
+          description: 'Cashflow date until which financial data is retrieved.
+
+
+            Format: DD-MM-YYYY'
+          example: '2025-01-01'
         orgId:
           type: string
-          description: Organization’s unique Identifier on 73 Strings Platform; Shared by 73 Strings team
-          example: C31ce0c7-63f6-4177-b59a-6c9fb5497081
+          description: Unique identifier of the organization.
+          example: b14ce0c7-63f6-4177-b59a-6c9fb54970e3
         periodType:
           type: string
-          description: Period type as mentioned on 73S Monitor
+          description: Period type as mentioned on 73S Monitor.
           example: Annual
         userId:
           type: string
-          description: User Id on 73 Strings Platform; Shared by 73 Strings team
-          example: n21ce0c7-63f6-4177-b59a-6c9fb54980r1
-        businessUnitIds:
-          type: array
-          items:
-            type: string
-            description: List of Unique Identifiers of Business Unit of the given entity as stored in 73S system
-            example: '[''321ce0c7-63f6-4177-b59a-6c9fb5497034'']'
-          description: List of Unique Identifiers of Business Unit of the given entity as stored in 73S system
-          example: '[''321ce0c7-63f6-4177-b59a-6c9fb5497034'']'
+          description: Unique Identifier of the user.
+          example: c52ce0c7-63f6-4177-b59a-6c9fb54970c4
         includeDrillDown:
-          type: array
-          items:
-            type: string
-            description: Decision to include the drilldown data of listed attribute on a specific cashflow date.
-            example: 'true'
+          type: string
           description: Decision to include the drilldown data of listed attribute on a specific cashflow date.
-          example: 'true'
-      description: Attributes to request to retrieve entity's Business Units financial Data.
+      description: Attributes to request to retrieve entity's financial Data.
       xml:
-        name: Request body of Entity Bu Financial Data
+        name: Request body of Entity Financials Data
     FinancialRecord:
       type: object
       properties:
@@ -1681,6 +1614,70 @@ components:
             Cost_of_Goods_Sold: null
             Gross_Profit: '111'
       description: Financial details for various cashflow date and period.
+    EntityFinancialResDTO:
+      type: object
+      properties:
+        orgId:
+          type: string
+          description: Unique identifier of the organization.
+          example: 4839fbd20-8534gf3bzzxxxx-0958htf3d924fg8bvuc
+        companyId:
+          type: string
+          description: Unique identifier of the entity.
+          example: b7eb2b8f-df3b-4b7a-9675-012ac2f3f088
+        version:
+          type: string
+          description: Name of the version, as used in 73strings platform.
+          example: Actual
+        period:
+          type: string
+          description: Period type as mentioned on 73 Strings platform.
+          example: period
+        tag:
+          type: string
+          description: Tag of the attribute
+          example: Income Statement
+        units:
+          type: string
+          description: Units as mentioned in 73 Strings platform.
+          example: Millions
+        currency:
+          type: string
+          description: Currency Codes as per the ISO standard; ISO 4217
+          example: USD
+        attributeId:
+          type: string
+          description: Unique identifier of the attribute. Use Attribute List API to get the IDs of attribute.
+          example: 70f49a71-746e-11ec-a730-249684d39778
+        attributeName:
+          type: string
+          description: Name of the attribute.
+          example: Revenue
+        cashFlowDate:
+          type: string
+          description: 'The date on which financial attribute''s values impact the cash position of the entity. '
+          example: '2024-12-31 00:00:00.0'
+        asOfDate:
+          type: string
+          description: 'The upload date as of which financial date is retrieved.
+
+
+            Format: DD-MM-YYYY'
+          example: '2025-06-07 00:00:00.0'
+        companyName:
+          type: string
+          description: Name of the entity.
+          example: reliance
+        trueUpValue:
+          type: string
+          description: Aggregated value of the attribute in the financials.
+          example: '60.0'
+        drillDown:
+          type: string
+          description: Contains breakdown of the attribute’s true Up value on given cashflow date.
+      description: Retrieved financial data for the requested entities.
+      xml:
+        name: Entity Financial Data
   securitySchemes:
     apiKeyHeader:
       type: apiKey

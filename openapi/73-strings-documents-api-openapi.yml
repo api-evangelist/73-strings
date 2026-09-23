@@ -25,7 +25,7 @@ paths:
       summary: Get Entity Document Download FIle
       tags:
       - Documents
-      description: 'The **Entity Document Download File API**  retrieves the content of documents that have been uploaded by users in the 73 Strings platform.
+      description: 'The **Entity Document Download File API** retrieves the content of documents that have been uploaded by users in the 73 Strings platform.
 
 
         This API allows users to access crucial information contained within these documents, which can be essential for various tasks such as:
@@ -314,34 +314,28 @@ paths:
                     message: Internal server error. Please try again later or contact support.
 components:
   schemas:
-    EntityDocumentListResDTO:
-      type: object
-      properties:
-        entityId:
-          type: string
-          description: Unique identifier of the entity, whose documents list is retrieved.
-          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
-        document:
-          type: array
-          items:
-            $ref: '#/components/schemas/DocumentDto'
-          description: List of the document ID which are uploaded in the entity.
-      description: Response parameters when Entity's documents list is requested.
-    EntityDocumentReqDTO:
+    DocumentDetailsReqDTO:
       required:
-      - entityId
+      - companyId
+      - documentId
       - userId
       type: object
       properties:
         userId:
           type: string
           description: Unique identifier of the user, who sends request.
-          example: 4d32666b-5fa9-489f-93b1-1f5036bd2a41
-        entityId:
+          example: nejc493-dnixxx-43j34j9n-jdnxx9nio494nnc3ik
+        companyId:
           type: string
-          description: Unique identifier of the entity, whose documents list is requested.
-          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
-      description: Request parameters that is passed to retrieve documents list uploaded in the entity.
+          description: Unique identifier of the entity, where the document is uploaded.
+          example: n3i-9jf3o94fj9-4949xxj9j-jdonm390d9jod0
+        documentId:
+          type: string
+          description: Unique identifier of the document.
+          example: dkjomn049-4jn3i30j-xxnmiw-zxniv49hf9
+      description: Request parameters that is passed to retrieve the document
+      xml:
+        name: documentDetailsReqDTO
     ApiResponse:
       required:
       - response
@@ -383,28 +377,34 @@ components:
       description: Generic API response wrapper containing parameters as follows; response data, success status, message, and error code.
       xml:
         name: ApiResponse
-    DocumentDetailsReqDTO:
+    EntityDocumentReqDTO:
       required:
-      - companyId
-      - documentId
+      - entityId
       - userId
       type: object
       properties:
         userId:
           type: string
           description: Unique identifier of the user, who sends request.
-          example: nejc493-dnixxx-43j34j9n-jdnxx9nio494nnc3ik
-        companyId:
+          example: 4d32666b-5fa9-489f-93b1-1f5036bd2a41
+        entityId:
           type: string
-          description: Unique identifier of the entity, where the document is uploaded.
-          example: n3i-9jf3o94fj9-4949xxj9j-jdonm390d9jod0
-        documentId:
+          description: Unique identifier of the entity, whose documents list is requested.
+          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
+      description: Request parameters that is passed to retrieve documents list uploaded in the entity.
+    EntityDocumentListResDTO:
+      type: object
+      properties:
+        entityId:
           type: string
-          description: Unique identifier of the document.
-          example: dkjomn049-4jn3i30j-xxnmiw-zxniv49hf9
-      description: Request parameters that is passed to retrieve the document
-      xml:
-        name: documentDetailsReqDTO
+          description: Unique identifier of the entity, whose documents list is retrieved.
+          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
+        document:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentDto'
+          description: List of the document ID which are uploaded in the entity.
+      description: Response parameters when Entity's documents list is requested.
     DocumentDto:
       type: object
       properties:
