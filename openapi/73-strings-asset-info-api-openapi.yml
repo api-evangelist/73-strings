@@ -673,73 +673,21 @@ paths:
                     message: Internal server error. Please try again later or contact support.
 components:
   schemas:
-    BusinessUnitsRespDTO:
+    CompBusinessUnitsRespDTO:
       type: object
       properties:
-        businessUnitId:
-          type: string
-          description: Unique identifier of a business unit.
-        businessUnitName:
-          type: string
-          description: Name of the business unit.
-        archive:
-          type: boolean
-          description: Indicates the status of the business unit, whether it's archieve.
-      description: Contains the business unit details.
-    EntityListReqDTO:
-      required:
-      - userId
-      type: object
-      properties:
-        userId:
-          type: string
-          description: Unique identifier of the user.
-          example: 4d32666b-5fa9-489f-93b1-1f5036bd2a41
-        orgId:
-          type: string
-          description: Unique identifier of the organization.
-          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
-      description: Request parameters that is passed to retrieve entity list of the organization.
-      xml:
-        name: Request body of Entity List
-    VersionListReqDTO:
-      required:
-      - orgId
-      - userId
-      type: object
-      properties:
-        userId:
-          type: string
-          description: Unique identifier of the user.
-          example: 61q2ce0c7-63f6-4177-b59a-6c9fb5497b21
-        orgId:
-          type: string
-          description: 'Unique identifier of the organization. '
-          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
-      description: Request parameters that is passed to retrieve list of versions that exist in the organization.
-      xml:
-        name: Request body of Version List
-    BusinessUnitReqDTO:
-      required:
-      - orgId
-      - userId
-      type: object
-      properties:
-        userId:
-          type: string
-          description: Unique identifier of the user.
-          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
-        orgId:
-          type: string
-          description: Unique identifier of the organization.
-          example: a32ce0c7-63f6-6575-b59a-6c9fb54978r3
         companyId:
           type: string
-          description: 'Unique identifier of the entity. Can be fetched from the Entity List APi '
-          example: b12ce0c7-63f6-4177-b59a-6c9fb5497lo1
-      description: Request parameters that is passed to retrieve Business units list created for the entity.
-      xml:
-        name: Request body of Business Units Data
+          description: Unique identifier of a company
+        companyName:
+          type: string
+          description: Name of the company
+        businessUnits:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessUnitsRespDTO'
+          description: Contains the business unit details.
+      description: Details of the company and its business units.
     EntityAttributeResDTO:
       type: object
       properties:
@@ -771,53 +719,60 @@ components:
       description: Response parameters when organization's attribute list is requested.
       xml:
         name: Entity Attribute ids
-    VersionsData:
+    EntityListResDTO:
       type: object
       properties:
-        versionId:
+        orgId:
           type: string
-          description: Unique identifier of the version.
-          example: bae84097-cac4-4270-a16d-61f1a7959aa1
-        versionName:
+          description: Org ID
+          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
+        userId:
           type: string
-          description: Name of the version.
-          example: ACT
-        active:
-          type: boolean
-          description: Indicates status of the version, whether it's active.
-          example: false
-      description: Contains the details of the version.
-    EntitySecurityListReqDTO:
+          description: Unique identifier of the user.
+          example: b92ce0c7-63f6-4177-b59a-6c9fb5494502
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Entities'
+          description: Contains the list of entites in the organization.
+      description: Response parameters when entity list is requested.
+    EntityListReqDTO:
+      required:
+      - userId
+      type: object
+      properties:
+        userId:
+          type: string
+          description: Unique identifier of the user.
+          example: 4d32666b-5fa9-489f-93b1-1f5036bd2a41
+        orgId:
+          type: string
+          description: Unique identifier of the organization.
+          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
+      description: Request parameters that is passed to retrieve entity list of the organization.
+      xml:
+        name: Request body of Entity List
+    BusinessUnitReqDTO:
       required:
       - orgId
       - userId
       type: object
       properties:
-        orgId:
-          type: string
-          description: Unique identifier of the organization.
-          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
         userId:
           type: string
           description: Unique identifier of the user.
-          example: a12ce0c7-5463-982-b59a-6c9fb549540e
-        entityId:
+          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
+        orgId:
           type: string
-          description: Unique identifier of the entity.
-          example: c32ce0c7-63f6-9817-b59a-6c9fb5497837
-        module:
+          description: Unique identifier of the organization.
+          example: a32ce0c7-63f6-6575-b59a-6c9fb54978r3
+        companyId:
           type: string
-          description: 'Name of the module.
-
-            **EQUITY**,
-
-            **CREDIT**,
-
-            **MONITORING**'
-          example: a1
-      description: Request parameters that is passed to retrieve list of securities created in the entity.
+          description: 'Unique identifier of the entity. Can be fetched from the Entity List APi '
+          example: b12ce0c7-63f6-4177-b59a-6c9fb5497lo1
+      description: Request parameters that is passed to retrieve Business units list created for the entity.
       xml:
-        name: Request body of Entity Security List
+        name: Request body of Business Units Data
     Entities:
       type: object
       properties:
@@ -855,6 +810,142 @@ components:
             $ref: '#/components/schemas/securities'
           description: Contains the list of securities in the entity.
       description: Contains the list of entites in the organization.
+    securities:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID
+          example: 1b84ef32-399c-47db-bb18-bc5428e5457d
+        name:
+          type: string
+          description: Name
+          example: sec yp 1
+        externalSecurityId:
+          type: string
+          description: External Security ID
+          example: b7eb2b8f-df3b-4b7a-9675-012ac2f3f088
+        issuerEntityId:
+          type: string
+          description: Issuer EntityId ID
+          example: 8e59599f-6065-41e7-ad03-85a45ea1ca8d
+        type:
+          type: string
+          description: Type
+          example: Portfolio Company
+        valid:
+          type: boolean
+          description: Valid
+          example: false
+      description: Response dto for Securities
+    VersionListResDTO:
+      type: object
+      properties:
+        orgId:
+          type: string
+          description: Unique identifier of the organization.
+          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
+        versionsData:
+          type: array
+          items:
+            $ref: '#/components/schemas/VersionsData'
+          description: Contains the details of the version.
+      description: Response parameters when organization's version list is requested.
+    VersionListReqDTO:
+      required:
+      - orgId
+      - userId
+      type: object
+      properties:
+        userId:
+          type: string
+          description: Unique identifier of the user.
+          example: 61q2ce0c7-63f6-4177-b59a-6c9fb5497b21
+        orgId:
+          type: string
+          description: 'Unique identifier of the organization. '
+          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
+      description: Request parameters that is passed to retrieve list of versions that exist in the organization.
+      xml:
+        name: Request body of Version List
+    AttributeIdsDataDTO:
+      required:
+      - orgId
+      - userId
+      type: object
+      properties:
+        orgId:
+          type: string
+          description: Org Identifier on 73 Strings Platform; Shared by 73 Strings team.
+          example: 2ab25cdf-1426-xxxx-a412-yyyy9cd40df4
+        userId:
+          type: string
+          description: Unique Identifier For User.
+          example: 4cb25cdf-1426-xxxx-a412-yyyy9cd40rt3
+      description: Request parameters that is passed to retrieve Attribute lists that exists in the organization.
+      xml:
+        name: Request body of Business Units Data
+    OrgBusinessUnitsRespDTO:
+      type: object
+      properties:
+        organizationId:
+          type: string
+          description: Unique identifier associated with the organization.
+          example: 4839fbd20-8534gf3bzzxxxx-0958htf3d924fg8bvuc
+        companies:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompBusinessUnitsRespDTO'
+          description: Details of the company and its business units.
+      description: Response parameters when business units of the entities in the organization is requested.
+      xml:
+        name: Business Units Data
+    EntitySecurityListResDTO:
+      type: object
+      properties:
+        orgId:
+          type: string
+          description: Unique identifier of the organiation.
+          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
+        userId:
+          type: string
+          description: Unique identifier of the user.
+          example: b92ce0c7-63f6-4177-b59a-6c9fb5494502
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Entities'
+          description: Details of the entity requested.
+      description: Response parameters when security list of the entity is requested.
+    BusinessUnitsRespDTO:
+      type: object
+      properties:
+        businessUnitId:
+          type: string
+          description: Unique identifier of a business unit.
+        businessUnitName:
+          type: string
+          description: Name of the business unit.
+        archive:
+          type: boolean
+          description: Indicates the status of the business unit, whether it's archieve.
+      description: Contains the business unit details.
+    VersionsData:
+      type: object
+      properties:
+        versionId:
+          type: string
+          description: Unique identifier of the version.
+          example: bae84097-cac4-4270-a16d-61f1a7959aa1
+        versionName:
+          type: string
+          description: Name of the version.
+          example: ACT
+        active:
+          type: boolean
+          description: Indicates status of the version, whether it's active.
+          example: false
+      description: Contains the details of the version.
     ApiResponse:
       required:
       - response
@@ -896,50 +987,7 @@ components:
       description: Generic API response wrapper containing parameters as follows; response data, success status, message, and error code.
       xml:
         name: ApiResponse
-    CompBusinessUnitsRespDTO:
-      type: object
-      properties:
-        companyId:
-          type: string
-          description: Unique identifier of a company
-        companyName:
-          type: string
-          description: Name of the company
-        businessUnits:
-          type: array
-          items:
-            $ref: '#/components/schemas/BusinessUnitsRespDTO'
-          description: Contains the business unit details.
-      description: Details of the company and its business units.
-    securities:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID
-          example: 1b84ef32-399c-47db-bb18-bc5428e5457d
-        name:
-          type: string
-          description: Name
-          example: sec yp 1
-        externalSecurityId:
-          type: string
-          description: External Security ID
-          example: b7eb2b8f-df3b-4b7a-9675-012ac2f3f088
-        issuerEntityId:
-          type: string
-          description: Issuer EntityId ID
-          example: 8e59599f-6065-41e7-ad03-85a45ea1ca8d
-        type:
-          type: string
-          description: Type
-          example: Portfolio Company
-        valid:
-          type: boolean
-          description: Valid
-          example: false
-      description: Response dto for Securities
-    AttributeIdsDataDTO:
+    EntitySecurityListReqDTO:
       required:
       - orgId
       - userId
@@ -947,77 +995,29 @@ components:
       properties:
         orgId:
           type: string
-          description: Org Identifier on 73 Strings Platform; Shared by 73 Strings team.
-          example: 2ab25cdf-1426-xxxx-a412-yyyy9cd40df4
-        userId:
-          type: string
-          description: Unique Identifier For User.
-          example: 4cb25cdf-1426-xxxx-a412-yyyy9cd40rt3
-      description: Request parameters that is passed to retrieve Attribute lists that exists in the organization.
-      xml:
-        name: Request body of Business Units Data
-    EntitySecurityListResDTO:
-      type: object
-      properties:
-        orgId:
-          type: string
-          description: Unique identifier of the organiation.
-          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
-        userId:
-          type: string
-          description: Unique identifier of the user.
-          example: b92ce0c7-63f6-4177-b59a-6c9fb5494502
-        entities:
-          type: array
-          items:
-            $ref: '#/components/schemas/Entities'
-          description: Details of the entity requested.
-      description: Response parameters when security list of the entity is requested.
-    EntityListResDTO:
-      type: object
-      properties:
-        orgId:
-          type: string
-          description: Org ID
-          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
-        userId:
-          type: string
-          description: Unique identifier of the user.
-          example: b92ce0c7-63f6-4177-b59a-6c9fb5494502
-        entities:
-          type: array
-          items:
-            $ref: '#/components/schemas/Entities'
-          description: Contains the list of entites in the organization.
-      description: Response parameters when entity list is requested.
-    OrgBusinessUnitsRespDTO:
-      type: object
-      properties:
-        organizationId:
-          type: string
-          description: Unique identifier associated with the organization.
-          example: 4839fbd20-8534gf3bzzxxxx-0958htf3d924fg8bvuc
-        companies:
-          type: array
-          items:
-            $ref: '#/components/schemas/CompBusinessUnitsRespDTO'
-          description: Details of the company and its business units.
-      description: Response parameters when business units of the entities in the organization is requested.
-      xml:
-        name: Business Units Data
-    VersionListResDTO:
-      type: object
-      properties:
-        orgId:
-          type: string
           description: Unique identifier of the organization.
           example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
-        versionsData:
-          type: array
-          items:
-            $ref: '#/components/schemas/VersionsData'
-          description: Contains the details of the version.
-      description: Response parameters when organization's version list is requested.
+        userId:
+          type: string
+          description: Unique identifier of the user.
+          example: a12ce0c7-5463-982-b59a-6c9fb549540e
+        entityId:
+          type: string
+          description: Unique identifier of the entity.
+          example: c32ce0c7-63f6-9817-b59a-6c9fb5497837
+        module:
+          type: string
+          description: 'Name of the module.
+
+            **EQUITY**,
+
+            **CREDIT**,
+
+            **MONITORING**'
+          example: a1
+      description: Request parameters that is passed to retrieve list of securities created in the entity.
+      xml:
+        name: Request body of Entity Security List
   securitySchemes:
     apiKeyHeader:
       type: apiKey

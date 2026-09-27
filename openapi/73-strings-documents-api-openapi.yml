@@ -336,6 +336,70 @@ components:
       description: Request parameters that is passed to retrieve the document
       xml:
         name: documentDetailsReqDTO
+    EntityDocumentReqDTO:
+      required:
+      - entityId
+      - userId
+      type: object
+      properties:
+        userId:
+          type: string
+          description: Unique identifier of the user, who sends request.
+          example: 4d32666b-5fa9-489f-93b1-1f5036bd2a41
+        entityId:
+          type: string
+          description: Unique identifier of the entity, whose documents list is requested.
+          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
+      description: Request parameters that is passed to retrieve documents list uploaded in the entity.
+    DocumentDto:
+      type: object
+      properties:
+        documentId:
+          type: string
+          description: Unique identifier of the document.
+          example: bae84097-cac4-4270-a16d-61f1a7959aa1
+        documentName:
+          type: string
+          description: Name of the document.
+          example: FILE NAME (1).pdf
+        originalDocUrl:
+          type: string
+          description: Original document URL
+          example: bae84097-cac4-4270-a16d-61f1a7959aa1_original.pdf
+        selectedDocUrl:
+          type: string
+          description: Selected document URL
+          example: bae84097-cac4-4270-a16d-61f1a7959aa11747808507309_selected.pdf
+        docType:
+          type: string
+          description: Type of the document.
+          example: PDF
+        status:
+          type: string
+          description: Processing status of the document.
+          example: PROCESSING
+        processedOn:
+          type: string
+          description: Date and time details when docuements processing was completd.
+          example: '2025-05-21T06:20:55Z'
+        uploadedBy:
+          type: string
+          description: Name of the user who uploaded the document in the entity.
+          example: Mohit Garg
+      description: Details related to a particular document.
+    EntityDocumentListResDTO:
+      type: object
+      properties:
+        entityId:
+          type: string
+          description: Unique identifier of the entity, whose documents list is retrieved.
+          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
+        document:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentDto'
+          description: List of the document ID which are uploaded in the entity.
+      description: Response parameters when Entity's documents list is requested.
     ApiResponse:
       required:
       - response
@@ -377,70 +441,6 @@ components:
       description: Generic API response wrapper containing parameters as follows; response data, success status, message, and error code.
       xml:
         name: ApiResponse
-    EntityDocumentReqDTO:
-      required:
-      - entityId
-      - userId
-      type: object
-      properties:
-        userId:
-          type: string
-          description: Unique identifier of the user, who sends request.
-          example: 4d32666b-5fa9-489f-93b1-1f5036bd2a41
-        entityId:
-          type: string
-          description: Unique identifier of the entity, whose documents list is requested.
-          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
-      description: Request parameters that is passed to retrieve documents list uploaded in the entity.
-    EntityDocumentListResDTO:
-      type: object
-      properties:
-        entityId:
-          type: string
-          description: Unique identifier of the entity, whose documents list is retrieved.
-          example: b92ce0c7-63f6-4177-b59a-6c9fb54970e7
-        document:
-          type: array
-          items:
-            $ref: '#/components/schemas/DocumentDto'
-          description: List of the document ID which are uploaded in the entity.
-      description: Response parameters when Entity's documents list is requested.
-    DocumentDto:
-      type: object
-      properties:
-        documentId:
-          type: string
-          description: Unique identifier of the document.
-          example: bae84097-cac4-4270-a16d-61f1a7959aa1
-        documentName:
-          type: string
-          description: Name of the document.
-          example: FILE NAME (1).pdf
-        originalDocUrl:
-          type: string
-          description: Original document URL
-          example: bae84097-cac4-4270-a16d-61f1a7959aa1_original.pdf
-        selectedDocUrl:
-          type: string
-          description: Selected document URL
-          example: bae84097-cac4-4270-a16d-61f1a7959aa11747808507309_selected.pdf
-        docType:
-          type: string
-          description: Type of the document.
-          example: PDF
-        status:
-          type: string
-          description: Processing status of the document.
-          example: PROCESSING
-        processedOn:
-          type: string
-          description: Date and time details when docuements processing was completd.
-          example: '2025-05-21T06:20:55Z'
-        uploadedBy:
-          type: string
-          description: Name of the user who uploaded the document in the entity.
-          example: Mohit Garg
-      description: Details related to a particular document.
   securitySchemes:
     apiKeyHeader:
       type: apiKey
