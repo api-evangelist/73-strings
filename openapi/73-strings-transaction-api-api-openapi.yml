@@ -1042,103 +1042,6 @@ components:
           description: Indicates whether the version can be deleted or is protected on the 73 Strings application.
           example: false
       description: Version data details
-    TransactionVersionData:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/VersionData'
-          description: List of version objects available within the organization.
-      description: Transaction version data
-    TransactionTypeResDTO:
-      type: object
-      properties:
-        response:
-          $ref: '#/components/schemas/TransactionTypeData'
-        success:
-          type: boolean
-          description: Indicates if the API execution was successful.
-          example: true
-        message:
-          type: string
-          description: Message from the API execution.
-          example: Success
-        errorCode:
-          type:
-          - string
-          - 'null'
-          description: Optional error code, if any issue occurs.
-      description: Wrapper object containing paginated transaction type details.
-    TransactionTypeContent:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique ID of the transaction type within the platform.
-          example: 389c4d13-d974-4764-89cb-6bd8013303d3
-        createdBy:
-          type: string
-          description: Name of the user or system that created this transaction type.
-          example: Dev API Integration
-        createdDate:
-          type: string
-          description: Date and time when this transaction type was created.
-          format: date-time
-          example: '2025-09-08T05:31:16Z'
-        lastModifiedBy:
-          type: string
-          description: Name of the user or system that last updated the transaction type.
-          example: Dev API Integration
-        lastModifiedDate:
-          type: string
-          description: Timestamp of the latest modification.
-          format: date-time
-          example: '2025-09-08T05:31:16Z'
-        name:
-          type: string
-          description: Name of the transaction type.
-          example: Additional Investment
-        dataItem:
-          type: string
-          description: Internal reference for the transaction type
-          example: Additional Investment-CF
-        description:
-          type: string
-          description: Business explanation provided by users for the transaction type.
-          example: Any further capital injected into an existing financial endeavor or asset beyond the original investment
-        transactionCategoryId:
-          type: string
-          description: Unique ID of the category under which the transaction type falls.
-          example: 9ce62901-efd5-4726-aad0-17034633609e
-        transactionCategoryName:
-          type: string
-          description: Category name defining the transaction type’s functional grouping.
-          example: Investments
-        valueType:
-          type: string
-          description: Defines whether the transaction value is positive or negative (affecting fund movement direction).
-          example: POSITIVE
-        deletable:
-          type: boolean
-          description: Indicates how values persist across reporting periods (e.g., DEFAULT, NONE).
-          example: false
-      description: List of transaction type objects retrieved from the 73Strings platform.
-    TransactionVersionReqDTO:
-      required:
-      - userId
-      - orgId
-      type: object
-      properties:
-        userId:
-          type: string
-          description: Unique identifier of the user, provided by 73 Strings platform.
-          example: 0ea63bb5-47c6-4590-9fc2-52fc180d6e8f
-        orgId:
-          type: string
-          description: 'Unique organization ID associated with the user. Authenticates Organization using the subscription key. '
-          example: 214fa428-0f39-4c06-9343-d0c51c9b4e34
-      description: Request Parameters Table
     TransactionTypeReqDTO:
       required:
       - userId
@@ -1166,363 +1069,6 @@ components:
             $ref: '#/components/schemas/SortCriteria'
           description: Defines the sorting logic of the result set.
       description: Request parameters for retrieving transaction types
-    ApiResponse:
-      type: object
-      properties:
-        response:
-          type: array
-          items:
-            type: object
-            description: List containing the response data.
-            example:
-            - id: '123'
-              name: Sample Data
-          description: List containing the response data.
-          example:
-          - id: '123'
-            name: Sample Data
-        success:
-          type: boolean
-          description: Request’s success status.
-          example: true
-        message:
-          type: string
-          description: Output message depending on success status.
-          example: Success
-        errorCode:
-          type: string
-          description: 'Error response on hitting API request.
-
-
-            null: No errors were encountered.
-
-
-            string: A descriptive error message or code if an issue occurred.'
-          example: EXCE00018
-      description: API response wrapper containing the response data, success status, message, and error code.
-      xml:
-        name: ApiResponse
-    Filter:
-      required:
-      - field
-      - operation
-      - valueSet
-      type: object
-      properties:
-        field:
-          type: string
-          description: Specifies which field of transaction type to filter by. Accepted Value - <b>transactionTypeClassification</b>
-          example: transactionTypeClassification
-        operation:
-          enum:
-          - IS_LESS_THAN_EQUAL_TO
-          - IN
-          - 'NULL'
-          - BETWEEN
-          - IS_GREATER_THAN_EQUAL_TO
-          - NOT_NULL
-          - IS
-          type: string
-          description: 'Logical operation used for filtering. Accepted Value: <b>IN</b>'
-        valueSet:
-          minItems: 1
-          type: array
-          items:
-            enum:
-            - CASH_FLOW
-            - VALUATION
-            type: string
-          description: List of acceptable values for the filter. 1) <b>CASH_FLOW</b> , 2) <b>VALUATION</b>
-      description: Request Parameters Table
-    UnifiedOwnerEntityMapping:
-      required:
-      - ownerEntityId
-      type: object
-      properties:
-        ownerEntityId:
-          type: string
-          description: Unique ID of owner (parent) entity generated by the platform. This can be retreived from EntityListAPI operation.
-          example: 0ea98f32-5393-441c-b7b0-7e6cc17c485a
-      description: Unified owner entity mapping details using names
-    TransactionDataResDTO:
-      type: object
-      properties:
-        response:
-          $ref: '#/components/schemas/TransactionDataResponse'
-        success:
-          type: boolean
-          description: Indicates the status of the request
-          example: true
-        message:
-          type: string
-          description: Explanation of the API response
-          example: Success
-        errorCode:
-          type:
-          - string
-          - 'null'
-          description: Error code if request fails
-      description: Response parameters when transaction data is retrieved
-    SortCriteria:
-      required:
-      - field
-      - direction
-      type: object
-      properties:
-        field:
-          type: string
-          description: 'Field name used for sorting.Accepted Value: lastModifiedDate'
-          example: lastModifiedDate
-        direction:
-          enum:
-          - asc
-          - desc
-          type: string
-          description: 'Sorting direction, either asc (ascending) or desc (descending). Accepted Values: 1) <b>asc</b> , 2) <b>desc</b>'
-          example: desc
-      description: Defines the sorting logic of the result set.
-    OwnerEntityMappingResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier
-          example: e4e89dee-2887-4773-9f53-098368751f28
-        transactionId:
-          type: string
-          description: Transaction ID
-          example: ab1fb6d4-4379-4849-a4d6-36177a6b7c34
-        ownerEntityId:
-          type: string
-          description: Unique Id of parent entities in the same hierarchy.
-          example: 987dd768-8b80-4d5b-b9a8-af6eb3321102
-        ownerEntityName:
-          type: string
-          description: Name of the owner entity provided in the platform.
-          example: ADCF 123
-      description: List of parent (ancestors) entities associated with the transaction (funds, investment vehicles, or holding companies).
-    FundDetailsDTO:
-      required:
-      - funds
-      - inputDate
-      - orgId
-      - userId
-      type: object
-      properties:
-        orgId:
-          type: string
-          description: Unique identifier associated with the organization.
-          example: 4839fbd20-8534gf3bzzxxxx-0958htf3d924fg8bvuc
-        inputDate:
-          type: string
-          description: "\t\nThe date on which transaction is uploaded in 73 Strings system.\n\nFormat: YYYY-MM-DD"
-          format: date-time
-        userId:
-          type: string
-          description: Unique identifier associated with the user.
-          example: 3ig5fh2-98430hdbn2083f-3853245gfhdnzq0n3v
-        funds:
-          type: array
-          items:
-            $ref: '#/components/schemas/FundDTO'
-          description: Array/List of key-word pairs with fund attributes and their data.
-          example: '12345'
-      description: DTO representing Fund Details
-      xml:
-        name: FundDetailsDTO
-    MultilayeredTransactionMetadataResponse:
-      type: object
-      properties:
-        externalTransactionSourceReferenceId:
-          type: string
-          description: External system or reference ID identifying the transaction’s origin (for integrations or audit trails).
-          example: XXXXXXXX-XXXXXX-XXXXXXXXX
-        securityId:
-          type:
-          - string
-          - 'null'
-          description: Unique Id of the security linked to the transaction.
-        securityType:
-          type:
-          - string
-          - 'null'
-          description: Type of the security (e.g., “CREDIT”, “EQUITY”). “null” if validation failed or not mapped.
-        externalSecurityId:
-          type:
-          - string
-          - 'null'
-          description: External identifier of the security from an external system during system integrations.
-        externalInvestmentEntityId:
-          type:
-          - string
-          - 'null'
-          description: External ID of the investment entity for integration with third-party systems.
-        ownershipPercentage:
-          type:
-          - number
-          - 'null'
-          description: Ownership Percentage of owner entity in the investment.
-        shareCount:
-          type:
-          - number
-          - 'null'
-          description: Number of shares involved for the transactions.
-        pps:
-          type:
-          - number
-          - 'null'
-          description: Price per share (PPS) of the equity based securities.
-        postMoneyValuation:
-          type:
-          - number
-          - 'null'
-          description: Post-money valuation of the entity after investment or distribution.
-        postMoneyValuationCurrency:
-          type:
-          - string
-          - 'null'
-          description: Currency name in which post-money valuation is reported.
-        postMoneyValuationCurrencyUnit:
-          type:
-          - string
-          - 'null'
-          description: Denotes the scale of post money valuation amount [Actual, Lakhs,Millions, Crores, Billions, Trillions].
-        remarks:
-          type:
-          - string
-          - 'null'
-          description: Remarks provided for audit or contextual information.
-        source:
-          type:
-          - string
-          - 'null'
-          description: External system or source reference ID for the transaction. Used for traceability during system integrations.
-        vehicleName:
-          type:
-          - string
-          - 'null'
-          description: Name of the investment vehicle (if any) through which the transaction is routed.
-        externalOwnerEntityId:
-          type:
-          - string
-          - 'null'
-          description: External system or source reference ID of the owner (investor) entity. Used for traceability during system integrations.
-        securityName:
-          type:
-          - string
-          - 'null'
-          description: Name of the security associated with this transaction.
-      description: Detailed metadata object containing investment-specific and security-related attributes for deeper analytics and validation.
-    TransactionTypeData:
-      type: object
-      properties:
-        content:
-          type: array
-          items:
-            $ref: '#/components/schemas/TransactionTypeContent'
-          description: List of transaction type objects retrieved from the 73Strings platform.
-        pageNo:
-          type: integer
-          description: Current page number of the paginated response.
-          example: 0
-        pageSize:
-          type: integer
-          description: Number of records in the current page.
-          example: 21
-        totalElements:
-          type: integer
-          description: Total number of transaction types matching the criteria.
-          example: 17
-        totalPages:
-          type: integer
-          description: Total number of available pages.
-          example: 0
-      description: Transaction type data with pagination
-    UnifiedMultilayeredTransactionV2Metadata:
-      type: object
-      properties:
-        remarks:
-          maxLength: 300
-          type: string
-          description: Free-text notes for the transaction.
-          example: API pushed transaction
-        securityId:
-          type: string
-          description: Unique 73 Strings system identifier of the security under the investment entity and owner entity. If securityId is provided, securityType must also be provided.
-          format: uuid
-          example: 2601e54d-b5ea-4178-9b19-3b5551f1de7e
-        securityType:
-          enum:
-          - EQUITY
-          - CREDIT
-          type: string
-          description: Type of security involved in the transaction. Allowed values are EQUITY and CREDIT. The value is case-sensitive and must be uppercase. If securityType is provided, securityId must also be provided.
-          example: CREDIT
-        externalTransactionSourceReferenceId:
-          maxLength: 255
-          type: string
-          description: Client-provided primary reference for the logical transaction. Together with the effective asOfDate, this field determines create/update behavior. Use a stable value across submissions for the same logical transaction. If omitted or new, the platform creates a new transaction; if the value exists with the same effective asOfDate, the existing row is fully overwritten; if the value exists with a new effective asOfDate, a new time-series instance is created.
-          example: EY - transactions 1
-        pps:
-          type: number
-          description: Price per share. Must be greater than 0 when provided.
-          example: 10.04
-          exclusiveMinimum: 0
-        postMoneyValuation:
-          type: number
-          description: Post-money valuation amount. Decimal values up to Decimal(42,17) are supported; zero, positive, and negative values are allowed. If any post-money valuation field is provided, postMoneyValuation, postMoneyValuationCurrency, and postMoneyValuationCurrencyUnit must all be provided.
-          format: decimal
-          example: 29404.429
-        postMoneyValuationCurrency:
-          maxLength: 3
-          minLength: 3
-          type: string
-          description: ISO 4217 three-letter currency code for post-money valuation. If any post-money valuation field is provided, all post-money valuation amount, currency, and unit fields must be provided.
-          example: USD
-        postMoneyValuationCurrencyUnit:
-          enum:
-          - Actual
-          - Lakhs
-          - Millions
-          - Crores
-          - Billions
-          - Trillions
-          type: string
-          description: Scale in which post-money valuation is provided. Allowed values are Actual, Lakhs, Millions, Crores, Billions, and Trillions. The value is case-sensitive. If any post-money valuation field is provided, all post-money valuation amount, currency, and unit fields must be provided.
-          example: Lakhs
-        ownershipPercentage:
-          maximum: 100
-          minimum: 0
-          type: number
-          description: Ownership percentage for the transaction. Must be between 0 and 100 when provided.
-          format: decimal
-          example: 60.2242
-        externalInvestmentEntityId:
-          maxLength: 255
-          type: string
-          description: Client-provided external identifier for the investment entity.
-          example: CEN02570
-        externalSecurityId:
-          maxLength: 255
-          type: string
-          description: Client-provided external identifier for the security.
-          example: CEN003100
-        shareCount:
-          type: number
-          description: Number of shares. Must be greater than 0 when provided.
-          example: 10
-          exclusiveMinimum: 0
-        vehicleName:
-          maxLength: 255
-          type: string
-          description: SPV or vehicle name associated with the transaction.
-          example: SPV-1
-        externalOwnerEntityId:
-          maxLength: 255
-          type: string
-          description: Client-provided external identifier for the owner entity.
-          example: samplePS
-      description: V2 transaction metadata containing source references, security details, valuation details, ownership metrics, and optional external IDs.
     UnifiedTransactionData:
       required:
       - transactionTypeId
@@ -1669,135 +1215,6 @@ components:
           description: External system or source reference ID of the owner (investor) entity. Used for traceability during system integrations.
           example: sample
       description: Container for detailed transaction-level data, capturing additonal info such as investment, security, or ownership-related attributes.
-    TransactionDataResponse:
-      type: object
-      properties:
-        content:
-          type: array
-          items:
-            $ref: '#/components/schemas/TransactionDto'
-          description: List of transaction data
-        pageNo:
-          type: integer
-          description: Current page number
-          example: 0
-        pageSize:
-          type: integer
-          description: Page size
-          example: 21
-        totalElements:
-          type: integer
-          description: Total number of elements
-          example: 13
-        totalPages:
-          type: integer
-          description: Total number of pages
-          example: 0
-      description: Transaction data response with pagination
-    FundDTO:
-      required:
-      - fundId
-      - fundName
-      - transactions
-      type: object
-      properties:
-        fundId:
-          type: string
-          description: Unique identifier associated with the fund.
-          example: ievb32f-4983g3f2hd-83ubifdn248300538ghfbdcxn
-        fundName:
-          type: string
-          description: Name of the fund
-          example: Fund 1
-        transactions:
-          type: array
-          items:
-            $ref: '#/components/schemas/TransactionDTO'
-          description: Array/List of key-word pair with transaction attributes and their data.
-      description: DTO representing Fund
-      xml:
-        name: FundDTO
-      example: '12345'
-    UnifiedTransactionV2ReqDTO:
-      required:
-      - userId
-      - orgId
-      - TransactionData
-      type: object
-      properties:
-        userId:
-          type: string
-          description: Unique identifier of the user submitting the request. The user must be authorized for the organization associated with the subscription key.
-          format: uuid
-          example: d2dae30f-7570-4f24-8cc5-e7ead4baf458
-        orgId:
-          type: string
-          description: Unique identifier of the organization. This value must match the organization scope associated with the subscription key.
-          format: uuid
-          example: cfcbb891-1838-48e7-98db-57142094123c
-        TransactionData:
-          maxItems: 2000
-          minItems: 1
-          type: array
-          items:
-            $ref: '#/components/schemas/UnifiedTransactionV2Data'
-          description: Array of transaction objects to create or update. Empty arrays are rejected. The total request payload must not exceed 5 MB.
-      description: V2 request parameters for bulk create/update transaction processing.
-    TransactionDTO:
-      required:
-      - amount
-      - currency
-      - date
-      - type
-      type: object
-      properties:
-        date:
-          type: string
-          description: Date of transaction.
-          example: '2023-09-15'
-        amount:
-          type: string
-          description: Amount involved in the transaction (In Millions)
-          example: '1000'
-        currency:
-          type: string
-          description: Reporting currency set for the fund.
-          example: USD
-        type:
-          type: string
-          description: 'The kind of transactions made in the fund.
-
-
-            - Interest Expenses
-
-
-            - Expenses
-
-
-            - other net assets
-
-
-            - Drawn/Call
-
-
-            - Distributed
-
-
-            - Distributed (Carry)
-
-
-            - Management Fee
-
-
-            - Carry Provision'
-          example: Distributed
-        details:
-          type: string
-          description: Comments added about the transaction.
-          example: Others
-      description: DTO representing Transaction
-      xml:
-        name: TransactionDTO
     TransactionDto:
       type: object
       properties:
@@ -1964,38 +1381,192 @@ components:
           description: Indicates whether all instance of the same transactions are flagged for deletion.
           example: false
       description: List of transaction objects. Each item represents the processed outcome of one transaction request, including metadata, computed fields, and validation status.
-    TransactionProcessResponse:
+    UnifiedTransactionReqDTO:
       required:
-      - response
-      - success
-      - message
+      - userId
+      - orgId
+      - TransactionData
+      type: object
+      properties:
+        userId:
+          type: string
+          description: Unique identifier of the user, provided by 73 Strings platform.
+          example: 1a4b3a64-7317-49f2-a0eb-7f023cbd341a
+        orgId:
+          type: string
+          description: 'Unique organization ID associated with the user. Authenticates Organization using the subscription key. '
+          example: b10d0b32-e50b-41ff-80cb-8b5b0adb054a
+        TransactionData:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnifiedTransactionData'
+          description: A list containing one or more transaction records. Each record holds detailed information about a specific transaction event.
+      description: Request parameters for unified create/update transaction
+    TransactionDataResDTO:
       type: object
       properties:
         response:
-          type: object
-          properties:
-            totalRecordsCount:
-              type: integer
-              description: Total number of records received for processing
-              format: int32
-              example: 2
-            invalidEntriesCount:
-              type: integer
-              description: Number of invalid records
-              format: int32
-              example: 0
-            valid:
-              type: boolean
-              description: Indicates whether processing was valid
-              example: true
+          $ref: '#/components/schemas/TransactionDataResponse'
         success:
           type: boolean
-          description: Overall API execution status
+          description: Indicates the status of the request
           example: true
         message:
           type: string
-          description: Human-readable status message
-          example: All transactions processed successfully.
+          description: Explanation of the API response
+          example: Success
+        errorCode:
+          type:
+          - string
+          - 'null'
+          description: Error code if request fails
+      description: Response parameters when transaction data is retrieved
+    OwnerEntityMappingResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier
+          example: e4e89dee-2887-4773-9f53-098368751f28
+        transactionId:
+          type: string
+          description: Transaction ID
+          example: ab1fb6d4-4379-4849-a4d6-36177a6b7c34
+        ownerEntityId:
+          type: string
+          description: Unique Id of parent entities in the same hierarchy.
+          example: 987dd768-8b80-4d5b-b9a8-af6eb3321102
+        ownerEntityName:
+          type: string
+          description: Name of the owner entity provided in the platform.
+          example: ADCF 123
+      description: List of parent (ancestors) entities associated with the transaction (funds, investment vehicles, or holding companies).
+    TransactionDataReqDTO:
+      required:
+      - userId
+      - orgId
+      type: object
+      properties:
+        userId:
+          type: string
+          description: Unique identifier of the user.
+          example: 0ea63bb5-47c6-4590-9fc2-52fc180d6e8f
+        orgId:
+          type: string
+          description: Unique identifier of the organization.
+          example: 214fa428-0f39-4c06-9343-d0c51c9b4e34
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/Filter'
+          description: Array of filters to apply
+        sortList:
+          type: array
+          items:
+            $ref: '#/components/schemas/SortCriteria'
+          description: Array of sort criteria
+        asOfDateSettings:
+          type: string
+          description: As of date settings for transaction data
+          example: LATEST
+      description: Request parameters for retrieving transaction data
+    UnifiedOwnerEntityMappingV2:
+      required:
+      - ownerEntityId
+      type: object
+      properties:
+        ownerEntityId:
+          type: string
+          description: Unique 73 Strings system identifier of the owner or parent entity associated with the investment entity. Retrieve valid IDs from the Entity List API.
+          format: uuid
+          example: 0ea98f32-5393-441c-b7b0-7e6cc17c485a
+      description: V2 owner entity mapping for a transaction.
+    FundDTO:
+      required:
+      - fundId
+      - fundName
+      - transactions
+      type: object
+      properties:
+        fundId:
+          type: string
+          description: Unique identifier associated with the fund.
+          example: ievb32f-4983g3f2hd-83ubifdn248300538ghfbdcxn
+        fundName:
+          type: string
+          description: Name of the fund
+          example: Fund 1
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionDTO'
+          description: Array/List of key-word pair with transaction attributes and their data.
+      description: DTO representing Fund
+      xml:
+        name: FundDTO
+      example: '12345'
+    FundDetailsDTO:
+      required:
+      - funds
+      - inputDate
+      - orgId
+      - userId
+      type: object
+      properties:
+        orgId:
+          type: string
+          description: Unique identifier associated with the organization.
+          example: 4839fbd20-8534gf3bzzxxxx-0958htf3d924fg8bvuc
+        inputDate:
+          type: string
+          description: "\t\nThe date on which transaction is uploaded in 73 Strings system.\n\nFormat: YYYY-MM-DD"
+          format: date-time
+        userId:
+          type: string
+          description: Unique identifier associated with the user.
+          example: 3ig5fh2-98430hdbn2083f-3853245gfhdnzq0n3v
+        funds:
+          type: array
+          items:
+            $ref: '#/components/schemas/FundDTO'
+          description: Array/List of key-word pairs with fund attributes and their data.
+          example: '12345'
+      description: DTO representing Fund Details
+      xml:
+        name: FundDetailsDTO
+    TransactionVersionReqDTO:
+      required:
+      - userId
+      - orgId
+      type: object
+      properties:
+        userId:
+          type: string
+          description: Unique identifier of the user, provided by 73 Strings platform.
+          example: 0ea63bb5-47c6-4590-9fc2-52fc180d6e8f
+        orgId:
+          type: string
+          description: 'Unique organization ID associated with the user. Authenticates Organization using the subscription key. '
+          example: 214fa428-0f39-4c06-9343-d0c51c9b4e34
+      description: Request Parameters Table
+    SortCriteria:
+      required:
+      - field
+      - direction
+      type: object
+      properties:
+        field:
+          type: string
+          description: 'Field name used for sorting.Accepted Value: lastModifiedDate'
+          example: lastModifiedDate
+        direction:
+          enum:
+          - asc
+          - desc
+          type: string
+          description: 'Sorting direction, either asc (ascending) or desc (descending). Accepted Values: 1) <b>asc</b> , 2) <b>desc</b>'
+          example: desc
+      description: Defines the sorting logic of the result set.
     UnifiedTransactionV2Data:
       required:
       - transactionTypeId
@@ -2109,27 +1680,344 @@ components:
           description: Scale in which the reporting amount is provided. Allowed values are Actual, Lakhs, Millions, Crores, Billions, and Trillions. The value is case-sensitive. If any reporting amount field is provided, reportingAmount, reportingCurrency, and reportingCurrencyUnit must all be provided.
           example: Actual
       description: V2 transaction object. displayId is generated by the platform and is not accepted in the request payload. asOfDate is optional; if it is omitted or empty, the platform uses the date on which the transaction is pushed.
-    UnifiedTransactionReqDTO:
-      required:
-      - userId
-      - orgId
-      - TransactionData
+    TransactionDataResponse:
       type: object
       properties:
-        userId:
-          type: string
-          description: Unique identifier of the user, provided by 73 Strings platform.
-          example: 1a4b3a64-7317-49f2-a0eb-7f023cbd341a
-        orgId:
-          type: string
-          description: 'Unique organization ID associated with the user. Authenticates Organization using the subscription key. '
-          example: b10d0b32-e50b-41ff-80cb-8b5b0adb054a
-        TransactionData:
+        content:
           type: array
           items:
-            $ref: '#/components/schemas/UnifiedTransactionData'
-          description: A list containing one or more transaction records. Each record holds detailed information about a specific transaction event.
-      description: Request parameters for unified create/update transaction
+            $ref: '#/components/schemas/TransactionDto'
+          description: List of transaction data
+        pageNo:
+          type: integer
+          description: Current page number
+          example: 0
+        pageSize:
+          type: integer
+          description: Page size
+          example: 21
+        totalElements:
+          type: integer
+          description: Total number of elements
+          example: 13
+        totalPages:
+          type: integer
+          description: Total number of pages
+          example: 0
+      description: Transaction data response with pagination
+    TransactionDTO:
+      required:
+      - amount
+      - currency
+      - date
+      - type
+      type: object
+      properties:
+        date:
+          type: string
+          description: Date of transaction.
+          example: '2023-09-15'
+        amount:
+          type: string
+          description: Amount involved in the transaction (In Millions)
+          example: '1000'
+        currency:
+          type: string
+          description: Reporting currency set for the fund.
+          example: USD
+        type:
+          type: string
+          description: 'The kind of transactions made in the fund.
+
+
+            - Interest Expenses
+
+
+            - Expenses
+
+
+            - other net assets
+
+
+            - Drawn/Call
+
+
+            - Distributed
+
+
+            - Distributed (Carry)
+
+
+            - Management Fee
+
+
+            - Carry Provision'
+          example: Distributed
+        details:
+          type: string
+          description: Comments added about the transaction.
+          example: Others
+      description: DTO representing Transaction
+      xml:
+        name: TransactionDTO
+    Filter:
+      required:
+      - field
+      - operation
+      - valueSet
+      type: object
+      properties:
+        field:
+          type: string
+          description: Specifies which field of transaction type to filter by. Accepted Value - <b>transactionTypeClassification</b>
+          example: transactionTypeClassification
+        operation:
+          enum:
+          - IS_LESS_THAN_EQUAL_TO
+          - IN
+          - 'NULL'
+          - BETWEEN
+          - IS_GREATER_THAN_EQUAL_TO
+          - NOT_NULL
+          - IS
+          type: string
+          description: 'Logical operation used for filtering. Accepted Value: <b>IN</b>'
+        valueSet:
+          minItems: 1
+          type: array
+          items:
+            enum:
+            - CASH_FLOW
+            - VALUATION
+            type: string
+          description: List of acceptable values for the filter. 1) <b>CASH_FLOW</b> , 2) <b>VALUATION</b>
+      description: Request Parameters Table
+    TransactionProcessResponse:
+      required:
+      - response
+      - success
+      - message
+      type: object
+      properties:
+        response:
+          type: object
+          properties:
+            totalRecordsCount:
+              type: integer
+              description: Total number of records received for processing
+              format: int32
+              example: 2
+            invalidEntriesCount:
+              type: integer
+              description: Number of invalid records
+              format: int32
+              example: 0
+            valid:
+              type: boolean
+              description: Indicates whether processing was valid
+              example: true
+        success:
+          type: boolean
+          description: Overall API execution status
+          example: true
+        message:
+          type: string
+          description: Human-readable status message
+          example: All transactions processed successfully.
+    TransactionTypeContent:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique ID of the transaction type within the platform.
+          example: 389c4d13-d974-4764-89cb-6bd8013303d3
+        createdBy:
+          type: string
+          description: Name of the user or system that created this transaction type.
+          example: Dev API Integration
+        createdDate:
+          type: string
+          description: Date and time when this transaction type was created.
+          format: date-time
+          example: '2025-09-08T05:31:16Z'
+        lastModifiedBy:
+          type: string
+          description: Name of the user or system that last updated the transaction type.
+          example: Dev API Integration
+        lastModifiedDate:
+          type: string
+          description: Timestamp of the latest modification.
+          format: date-time
+          example: '2025-09-08T05:31:16Z'
+        name:
+          type: string
+          description: Name of the transaction type.
+          example: Additional Investment
+        dataItem:
+          type: string
+          description: Internal reference for the transaction type
+          example: Additional Investment-CF
+        description:
+          type: string
+          description: Business explanation provided by users for the transaction type.
+          example: Any further capital injected into an existing financial endeavor or asset beyond the original investment
+        transactionCategoryId:
+          type: string
+          description: Unique ID of the category under which the transaction type falls.
+          example: 9ce62901-efd5-4726-aad0-17034633609e
+        transactionCategoryName:
+          type: string
+          description: Category name defining the transaction type’s functional grouping.
+          example: Investments
+        valueType:
+          type: string
+          description: Defines whether the transaction value is positive or negative (affecting fund movement direction).
+          example: POSITIVE
+        deletable:
+          type: boolean
+          description: Indicates how values persist across reporting periods (e.g., DEFAULT, NONE).
+          example: false
+      description: List of transaction type objects retrieved from the 73Strings platform.
+    UnifiedMultilayeredTransactionV2Metadata:
+      type: object
+      properties:
+        remarks:
+          maxLength: 300
+          type: string
+          description: Free-text notes for the transaction.
+          example: API pushed transaction
+        securityId:
+          type: string
+          description: Unique 73 Strings system identifier of the security under the investment entity and owner entity. If securityId is provided, securityType must also be provided.
+          format: uuid
+          example: 2601e54d-b5ea-4178-9b19-3b5551f1de7e
+        securityType:
+          enum:
+          - EQUITY
+          - CREDIT
+          type: string
+          description: Type of security involved in the transaction. Allowed values are EQUITY and CREDIT. The value is case-sensitive and must be uppercase. If securityType is provided, securityId must also be provided.
+          example: CREDIT
+        externalTransactionSourceReferenceId:
+          maxLength: 255
+          type: string
+          description: Client-provided primary reference for the logical transaction. Together with the effective asOfDate, this field determines create/update behavior. Use a stable value across submissions for the same logical transaction. If omitted or new, the platform creates a new transaction; if the value exists with the same effective asOfDate, the existing row is fully overwritten; if the value exists with a new effective asOfDate, a new time-series instance is created.
+          example: EY - transactions 1
+        pps:
+          type: number
+          description: Price per share. Must be greater than 0 when provided.
+          example: 10.04
+          exclusiveMinimum: 0
+        postMoneyValuation:
+          type: number
+          description: Post-money valuation amount. Decimal values up to Decimal(42,17) are supported; zero, positive, and negative values are allowed. If any post-money valuation field is provided, postMoneyValuation, postMoneyValuationCurrency, and postMoneyValuationCurrencyUnit must all be provided.
+          format: decimal
+          example: 29404.429
+        postMoneyValuationCurrency:
+          maxLength: 3
+          minLength: 3
+          type: string
+          description: ISO 4217 three-letter currency code for post-money valuation. If any post-money valuation field is provided, all post-money valuation amount, currency, and unit fields must be provided.
+          example: USD
+        postMoneyValuationCurrencyUnit:
+          enum:
+          - Actual
+          - Lakhs
+          - Millions
+          - Crores
+          - Billions
+          - Trillions
+          type: string
+          description: Scale in which post-money valuation is provided. Allowed values are Actual, Lakhs, Millions, Crores, Billions, and Trillions. The value is case-sensitive. If any post-money valuation field is provided, all post-money valuation amount, currency, and unit fields must be provided.
+          example: Lakhs
+        ownershipPercentage:
+          maximum: 100
+          minimum: 0
+          type: number
+          description: Ownership percentage for the transaction. Must be between 0 and 100 when provided.
+          format: decimal
+          example: 60.2242
+        externalInvestmentEntityId:
+          maxLength: 255
+          type: string
+          description: Client-provided external identifier for the investment entity.
+          example: CEN02570
+        externalSecurityId:
+          maxLength: 255
+          type: string
+          description: Client-provided external identifier for the security.
+          example: CEN003100
+        shareCount:
+          type: number
+          description: Number of shares. Must be greater than 0 when provided.
+          example: 10
+          exclusiveMinimum: 0
+        vehicleName:
+          maxLength: 255
+          type: string
+          description: SPV or vehicle name associated with the transaction.
+          example: SPV-1
+        externalOwnerEntityId:
+          maxLength: 255
+          type: string
+          description: Client-provided external identifier for the owner entity.
+          example: samplePS
+      description: V2 transaction metadata containing source references, security details, valuation details, ownership metrics, and optional external IDs.
+    TransactionTypeResDTO:
+      type: object
+      properties:
+        response:
+          $ref: '#/components/schemas/TransactionTypeData'
+        success:
+          type: boolean
+          description: Indicates if the API execution was successful.
+          example: true
+        message:
+          type: string
+          description: Message from the API execution.
+          example: Success
+        errorCode:
+          type:
+          - string
+          - 'null'
+          description: Optional error code, if any issue occurs.
+      description: Wrapper object containing paginated transaction type details.
+    ApiResponse:
+      type: object
+      properties:
+        response:
+          type: array
+          items:
+            type: object
+            description: List containing the response data.
+            example:
+            - id: '123'
+              name: Sample Data
+          description: List containing the response data.
+          example:
+          - id: '123'
+            name: Sample Data
+        success:
+          type: boolean
+          description: Request’s success status.
+          example: true
+        message:
+          type: string
+          description: Output message depending on success status.
+          example: Success
+        errorCode:
+          type: string
+          description: 'Error response on hitting API request.
+
+
+            null: No errors were encountered.
+
+
+            string: A descriptive error message or code if an issue occurred.'
+          example: EXCE00018
+      description: API response wrapper containing the response data, success status, message, and error code.
+      xml:
+        name: ApiResponse
     TransactionVersionResDTO:
       type: object
       properties:
@@ -2149,46 +2037,158 @@ components:
           - 'null'
           description: Optional error code, if any issue occurs.
       description: Wrapper object containing metadata and version data returned by the API.
-    UnifiedOwnerEntityMappingV2:
+    MultilayeredTransactionMetadataResponse:
+      type: object
+      properties:
+        externalTransactionSourceReferenceId:
+          type: string
+          description: External system or reference ID identifying the transaction’s origin (for integrations or audit trails).
+          example: XXXXXXXX-XXXXXX-XXXXXXXXX
+        securityId:
+          type:
+          - string
+          - 'null'
+          description: Unique Id of the security linked to the transaction.
+        securityType:
+          type:
+          - string
+          - 'null'
+          description: Type of the security (e.g., “CREDIT”, “EQUITY”). “null” if validation failed or not mapped.
+        externalSecurityId:
+          type:
+          - string
+          - 'null'
+          description: External identifier of the security from an external system during system integrations.
+        externalInvestmentEntityId:
+          type:
+          - string
+          - 'null'
+          description: External ID of the investment entity for integration with third-party systems.
+        ownershipPercentage:
+          type:
+          - number
+          - 'null'
+          description: Ownership Percentage of owner entity in the investment.
+        shareCount:
+          type:
+          - number
+          - 'null'
+          description: Number of shares involved for the transactions.
+        pps:
+          type:
+          - number
+          - 'null'
+          description: Price per share (PPS) of the equity based securities.
+        postMoneyValuation:
+          type:
+          - number
+          - 'null'
+          description: Post-money valuation of the entity after investment or distribution.
+        postMoneyValuationCurrency:
+          type:
+          - string
+          - 'null'
+          description: Currency name in which post-money valuation is reported.
+        postMoneyValuationCurrencyUnit:
+          type:
+          - string
+          - 'null'
+          description: Denotes the scale of post money valuation amount [Actual, Lakhs,Millions, Crores, Billions, Trillions].
+        remarks:
+          type:
+          - string
+          - 'null'
+          description: Remarks provided for audit or contextual information.
+        source:
+          type:
+          - string
+          - 'null'
+          description: External system or source reference ID for the transaction. Used for traceability during system integrations.
+        vehicleName:
+          type:
+          - string
+          - 'null'
+          description: Name of the investment vehicle (if any) through which the transaction is routed.
+        externalOwnerEntityId:
+          type:
+          - string
+          - 'null'
+          description: External system or source reference ID of the owner (investor) entity. Used for traceability during system integrations.
+        securityName:
+          type:
+          - string
+          - 'null'
+          description: Name of the security associated with this transaction.
+      description: Detailed metadata object containing investment-specific and security-related attributes for deeper analytics and validation.
+    UnifiedOwnerEntityMapping:
       required:
       - ownerEntityId
       type: object
       properties:
         ownerEntityId:
           type: string
-          description: Unique 73 Strings system identifier of the owner or parent entity associated with the investment entity. Retrieve valid IDs from the Entity List API.
-          format: uuid
+          description: Unique ID of owner (parent) entity generated by the platform. This can be retreived from EntityListAPI operation.
           example: 0ea98f32-5393-441c-b7b0-7e6cc17c485a
-      description: V2 owner entity mapping for a transaction.
-    TransactionDataReqDTO:
+      description: Unified owner entity mapping details using names
+    UnifiedTransactionV2ReqDTO:
       required:
       - userId
       - orgId
+      - TransactionData
       type: object
       properties:
         userId:
           type: string
-          description: Unique identifier of the user.
-          example: 0ea63bb5-47c6-4590-9fc2-52fc180d6e8f
+          description: Unique identifier of the user submitting the request. The user must be authorized for the organization associated with the subscription key.
+          format: uuid
+          example: d2dae30f-7570-4f24-8cc5-e7ead4baf458
         orgId:
           type: string
-          description: Unique identifier of the organization.
-          example: 214fa428-0f39-4c06-9343-d0c51c9b4e34
-        filters:
+          description: Unique identifier of the organization. This value must match the organization scope associated with the subscription key.
+          format: uuid
+          example: cfcbb891-1838-48e7-98db-57142094123c
+        TransactionData:
+          maxItems: 2000
+          minItems: 1
           type: array
           items:
-            $ref: '#/components/schemas/Filter'
-          description: Array of filters to apply
-        sortList:
+            $ref: '#/components/schemas/UnifiedTransactionV2Data'
+          description: Array of transaction objects to create or update. Empty arrays are rejected. The total request payload must not exceed 5 MB.
+      description: V2 request parameters for bulk create/update transaction processing.
+    TransactionTypeData:
+      type: object
+      properties:
+        content:
           type: array
           items:
-            $ref: '#/components/schemas/SortCriteria'
-          description: Array of sort criteria
-        asOfDateSettings:
-          type: string
-          description: As of date settings for transaction data
-          example: LATEST
-      description: Request parameters for retrieving transaction data
+            $ref: '#/components/schemas/TransactionTypeContent'
+          description: List of transaction type objects retrieved from the 73Strings platform.
+        pageNo:
+          type: integer
+          description: Current page number of the paginated response.
+          example: 0
+        pageSize:
+          type: integer
+          description: Number of records in the current page.
+          example: 21
+        totalElements:
+          type: integer
+          description: Total number of transaction types matching the criteria.
+          example: 17
+        totalPages:
+          type: integer
+          description: Total number of available pages.
+          example: 0
+      description: Transaction type data with pagination
+    TransactionVersionData:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/VersionData'
+          description: List of version objects available within the organization.
+      description: Transaction version data
   securitySchemes:
     apiKeyHeader:
       type: apiKey
