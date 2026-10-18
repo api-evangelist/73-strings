@@ -245,6 +245,8 @@ apis:
   humanURL: https://api-accord-eut-73strings.developer.azure-api.net/api-details#api=asset-info
   baseURL: https://api-accord-eut-73strings.azure-api.net/assetinfo
   tags:
+  - Cap Table
+  tags_raw:
   - cap table
   properties:
   - type: OpenAPI
